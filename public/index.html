@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Uma Canção Para Sua Mãe 🌸</title>
+<meta name="description" content="Músicas originais para o Dia das Mães — ouça a prévia, compre e baixe na hora. Entrega digital imediata.">
+
+<!-- Mercado Pago Checkout Bricks -->
+<script src="https://sdk.mercadopago.com/js/v2"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --r:#c0395f;--rl:#fceef3;--rd:#8b1a3a;--g:#c9a84c;
+  --cr:#fdf7f2;--tx:#1e1014;--ts:#7a5060;
+  --green:#2d9e6b;
+  --ft:'Cormorant Garamond',serif;--fb:'Inter',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--cr);color:var(--tx);font-size:14px;overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(253,247,242,.96);backdrop-filter:blur(10px);border-bottom:1px solid #f0d5e0;padding:11px 24px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:var(--ft);font-size:1rem;color:var(--rd);font-style:italic}
+.nav-btn{font-size:.75rem;font-weight:600;color:white;background:var(--r);padding:7px 16px;border-radius:50px;border:none;cursor:pointer;transition:background .2s}
+.nav-btn:hover{background:var(--rd)}
+
+/* COUNTDOWN */
+.cbar{margin-top:44px;background:var(--rd);color:white;padding:9px 20px;display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}
+.cbar-txt{font-size:.75rem;letter-spacing:.4px;opacity:.9}
+.cboxes{display:flex;gap:5px;align-items:center}
+.cb{background:rgba(255,255,255,.15);border-radius:5px;padding:4px 9px;min-width:40px;text-align:center;border:1px solid rgba(255,255,255,.18)}
+.cn{font-size:1rem;font-weight:700;font-family:var(--ft);display:block;line-height:1.2}
+.cl{font-size:.5rem;opacity:.7;letter-spacing:1px;text-transform:uppercase}
+.csep{font-size:.9rem;opacity:.4;font-weight:700}
+
+/* HERO */
+.hero{padding:40px 20px 36px;text-align:center;background:linear-gradient(160deg,#fdf7f2,#faedf4 55%,#f5e0ec);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(192,57,95,.05),transparent 60%)}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:var(--rl);color:var(--r);font-size:.68rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:50px;border:1px solid #f0c0d0;margin-bottom:16px}
+.hero h1{font-family:var(--ft);font-size:clamp(2.2rem,6vw,4rem);line-height:1.12;color:var(--rd);margin-bottom:8px}
+.hero h1 em{color:var(--r);font-style:italic}
+.hero-sub{font-family:var(--ft);font-style:italic;font-size:clamp(.95rem,2vw,1.2rem);color:var(--ts);margin-bottom:12px}
+.hero-desc{max-width:440px;margin:0 auto 22px;font-size:.88rem;color:var(--ts);line-height:1.75}
+.hero-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+
+/* BOTÕES */
+.btn{display:inline-block;font-family:var(--fb);font-weight:600;font-size:.85rem;padding:13px 28px;border-radius:50px;text-decoration:none;border:none;cursor:pointer;transition:all .2s;letter-spacing:.3px}
+.btn-rose{background:var(--r);color:white;box-shadow:0 5px 20px rgba(192,57,95,.3)}
+.btn-rose:hover{background:var(--rd);transform:translateY(-2px)}
+.btn-out{background:transparent;color:var(--r);border:1.5px solid var(--r)}
+.btn-out:hover{background:var(--rl)}
+.btn-gold{background:var(--g);color:#3a2000;box-shadow:0 5px 18px rgba(201,168,76,.3)}
+.btn-gold:hover{background:#b8952a;transform:translateY(-2px)}
+.btn-green{background:var(--green);color:white;box-shadow:0 5px 18px rgba(45,158,107,.3)}
+.btn-green:hover{background:#1f7a50;transform:translateY(-2px)}
+.btn-full{display:block;width:100%;text-align:center;padding:14px}
+
+.div{height:1px;background:linear-gradient(90deg,transparent,#f0c8d8,transparent)}
+
+/* CABEÇALHO DE SEÇÃO */
+.sec-hd{text-align:center;margin-bottom:24px}
+.sec-title{font-family:var(--ft);font-size:clamp(1.5rem,3.5vw,2.2rem);color:var(--rd);margin-bottom:4px}
+.sec-title em{color:var(--r);font-style:italic}
+.goldbar{width:36px;height:2px;background:var(--g);margin:6px auto 10px;border-radius:2px}
+.sec-sub{font-size:.82rem;color:var(--ts);line-height:1.6}
+
+/* PACKS */
+.packs-section{padding:36px 16px;background:white}
+.packs{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;max-width:920px;margin:0 auto}
+.pack{border-radius:16px;border:1.5px solid #f0d5e0;overflow:hidden;background:var(--cr);transition:transform .2s,box-shadow .2s;position:relative}
+.pack:hover{transform:translateY(-4px);box-shadow:0 14px 36px rgba(192,57,95,.12)}
+.pack.hot{border:2px solid var(--r);box-shadow:0 6px 24px rgba(192,57,95,.15)}
+.hot-b{position:absolute;top:12px;right:12px;background:var(--r);color:white;font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border-radius:50px}
+.pack-top{padding:18px 18px 14px;background:linear-gradient(135deg,#fff8fb,#fdf2f7);border-bottom:1px solid #f5dde8}
+.pack-ico{font-size:1.8rem;margin-bottom:6px;display:block}
+.pack-name{font-family:var(--ft);font-size:1.2rem;color:var(--rd);font-weight:700;margin-bottom:2px}
+.pack-tagline{font-family:var(--ft);font-style:italic;color:var(--ts);font-size:.8rem;margin-bottom:10px}
+.pack-price{display:flex;align-items:baseline;gap:2px}
+.p-cur{font-size:.95rem;font-weight:700;color:var(--r)}
+.p-val{font-size:2.1rem;font-weight:700;color:var(--r);line-height:1}
+.p-info{font-size:.72rem;color:var(--ts);margin-left:5px}
+
+/* TRACKS */
+.tracks{padding:12px 18px 14px}
+.trk-lbl{font-size:.6rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--ts);margin-bottom:8px}
+.track{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid #f8eff4}
+.track:last-child{border-bottom:none}
+.playbtn{width:28px;height:28px;border-radius:50%;background:var(--rl);border:1.5px solid #f0c0d0;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .18s}
+.playbtn:hover,.playbtn.active{background:var(--r);border-color:var(--r)}
+.playbtn:hover svg polygon,.playbtn.active svg polygon,
+.playbtn:hover svg rect,.playbtn.active svg rect{fill:white}
+.tinfo{flex:1;min-width:0}
+.tname{font-weight:600;font-size:.78rem;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tgenre{font-size:.68rem;color:var(--ts)}
+.prog{flex:1;height:3px;background:#f0d5e0;border-radius:3px;min-width:40px}
+.progfill{height:3px;background:var(--r);border-radius:3px;width:0%;transition:width .1s linear}
+.ttime{font-size:.65rem;color:var(--ts);min-width:26px;text-align:right}
+
+.pack-bot{padding:12px 18px 18px}
+.perks{display:flex;flex-direction:column;gap:3px;margin-bottom:12px}
+.perk{font-size:.75rem;color:var(--ts);display:flex;align-items:center;gap:6px}
+.pk{color:var(--r)}
+
+/* COMO FUNCIONA */
+.steps-sec{padding:32px 16px;background:var(--cr)}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;max-width:820px;margin:0 auto}
+.step{background:white;border-radius:12px;border:1px solid #f0d5e0;padding:18px 16px;text-align:center}
+.snum{width:36px;height:36px;border-radius:50%;background:var(--rl);border:1.5px solid #f0c0d0;display:flex;align-items:center;justify-content:center;font-family:var(--ft);font-size:1.1rem;color:var(--r);font-weight:700;margin:0 auto 10px}
+.step h3{font-family:var(--ft);font-size:.95rem;color:var(--rd);margin-bottom:4px}
+.step p{font-size:.76rem;color:var(--ts);line-height:1.6}
+
+/* DEPOIMENTOS */
+.depos-sec{padding:32px 16px;background:white}
+.depos{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;max-width:820px;margin:0 auto}
+.depo{background:var(--cr);border-radius:12px;padding:18px 16px;border:1px solid #f0d5e0}
+.qm{font-family:var(--ft);font-size:2.8rem;color:#f0c0d0;line-height:.3;margin-bottom:10px;display:block}
+.stars{color:var(--g);font-size:11px;margin-bottom:5px}
+.depo p{font-family:var(--ft);font-style:italic;color:var(--ts);line-height:1.65;font-size:.85rem;margin-bottom:10px}
+.dauth{font-weight:600;color:var(--rd);font-size:.75rem}
+
+/* URGÊNCIA */
+.urgency{background:linear-gradient(135deg,var(--rd),#6b0e2e);color:white;padding:36px 20px;text-align:center}
+.urgency h2{font-family:var(--ft);font-size:clamp(1.3rem,3vw,2rem);margin-bottom:6px}
+.urgency p{font-size:.85rem;opacity:.88;line-height:1.65;margin-bottom:20px;max-width:420px;margin-left:auto;margin-right:auto}
+
+/* MODAL CHECKOUT */
+.overlay{display:none;position:fixed;inset:0;background:rgba(20,5,10,.6);z-index:500;align-items:center;justify-content:center;padding:16px}
+.overlay.open{display:flex}
+.modal{background:white;border-radius:20px;width:100%;max-width:460px;max-height:92vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.25)}
+.modal-head{padding:18px 22px 14px;border-bottom:1px solid #f0d5e0;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:white;z-index:1}
+.modal-title{font-family:var(--ft);font-size:1.2rem;color:var(--rd)}
+.close-btn{background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--ts);padding:4px;line-height:1}
+.modal-body{padding:18px 22px 24px}
+.m-pack-info{background:var(--rl);border-radius:10px;padding:12px 14px;margin-bottom:16px;display:flex;align-items:center;gap:12px}
+.m-pack-ico{font-size:1.5rem}
+.m-pack-name{font-family:var(--ft);font-size:1rem;color:var(--rd);font-weight:600}
+.m-pack-sub{font-size:.72rem;color:var(--ts)}
+.m-price{font-size:1.3rem;font-weight:700;color:var(--r);margin-left:auto;white-space:nowrap}
+
+/* Método de pagamento */
+.pay-methods{display:flex;gap:8px;margin-bottom:16px}
+.pay-opt{flex:1;padding:10px 8px;border:1.5px solid #f0d5e0;border-radius:10px;text-align:center;cursor:pointer;transition:all .18s;background:var(--cr)}
+.pay-opt.sel{border-color:var(--r);background:var(--rl)}
+.pay-opt-ico{font-size:1.1rem;margin-bottom:3px}
+.pay-opt-lbl{font-size:.67rem;font-weight:600;color:var(--ts)}
+.pay-opt.sel .pay-opt-lbl{color:var(--r)}
+
+/* Campos de formulário */
+.form-group{margin-bottom:12px}
+.form-label{font-size:.68rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--ts);margin-bottom:4px;display:block}
+.form-input{width:100%;border:1.5px solid #f0d5e0;border-radius:8px;padding:10px 12px;font-size:.85rem;font-family:var(--fb);color:var(--tx);background:var(--cr);outline:none;transition:border-color .18s}
+.form-input:focus{border-color:var(--r)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* Pix */
+.pix-box{background:#f0fdf7;border:1px solid #a7f0d0;border-radius:10px;padding:14px;text-align:center;margin-bottom:14px}
+.pix-chave{font-size:.75rem;color:#1a7a4a;margin-bottom:4px}
+.pix-chave strong{display:block;font-size:.9rem;margin-top:2px;letter-spacing:.5px}
+.pix-val{font-size:1.3rem;font-weight:700;color:var(--green);margin:6px 0}
+.pix-nota{font-size:.68rem;color:#4a8a6a;margin-top:4px;line-height:1.5}
+.pix-copy{background:transparent;border:1px solid #2d9e6b;color:var(--green);font-size:.7rem;font-weight:600;padding:5px 12px;border-radius:50px;cursor:pointer;margin-top:8px;transition:all .18s;font-family:var(--fb)}
+.pix-copy:hover{background:var(--green);color:white}
+
+/* Bricks MP container */
+#cardPaymentBrick_container{min-height:100px}
+
+.secure-note{display:flex;align-items:center;justify-content:center;gap:6px;font-size:.68rem;color:var(--ts);margin-top:12px}
+
+/* Loading spinner */
+.spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,.4);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* TELA DE ENTREGA */
+.delivery-screen{display:none;position:fixed;inset:0;background:white;z-index:600;overflow-y:auto}
+.delivery-screen.open{display:block}
+.delivery-inner{max-width:600px;margin:0 auto;padding:24px 16px 40px}
+.delivery-head{text-align:center;padding:20px 0 22px;border-bottom:1px solid #f0d5e0;margin-bottom:22px}
+.check-circle{width:56px;height:56px;border-radius:50%;background:#f0fdf7;border:2px solid #a7f0d0;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:1.6rem}
+.delivery-head h2{font-family:var(--ft);font-size:1.5rem;color:var(--green);margin-bottom:4px}
+.delivery-head p{font-size:.82rem;color:var(--ts)}
+.delivery-pack-name{font-family:var(--ft);font-size:1.05rem;color:var(--rd);margin-bottom:14px;text-align:center}
+
+.d-track{background:var(--cr);border:1px solid #f0d5e0;border-radius:14px;padding:14px;margin-bottom:10px}
+.d-track-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.d-num{width:26px;height:26px;border-radius:50%;background:var(--rl);border:1.5px solid #f0c0d0;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:var(--r);flex-shrink:0}
+.d-tname{font-weight:600;font-size:.88rem;color:var(--tx);flex:1}
+.d-genre{font-size:.65rem;color:var(--ts);background:var(--rl);padding:2px 8px;border-radius:50px;white-space:nowrap}
+.d-player{display:flex;align-items:center;gap:8px;background:white;border-radius:8px;padding:8px 10px;margin-bottom:8px;border:1px solid #f0d5e0}
+.d-playbtn{width:32px;height:32px;border-radius:50%;background:var(--r);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:background .18s}
+.d-playbtn:hover{background:var(--rd)}
+.d-prog{flex:1;height:3px;background:#f0d5e0;border-radius:3px;cursor:pointer}
+.d-progfill{height:3px;background:var(--r);border-radius:3px;width:0%;transition:width .1s linear}
+.d-time{font-size:.68rem;color:var(--ts);min-width:34px;text-align:right}
+.d-actions{display:flex;gap:8px}
+.d-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;font-size:.73rem;font-weight:600;padding:9px 8px;border-radius:8px;border:none;cursor:pointer;transition:all .18s;font-family:var(--fb)}
+.d-btn-dl{background:var(--r);color:white}
+.d-btn-dl:hover{background:var(--rd)}
+.d-btn-pdf{background:var(--rl);color:var(--r);border:1px solid #f0c0d0}
+.d-btn-pdf:hover{background:var(--r);color:white}
+
+.d-footer{text-align:center;margin-top:18px;padding-top:14px;border-top:1px solid #f0d5e0;font-size:.75rem;color:var(--ts);line-height:1.7}
+
+footer{background:var(--tx);color:rgba(255,255,255,.45);text-align:center;padding:18px;font-size:.72rem}
+footer strong{color:rgba(255,255,255,.8)}
+
+.fade-in{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+
+/* Toast */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:#1e1014;color:white;padding:10px 20px;border-radius:50px;font-size:.8rem;font-weight:500;z-index:999;transition:transform .3s ease;white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-logo">♪ Uma Canção Para Sua Mãe</span>
+  <button class="nav-btn" onclick="abrirModal('p2')">Comprar Agora</button>
+</nav>
+
+<!-- COUNTDOWN -->
+<div class="cbar">
+  <span class="cbar-txt">🌸 Dia das Mães em:</span>
+  <div class="cboxes">
+    <div class="cb"><span class="cn" id="days">--</span><span class="cl">dias</span></div>
+    <span class="csep">:</span>
+    <div class="cb"><span class="cn" id="hours">--</span><span class="cl">horas</span></div>
+    <span class="csep">:</span>
+    <div class="cb"><span class="cn" id="mins">--</span><span class="cl">min</span></div>
+    <span class="csep">:</span>
+    <div class="cb"><span class="cn" id="secs">--</span><span class="cl">seg</span></div>
+  </div>
+  <span class="cbar-txt" style="opacity:.7">11 de maio · não deixe pra última hora!</span>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">🎵 Presente Único · Entrega Imediata</div>
+  <h1>A música que vai fazer<br>sua mãe <em>chorar</em><br>de emoção</h1>
+  <p class="hero-sub">Porque "eu te amo" às vezes precisa de uma melodia.</p>
+  <p class="hero-desc">Packs com 3 músicas originais — ouça a prévia, compre e receba na hora: player completo, download MP3 e letra em PDF.</p>
+  <div class="hero-btns">
+    <a href="#packs" class="btn btn-rose">✨ Ver os Packs</a>
+    <a href="#como-funciona" class="btn btn-out">Como funciona?</a>
+  </div>
+</section>
+<div class="div"></div>
+
+<!-- PACKS (preenchidos via JS) -->
+<section class="packs-section" id="packs">
+  <div class="sec-hd fade-in">
+    <div class="sec-title">Escolha seu <em>Pack</em></div>
+    <div class="goldbar"></div>
+    <div class="sec-sub">Prévia de 30s gratuita · Após comprar: ouça completo, baixe MP3 e a letra em PDF</div>
+  </div>
+  <div class="packs fade-in" id="packs-container">
+    <div style="text-align:center;padding:40px;color:var(--ts);grid-column:1/-1">Carregando packs...</div>
+  </div>
+</section>
+<div class="div"></div>
+
+<!-- COMO FUNCIONA -->
+<section class="steps-sec" id="como-funciona">
+  <div class="sec-hd fade-in">
+    <div class="sec-title">Como <em>funciona?</em></div>
+    <div class="goldbar"></div>
+  </div>
+  <div class="steps fade-in">
+    <div class="step"><div class="snum">1</div><h3>Ouça a prévia</h3><p>30 segundos grátis de cada música antes de decidir.</p></div>
+    <div class="step"><div class="snum">2</div><h3>Compre na hora</h3><p>Cartão de crédito ou Pix via Mercado Pago. Seguro e rápido.</p></div>
+    <div class="step"><div class="snum">3</div><h3>Acesso imediato</h3><p>Player completo, download MP3 e letra em PDF — tudo na mesma página, na hora.</p></div>
+    <div class="step"><div class="snum">4</div><h3>Manda pra ela</h3><p>Encaminha a música e prepara os lenços. 🌸</p></div>
+  </div>
+</section>
+<div class="div"></div>
+
+<!-- DEPOIMENTOS -->
+<section class="depos-sec">
+  <div class="sec-hd fade-in">
+    <div class="sec-title">Elas <em>choraram</em></div>
+    <div class="goldbar"></div>
+  </div>
+  <div class="depos fade-in">
+    <div class="depo"><span class="qm">"</span><div class="stars">★★★★★</div><p>Minha mãe chorou antes de terminar a primeira música. O presente mais especial que ela já recebeu.</p><div class="dauth">— Ana Paula M., São Paulo/SP</div></div>
+    <div class="depo"><span class="qm">"</span><div class="stars">★★★★★</div><p>Comprei o Pack Saudade porque moro em outro estado. Minha mãe disse que escuta toda noite antes de dormir.</p><div class="dauth">— Carlos R., Manaus/AM</div></div>
+    <div class="depo"><span class="qm">"</span><div class="stars">★★★★★</div><p>Nunca pensei que IA fazia músicas tão bonitas. Minha mãe compartilhou no status do WhatsApp dela na hora!</p><div class="dauth">— Juliana F., Porto Alegre/RS</div></div>
+  </div>
+</section>
+
+<!-- URGÊNCIA -->
+<section class="urgency">
+  <h2>⏰ O Dia das Mães tá chegando!</h2>
+  <p>11 de maio. Garanta seu pack agora e chegue na hora com o presente mais emocionante que ela já recebeu.</p>
+  <button class="btn btn-gold" onclick="abrirModal('p2')">🎵 Garantir Meu Pack Agora</button>
+</section>
+
+<footer>
+  <p>Feito com <strong>♥</strong> no Brasil · <strong>Uma Canção Para Sua Mãe</strong> · Músicas criadas com IA · Entrega digital imediata</p>
+  <p style="margin-top:5px">Pagamento processado com segurança pelo <strong>Mercado Pago</strong> · Pix ou cartão de crédito</p>
+</footer>
+
+<!-- ═══════════ MODAL CHECKOUT ═══════════ -->
+<div class="overlay" id="overlay" onclick="fecharSeClicarFora(event)">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Finalizar Compra</div>
+      <button class="close-btn" onclick="fecharModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="m-pack-info">
+        <div class="m-pack-ico" id="m-ico">🌹</div>
+        <div>
+          <div class="m-pack-name" id="m-nome">Pack Amor de Mãe</div>
+          <div class="m-pack-sub">3 músicas · Player + MP3 + PDF da letra</div>
+        </div>
+        <div class="m-price" id="m-preco">R$ 29</div>
+      </div>
+
+      <div class="form-group">
+        <div class="form-label">Forma de Pagamento</div>
+        <div class="pay-methods">
+          <div class="pay-opt sel" id="opt-cartao" onclick="selecionarPagamento('cartao')">
+            <div class="pay-opt-ico">💳</div>
+            <div class="pay-opt-lbl">Cartão de Crédito</div>
+          </div>
+          <div class="pay-opt" id="opt-pix" onclick="selecionarPagamento('pix')">
+            <div class="pay-opt-ico">⚡</div>
+            <div class="pay-opt-lbl">Pix</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARTÃO via Mercado Pago Bricks -->
+      <div id="campos-cartao">
+        <div class="form-group">
+          <label class="form-label">Seu e-mail</label>
+          <input class="form-input" type="email" id="email-cartao" placeholder="seuemail@gmail.com">
+        </div>
+        <!-- O Brick do MP vai renderizar aqui -->
+        <div id="cardPaymentBrick_container"></div>
+        <p style="font-size:.68rem;color:var(--ts);text-align:center;margin-top:8px">Seus dados de cartão são processados diretamente pelo Mercado Pago</p>
+      </div>
+
+      <!-- PIX -->
+      <div id="campos-pix" style="display:none">
+        <div class="form-group">
+          <label class="form-label">Seu e-mail (para confirmação)</label>
+          <input class="form-input" type="email" id="email-pix" placeholder="seuemail@gmail.com">
+        </div>
+        <div class="pix-box">
+          <div class="pix-chave">Chave Pix <strong id="chave-pix">sua.chave@pix.com</strong></div>
+          <div class="pix-val" id="pix-valor">R$ 29</div>
+          <div class="pix-nota">Copie a chave, abra o app do seu banco e faça o Pix.<br>Após o pagamento, clique no botão abaixo.</div>
+          <button class="pix-copy" onclick="copiarChavePix()">📋 Copiar chave Pix</button>
+        </div>
+        <button class="btn btn-green btn-full" onclick="confirmarPix()" id="btn-pix-pago">✅ Já Fiz o Pix — Liberar Acesso</button>
+      </div>
+
+      <div class="secure-note">🔒 Pagamento seguro via Mercado Pago · SSL criptografado</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ TELA DE ENTREGA ═══════════ -->
+<div class="delivery-screen" id="tela-entrega">
+  <div class="delivery-inner">
+    <div class="delivery-head">
+      <div class="check-circle">✅</div>
+      <h2>Pagamento confirmado!</h2>
+      <p>Obrigado pela compra. Suas músicas estão prontas abaixo. 🌸</p>
+    </div>
+    <div class="delivery-pack-name" id="d-pack-nome"></div>
+    <div id="d-faixas"></div>
+    <div class="d-footer">
+      Salve os MP3s e as letras agora.<br>
+      Dúvidas? Fale com a gente: <strong>contato@umacanção.com.br</strong>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════
+// CONFIGURAÇÃO — substitua com seus dados
+// ══════════════════════════════════════════
+const CONFIG = {
+  // Sua Public Key do Mercado Pago
+  // Painel: https://www.mercadopago.com.br/developers/panel/app
+  MP_PUBLIC_KEY: 'APP_USR-bfe1a780-190c-4b8b-a87c-b44e3418326a',
+
+  // URL da sua API (server.js rodando)
+  API_URL: '', // vazio = mesmo domínio
+
+  // Sua chave Pix (CPF, CNPJ, e-mail ou celular)
+  CHAVE_PIX: '55974007771',
+};
+
+// ══════════════════════════════════════════
+// ESTADO GLOBAL
+// ══════════════════════════════════════════
+let packAtual = null;
+let metodoPagamento = 'cartao';
+let mp = null;
+let brickController = null;
+let packsData = {};
+
+// ══════════════════════════════════════════
+// INICIALIZAÇÃO
+// ══════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', async () => {
+  iniciarContagem();
+  await carregarPacks();
+  iniciarMP();
+  verificarRetornoCheckout();
+  iniciarFadeIn();
+});
+
+function iniciarMP() {
+  if (typeof MercadoPago === 'undefined') return;
+  mp = new MercadoPago(CONFIG.MP_PUBLIC_KEY, { locale: 'pt-BR' });
+}
+
+// ══════════════════════════════════════════
+// CARREGAR PACKS DA API
+// ══════════════════════════════════════════
+async function carregarPacks() {
+  try {
+    const res = await fetch(CONFIG.API_URL + '/api/packs');
+    const packs = await res.json();
+    packs.forEach(p => packsData[p.id] = p);
+    renderizarPacks(packs);
+  } catch {
+    // Fallback com dados locais se a API não estiver disponível
+    const fallback = [
+      { id:'p1', ico:'💖', nome:'Pack Emoção Pura', tagline:'Para a mãe guerreira e dedicada', precoLabel:'R$ 19', destaque:false,
+        faixas:[{nome:'Obrigada por Tudo',genero:'Pop Romântico'},{nome:'Minha Fortaleza',genero:'MPB Suave'},{nome:'Amor Sem Fim',genero:'Balada'}]},
+      { id:'p2', ico:'🌹', nome:'Pack Amor de Mãe', tagline:'Para emocionar até a mais durona', precoLabel:'R$ 29', destaque:true,
+        faixas:[{nome:'Você É Meu Lar',genero:'Soul Brasileiro'},{nome:'Mãe Guerreira',genero:'Gospel Suave'},{nome:'Primeiro Abraço',genero:'Acústico'}]},
+      { id:'p3', ico:'🌙', nome:'Pack Saudade', tagline:'Para quem está longe mas não esquece', precoLabel:'R$ 19', destaque:false,
+        faixas:[{nome:'Longe, Mas Perto',genero:'Bossa Nova'},{nome:'Abraço de Longe',genero:'Pop Melancólico'},{nome:'Você Vive em Mim',genero:'Balada Suave'}]},
+    ];
+    fallback.forEach(p => packsData[p.id] = p);
+    renderizarPacks(fallback);
+  }
+}
+
+function renderizarPacks(packs) {
+  const c = document.getElementById('packs-container');
+  c.innerHTML = packs.map(p => `
+    <div class="pack ${p.destaque ? 'hot' : ''}">
+      ${p.destaque ? '<div class="hot-b">⭐ Mais Pedido</div>' : ''}
+      <div class="pack-top">
+        <span class="pack-ico">${p.ico}</span>
+        <div class="pack-name">${p.nome}</div>
+        <div class="pack-tagline">"${p.tagline}"</div>
+        <div class="pack-price"><span class="p-cur">R$</span><span class="p-val">${p.precoLabel.replace('R$','').replace('R$ ','').trim()}</span><span class="p-info">· 3 músicas</span></div>
+      </div>
+      <div class="tracks">
+        <div class="trk-lbl">Prévia de 30s — clique pra ouvir</div>
+        ${p.faixas.map((f,i) => `
+        <div class="track">
+          <button class="playbtn" onclick="togglePrevia(this,'${p.id}_${i}')">
+            <svg width="9" height="10" viewBox="0 0 9 10"><polygon points="1,1 8,5 1,9" fill="var(--r)"/></svg>
+          </button>
+          <div class="tinfo"><div class="tname">${f.nome}</div><div class="tgenre">${f.genero}</div></div>
+          <div class="prog"><div class="progfill" id="pb-${p.id}_${i}"></div></div>
+          <div class="ttime" id="tl-${p.id}_${i}">0:30</div>
+        </div>`).join('')}
+      </div>
+      <div class="pack-bot">
+        <div class="perks">
+          <div class="perk"><span class="pk">♥</span>Player completo após compra</div>
+          <div class="perk"><span class="pk">♥</span>Download MP3 de cada faixa</div>
+          <div class="perk"><span class="pk">♥</span>Letra completa em PDF</div>
+          ${p.destaque ? '<div class="perk"><span class="pk">♥</span>Estilos variados no mesmo pack</div>' : ''}
+        </div>
+        <button class="btn btn-rose btn-full" onclick="abrirModal('${p.id}')">Comprar · ${p.precoLabel}</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ══════════════════════════════════════════
+// PLAYER PRÉVIA 30s
+// ══════════════════════════════════════════
+const prevState = {}; let curPrev = null;
+
+function togglePrevia(btn, id) {
+  if (curPrev && curPrev !== id) pararPrevia(curPrev);
+  prevState[id]?.on ? pararPrevia(id) : iniciarPrevia(btn, id);
+}
+function iniciarPrevia(btn, id) {
+  if (!prevState[id]) prevState[id] = { on:false, t:0, iv:null };
+  const s = prevState[id]; s.on = true; curPrev = id;
+  btn.classList.add('active');
+  btn.innerHTML = '<svg width="9" height="10" viewBox="0 0 9 10"><rect x="0" y="0" width="3" height="10" rx="1" fill="var(--r)"/><rect x="5" y="0" width="3" height="10" rx="1" fill="var(--r)"/></svg>';
+  s.iv = setInterval(() => {
+    s.t += 0.1;
+    const pb = document.getElementById('pb-' + id);
+    const tl = document.getElementById('tl-' + id);
+    if (pb) pb.style.width = Math.min(s.t / 30 * 100, 100) + '%';
+    if (tl) { const r = Math.max(0, 30 - Math.floor(s.t)); tl.textContent = '0:' + (r < 10 ? '0' : '') + r; }
+    if (s.t >= 30) { pararPrevia(id); resetarPrevia(id); }
+  }, 100);
+}
+function pararPrevia(id) {
+  const s = prevState[id]; if (!s) return;
+  s.on = false; clearInterval(s.iv);
+  const btn = document.querySelector(`[onclick="togglePrevia(this,'${id}')"]`);
+  if (btn) { btn.classList.remove('active'); btn.innerHTML = '<svg width="9" height="10" viewBox="0 0 9 10"><polygon points="1,1 8,5 1,9" fill="var(--r)"/></svg>'; }
+}
+function resetarPrevia(id) {
+  const s = prevState[id]; if (s) s.t = 0;
+  const pb = document.getElementById('pb-' + id); const tl = document.getElementById('tl-' + id);
+  if (pb) pb.style.width = '0%'; if (tl) tl.textContent = '0:30';
+}
+
+// ══════════════════════════════════════════
+// MODAL CHECKOUT
+// ══════════════════════════════════════════
+function abrirModal(packId) {
+  packAtual = packsData[packId] || packsData['p2'];
+  document.getElementById('m-ico').textContent = packAtual.ico;
+  document.getElementById('m-nome').textContent = packAtual.nome;
+  document.getElementById('m-preco').textContent = packAtual.precoLabel;
+  document.getElementById('pix-valor').textContent = packAtual.precoLabel;
+  document.getElementById('chave-pix').textContent = CONFIG.CHAVE_PIX;
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  selecionarPagamento('cartao');
+}
+function fecharModal() {
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  if (brickController) { brickController.unmount(); brickController = null; }
+}
+function fecharSeClicarFora(e) { if (e.target === document.getElementById('overlay')) fecharModal(); }
+
+function selecionarPagamento(metodo) {
+  metodoPagamento = metodo;
+  document.getElementById('opt-cartao').classList.toggle('sel', metodo === 'cartao');
+  document.getElementById('opt-pix').classList.toggle('sel', metodo === 'pix');
+  document.getElementById('campos-cartao').style.display = metodo === 'cartao' ? 'block' : 'none';
+  document.getElementById('campos-pix').style.display = metodo === 'pix' ? 'block' : 'none';
+  if (metodo === 'cartao' && mp) renderizarBrickCartao();
+}
+
+// ─── Mercado Pago Checkout Bricks ────────────────────────────
+async function renderizarBrickCartao() {
+  if (brickController) return; // já renderizado
+  const container = document.getElementById('cardPaymentBrick_container');
+  container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--ts);font-size:.8rem">Carregando formulário seguro...</div>';
+
+  try {
+    const res = await fetch(CONFIG.API_URL + '/api/criar-preferencia', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ packId: packAtual.id, email: document.getElementById('email-cartao').value }),
+    });
+    const { preferenceId } = await res.json();
+
+    const bricksBuilder = mp.bricks();
+    brickController = await bricksBuilder.create('cardPayment', 'cardPaymentBrick_container', {
+      initialization: {
+        amount: parseFloat(packAtual.precoLabel.replace('R$','').replace('R$ ','').trim()),
+        payer: { email: document.getElementById('email-cartao').value },
+      },
+      customization: {
+        visual: { style: { theme: 'default' } },
+        paymentMethods: { types: { included: ['credit_card', 'debit_card'] } },
+      },
+      callbacks: {
+        onReady: () => {},
+        onSubmit: async (cardFormData) => {
+          try {
+            const resp = await fetch(CONFIG.API_URL + '/api/processar-pagamento', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                packId: packAtual.id,
+                token: cardFormData.token,
+                email: cardFormData.payer.email,
+                installments: cardFormData.installments,
+                issuerId: cardFormData.issuer_id,
+                paymentMethodId: cardFormData.payment_method_id,
+              }),
+            });
+            const dados = await resp.json();
+            if (dados.status === 'aprovado') {
+              salvarTokenAcesso(dados.accessToken);
+              fecharModal();
+              mostrarEntrega(dados.accessToken);
+            } else if (dados.status === 'pendente') {
+              mostrarToast('Pagamento em análise. Avisaremos por e-mail.');
+              iniciarPolling(dados.paymentId);
+            } else {
+              mostrarToast('Pagamento recusado. Tente outro cartão.');
+            }
+          } catch {
+            mostrarToast('Erro ao processar. Tente novamente.');
+          }
+        },
+        onError: (err) => console.error('Brick error:', err),
+      },
+    });
+  } catch (err) {
+    container.innerHTML = '<p style="color:var(--r);font-size:.8rem;text-align:center;padding:12px">Erro ao carregar formulário. Tente o Pix.</p>';
+  }
+}
+
+// ─── PIX ─────────────────────────────────────────────────────
+function copiarChavePix() {
+  navigator.clipboard.writeText(CONFIG.CHAVE_PIX).then(() => mostrarToast('Chave Pix copiada!'));
+}
+
+async function confirmarPix() {
+  const btn = document.getElementById('btn-pix-pago');
+  btn.textContent = 'Verificando...'; btn.disabled = true;
+  // Em produção: o webhook do MP libera automaticamente
+  // Aqui simulamos a liberação após o clique (para demo)
+  setTimeout(() => {
+    const tokenFake = 'demo_' + packAtual.id + '_' + Date.now();
+    salvarTokenAcesso(tokenFake);
+    fecharModal();
+    mostrarEntregaDemo();
+    btn.textContent = '✅ Já Fiz o Pix — Liberar Acesso'; btn.disabled = false;
+  }, 1500);
+}
+
+// ─── POLLING para pagamentos pendentes ───────────────────────
+async function iniciarPolling(paymentId) {
+  let tentativas = 0;
+  const intervalo = setInterval(async () => {
+    tentativas++;
+    if (tentativas > 20) { clearInterval(intervalo); return; }
+    try {
+      const res = await fetch(CONFIG.API_URL + `/api/verificar-pagamento/${paymentId}`);
+      const dados = await res.json();
+      if (dados.status === 'aprovado') {
+        clearInterval(intervalo);
+        salvarTokenAcesso(dados.accessToken);
+        mostrarEntrega(dados.accessToken);
+      }
+    } catch {}
+  }, 5000);
+}
+
+// ══════════════════════════════════════════
+// TELA DE ENTREGA
+// ══════════════════════════════════════════
+function salvarTokenAcesso(token) {
+  sessionStorage.setItem('acesso_token', token);
+  sessionStorage.setItem('acesso_pack', packAtual.id);
+}
+
+async function mostrarEntrega(token) {
+  try {
+    const res = await fetch(CONFIG.API_URL + '/api/acesso', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token }),
+    });
+    const dados = await res.json();
+    if (dados.faixas) renderizarEntrega(dados);
+    else mostrarEntregaDemo();
+  } catch {
+    mostrarEntregaDemo();
+  }
+}
+
+function mostrarEntregaDemo() {
+  // Fallback para demo (sem API rodando)
+  const pack = packAtual;
+  renderizarEntrega({
+    pack: { ico: pack.ico, nome: pack.nome },
+    faixas: (pack.faixas || []).map(f => ({
+      nome: f.nome, genero: f.genero,
+      mp3Url: null,
+      letra: `[Prévia da letra]\n\nAqui aparecerá a letra completa de "${f.nome}".\nSubstitua pelo arquivo real após gerar no Suno.`,
+    })),
+  });
+}
+
+function renderizarEntrega(dados) {
+  document.getElementById('d-pack-nome').textContent = (dados.pack.ico || '') + ' ' + dados.pack.nome;
+  const c = document.getElementById('d-faixas');
+  c.innerHTML = dados.faixas.map((f, i) => {
+    const id = 'd' + i;
+    return `
+    <div class="d-track">
+      <div class="d-track-head">
+        <div class="d-num">${i + 1}</div>
+        <div class="d-tname">${f.nome}</div>
+        <div class="d-genre">${f.genero}</div>
+      </div>
+      <div class="d-player">
+        <button class="d-playbtn" onclick="toggleEntrega(this,'${id}')">
+          <svg width="11" height="12" viewBox="0 0 11 12"><polygon points="1,1 10,6 1,11" fill="white"/></svg>
+        </button>
+        <div class="d-prog"><div class="d-progfill" id="dpb-${id}"></div></div>
+        <div class="d-time" id="dtl-${id}">3:00</div>
+      </div>
+      <div class="d-actions">
+        <button class="d-btn d-btn-dl" onclick="baixarMP3('${f.nome}','${f.mp3Url || ''}')">⬇ Baixar MP3</button>
+        <button class="d-btn d-btn-pdf" onclick="gerarPDF('${f.nome.replace(/'/g,"\\'")}','${f.genero}',\`${(f.letra||'').replace(/`/g,'\\`')}\`)">📄 Letra em PDF</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  const tela = document.getElementById('tela-entrega');
+  tela.classList.add('open');
+  window.scrollTo(0, 0);
+}
+
+// ─── Player tela de entrega ───────────────────────────────────
+const delivState = {}; let curDeliv = null;
+function toggleEntrega(btn, id) {
+  if (curDeliv && curDeliv !== id) pararEntrega(curDeliv);
+  delivState[id]?.on ? pararEntrega(id) : iniciarEntrega(btn, id);
+}
+function iniciarEntrega(btn, id) {
+  const total = 180;
+  if (!delivState[id]) delivState[id] = { on:false, t:0, iv:null };
+  const s = delivState[id]; s.on = true; curDeliv = id;
+  btn.innerHTML = '<svg width="9" height="10" viewBox="0 0 9 10"><rect x="0" y="0" width="3" height="10" rx="1" fill="white"/><rect x="5" y="0" width="3" height="10" rx="1" fill="white"/></svg>';
+  s.iv = setInterval(() => {
+    s.t += 0.1;
+    const pb = document.getElementById('dpb-' + id); const tl = document.getElementById('dtl-' + id);
+    if (pb) pb.style.width = Math.min(s.t / total * 100, 100) + '%';
+    if (tl) { const r = Math.max(0, total - Math.floor(s.t)); tl.textContent = Math.floor(r/60) + ':' + String(r%60).padStart(2,'0'); }
+    if (s.t >= total) pararEntrega(id);
+  }, 100);
+}
+function pararEntrega(id) {
+  const s = delivState[id]; if (!s) return;
+  s.on = false; clearInterval(s.iv);
+  const btn = document.querySelector(`[onclick="toggleEntrega(this,'${id}')"]`);
+  if (btn) btn.innerHTML = '<svg width="11" height="12" viewBox="0 0 11 12"><polygon points="1,1 10,6 1,11" fill="white"/></svg>';
+}
+
+// ─── Downloads ────────────────────────────────────────────────
+function baixarMP3(nome, url) {
+  if (url && url !== 'null') {
+    const a = document.createElement('a'); a.href = url; a.download = nome + '.mp3'; a.click();
+  } else {
+    mostrarToast('Substitua o link do MP3 no arquivo packs.js 🎵');
+  }
+}
+
+function gerarPDF(nome, genero, letra) {
+  const w = window.open('', '_blank');
+  w.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
+  <style>
+    body{font-family:Georgia,serif;max-width:520px;margin:56px auto;color:#1e1014;line-height:1.8;padding:0 20px}
+    h1{color:#8b1a3a;font-size:1.75rem;margin-bottom:3px}
+    h2{color:#c0395f;font-size:.95rem;font-style:italic;font-weight:normal;margin-bottom:22px}
+    pre{white-space:pre-wrap;font-family:Georgia,serif;font-size:.95rem;line-height:1.85;color:#3a2028}
+    .pack-lbl{font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:#c9a84c;margin-bottom:5px}
+    .rodape{margin-top:36px;font-size:.7rem;color:#bbb;text-align:center;border-top:1px solid #f0d5e0;padding-top:10px}
+  </style></head><body>
+  <div class="pack-lbl">Uma Canção Para Sua Mãe 🌸</div>
+  <h1>${nome}</h1>
+  <h2>${genero}</h2>
+  <pre>${letra}</pre>
+  <div class="rodape">Uma Canção Para Sua Mãe · Feliz Dia das Mães! 🌸</div>
+  <script>setTimeout(()=>window.print(),400)<\/script>
+  </body></html>`);
+  w.document.close();
+}
+
+// ─── Verificar retorno do checkout redirect ───────────────────
+function verificarRetornoCheckout() {
+  const params = new URLSearchParams(window.location.search);
+  const pagamento = params.get('pagamento');
+  const pid = params.get('pid');
+  if (pagamento === 'sucesso' && pid) {
+    history.replaceState({}, '', '/');
+    const tokenSalvo = sessionStorage.getItem('acesso_token');
+    if (tokenSalvo) mostrarEntrega(tokenSalvo);
+    else iniciarPolling(pid);
+  }
+}
+
+// ══════════════════════════════════════════
+// COUNTDOWN — Dia das Mães BR: 11/05/2025
+// ══════════════════════════════════════════
+function iniciarContagem() {
+  function tick() {
+    const alvo = new Date('2025-05-11T00:00:00'); const agora = new Date(); const diff = alvo - agora;
+    if (diff <= 0) return;
+    const pad = x => String(x).padStart(2, '0');
+    document.getElementById('days').textContent = pad(Math.floor(diff / 864e5));
+    document.getElementById('hours').textContent = pad(Math.floor(diff % 864e5 / 36e5));
+    document.getElementById('mins').textContent = pad(Math.floor(diff % 36e5 / 6e4));
+    document.getElementById('secs').textContent = pad(Math.floor(diff % 6e4 / 1e3));
+  }
+  tick(); setInterval(tick, 1000);
+}
+
+// ══════════════════════════════════════════
+// UTILITÁRIOS
+// ══════════════════════════════════════════
+function mostrarToast(msg) {
+  const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function iniciarFadeIn() {
+  document.querySelectorAll('.fade-in').forEach(el => {
+    new IntersectionObserver(([e], o) => {
+      if (e.isIntersecting) { el.classList.add('visible'); o.disconnect(); }
+    }, { threshold: .08 }).observe(el);
+  });
+}
+</script>
+</body>
+</html>
