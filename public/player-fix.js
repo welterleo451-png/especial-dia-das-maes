@@ -1,219 +1,256 @@
 // ═══════════════════════════════════════════
-// OVERRIDE: Player real + PDF fix + countdown
-// Este arquivo é carregado APÓS o script principal
+// CORREÇÕES: countdown 2026 + player real + PDF fix
+// Carregado APÓS o script principal do index.html
 // ═══════════════════════════════════════════
 
-// --- Fix countdown para 2026 ---
-(function() {
-  function tickFix() {
-    const alvo = new Date('2026-05-10T00:00:00');
-    const agora = new Date();
-    const diff = alvo - agora;
+// --- 1. FIX COUNTDOWN para 2026 ---
+(function fixCountdown() {
+  function tick2026() {
+    var alvo = new Date('2026-05-10T00:00:00');
+    var agora = new Date();
+    var diff = alvo - agora;
     if (diff <= 0) return;
-    const pad = x => String(x).padStart(2, '0');
+    function pad(x) { return String(x).padStart(2, '0'); }
     document.getElementById('days').textContent = pad(Math.floor(diff / 864e5));
     document.getElementById('hours').textContent = pad(Math.floor(diff % 864e5 / 36e5));
     document.getElementById('mins').textContent = pad(Math.floor(diff % 36e5 / 6e4));
     document.getElementById('secs').textContent = pad(Math.floor(diff % 6e4 / 1e3));
   }
-  tickFix();
-  setInterval(tickFix, 1000);
+  tick2026();
+  setInterval(tick2026, 1000);
 })();
 
-// --- Override mostrarEntregaDemo para incluir mp3Url e letra real ---
-window._originalMostrarEntregaDemo = window.mostrarEntregaDemo;
-window.mostrarEntregaDemo = function() {
-  const pack = window.packAtual;
-  window.renderizarEntregaReal({
-    pack: { ico: pack.ico, nome: pack.nome },
-    faixas: (pack.faixas || []).map(f => ({
-      nome: f.nome,
-      genero: f.genero,
-      mp3Url: f.mp3Url || f.previaUrl || null,
-      letra: f.letra || 'Letra completa de "' + f.nome + '"',
-    })),
+// --- 2. GLOBAL STORAGE para dados de entrega ---
+var _tracks = {};
+var _faixas = [];
+var _audioPlayers = {};
+var _curAudioId = null;
+
+// --- 3. OVERRIDE: mostrarEntregaDemo ---
+// O original usa `packAtual` que é `let` (não acessível via window)
+// Então interceptamos a chamada reescrevendo confirmarPix
+(function overrideConfirmarPix() {
+  // Salva referência ao botão
+  var pixBtn = document.getElementById('btn-pix-pago');
+  if (!pixBtn) return;
+
+  // Remove onclick original e adiciona o nosso
+  pixBtn.removeAttribute('onclick');
+  pixBtn.addEventListener('click', function() {
+    pixBtn.textContent = 'Verificando...';
+    pixBtn.disabled = true;
+
+    setTimeout(function() {
+      // Pega packAtual do escopo global (funciona porque function declarations são globais)
+      var packId = document.getElementById('m-nome').textContent;
+      var packIco = document.getElementById('m-ico').textContent;
+
+      // Fecha modal
+      document.getElementById('overlay').classList.remove('open');
+      document.body.style.overflow = '';
+
+      // Busca dados do pack da API
+      fetch('/api/packs')
+        .then(function(r) { return r.json(); })
+        .then(function(packs) {
+          // Encontra o pack pelo nome
+          var pack = null;
+          for (var i = 0; i < packs.length; i++) {
+            if (packs[i].nome === packId) { pack = packs[i]; break; }
+          }
+          if (!pack) pack = packs[0]; // fallback
+
+          renderEntregaReal({
+            pack: { ico: pack.ico, nome: pack.nome },
+            faixas: pack.faixas.map(function(f) {
+              return {
+                nome: f.nome,
+                genero: f.genero,
+                mp3Url: f.mp3Url || f.previaUrl || null,
+                letra: f.letra || 'Letra de "' + f.nome + '"'
+              };
+            })
+          });
+        })
+        .catch(function() {
+          // Fallback: mostra mensagem
+          document.getElementById('tela-entrega').classList.add('open');
+          document.getElementById('d-pack-nome').textContent = packIco + ' ' + packId;
+          document.getElementById('d-faixas').innerHTML = '<p style="text-align:center;padding:20px;color:#7a5060">Músicas carregando... Recarregue a página.</p>';
+        });
+
+      pixBtn.textContent = '✅ Já Fiz o Pix — Liberar Acesso';
+      pixBtn.disabled = false;
+    }, 1500);
   });
-};
+})();
 
-// --- Override mostrarEntrega para usar renderizarEntregaReal ---
-window._originalMostrarEntrega = window.mostrarEntrega;
-window.mostrarEntrega = async function(token) {
-  try {
-    const res = await fetch((window.CONFIG ? CONFIG.API_URL : '') + '/api/acesso', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: token }),
-    });
-    const dados = await res.json();
-    if (dados.faixas) window.renderizarEntregaReal(dados);
-    else window.mostrarEntregaDemo();
-  } catch(e) {
-    window.mostrarEntregaDemo();
-  }
-};
-
-// --- Novo renderizarEntrega com player real ---
-window._audioTracks = {};
-window._audioFaixas = [];
-
-window.renderizarEntregaReal = function(dados) {
+// --- 4. RENDERIZAR ENTREGA com player real ---
+function renderEntregaReal(dados) {
   document.getElementById('d-pack-nome').textContent = (dados.pack.ico || '') + ' ' + dados.pack.nome;
-  const c = document.getElementById('d-faixas');
-  window._audioTracks = {};
-  window._audioFaixas = dados.faixas;
+  var c = document.getElementById('d-faixas');
+  _tracks = {};
+  _faixas = dados.faixas;
+  _audioPlayers = {};
+  _curAudioId = null;
 
-  let html = '';
-  dados.faixas.forEach(function(f, i) {
-    const id = 'da' + i;
-    window._audioTracks[id] = f.mp3Url || '';
+  var html = '';
+  for (var i = 0; i < dados.faixas.length; i++) {
+    var f = dados.faixas[i];
+    var id = 'trk' + i;
+    _tracks[id] = f.mp3Url || '';
+
     html += '<div class="d-track">';
     html += '<div class="d-track-head">';
-    html += '<div class="d-num">' + (i+1) + '</div>';
+    html += '<div class="d-num">' + (i + 1) + '</div>';
     html += '<div class="d-tname">' + f.nome + '</div>';
     html += '<div class="d-genre">' + f.genero + '</div>';
     html += '</div>';
     html += '<div class="d-player">';
-    html += '<button class="d-playbtn" data-track="' + id + '" onclick="window.toggleAudio(this,\'' + id + '\')">';
+    html += '<button class="d-playbtn" data-tid="' + id + '" onclick="playToggle(\'' + id + '\',this)">';
     html += '<svg width="11" height="12" viewBox="0 0 11 12"><polygon points="1,1 10,6 1,11" fill="white"/></svg>';
     html += '</button>';
-    html += '<div class="d-prog" onclick="window.seekAudio(event,\'' + id + '\')"><div class="d-progfill" id="dpb-' + id + '"></div></div>';
-    html += '<div class="d-time" id="dtl-' + id + '">--:--</div>';
+    html += '<div class="d-prog" onclick="audioSeek(event,\'' + id + '\')"><div class="d-progfill" id="bar-' + id + '"></div></div>';
+    html += '<div class="d-time" id="tm-' + id + '">--:--</div>';
     html += '</div>';
     html += '<div class="d-actions">';
-    html += '<button class="d-btn d-btn-dl" onclick="window.dlMP3(' + i + ')">⬇ Baixar MP3</button>';
-    html += '<button class="d-btn d-btn-pdf" onclick="window.dlPDF(' + i + ')">📄 Letra em PDF</button>';
-    html += '</div></div>';
-  });
+    html += '<button class="d-btn d-btn-dl" onclick="dlTrack(' + i + ')">⬇ Baixar MP3</button>';
+    html += '<button class="d-btn d-btn-pdf" onclick="dlLetra(' + i + ')">📄 Letra em PDF</button>';
+    html += '</div>';
+    html += '</div>';
+  }
   c.innerHTML = html;
-
   document.getElementById('tela-entrega').classList.add('open');
   window.scrollTo(0, 0);
-};
+}
 
-// --- Player de áudio real ---
-window._audioPlayers = {};
-window._curAudio = null;
-
-window.toggleAudio = function(btn, id) {
-  if (window._curAudio && window._curAudio !== id) {
-    window.stopAudio(window._curAudio);
+// --- 5. PLAYER DE ÁUDIO REAL ---
+function playToggle(id, btn) {
+  // Parar outro que esteja tocando
+  if (_curAudioId && _curAudioId !== id) {
+    stopTrack(_curAudioId);
   }
-  const player = window._audioPlayers[id];
+  var player = _audioPlayers[id];
   if (player && player.playing) {
-    window.stopAudio(id);
+    stopTrack(id);
   } else {
-    window.playAudio(btn, id);
+    startTrack(id, btn);
   }
-};
+}
 
-window.playAudio = function(btn, id) {
-  if (!window._audioPlayers[id]) {
-    const url = window._audioTracks[id];
+function startTrack(id, btn) {
+  if (!_audioPlayers[id]) {
+    var url = _tracks[id];
     if (!url) {
-      if (typeof mostrarToast === 'function') mostrarToast('MP3 não disponível ainda');
+      showMsg('MP3 não disponível ainda');
       return;
     }
-    const audio = new Audio(url);
-    window._audioPlayers[id] = { audio: audio, playing: false };
+    var audio = new Audio(url);
+    _audioPlayers[id] = { audio: audio, playing: false };
 
     audio.addEventListener('timeupdate', function() {
-      const pb = document.getElementById('dpb-' + id);
-      const tl = document.getElementById('dtl-' + id);
-      if (audio.duration && pb) {
-        pb.style.width = (audio.currentTime / audio.duration * 100) + '%';
+      var bar = document.getElementById('bar-' + id);
+      var tm = document.getElementById('tm-' + id);
+      if (audio.duration && bar) {
+        bar.style.width = (audio.currentTime / audio.duration * 100) + '%';
       }
-      if (tl) {
-        const remaining = Math.max(0, Math.floor((audio.duration || 0) - audio.currentTime));
-        const mins = Math.floor(remaining / 60);
-        const secs = remaining % 60;
-        tl.textContent = mins + ':' + String(secs).padStart(2, '0');
+      if (tm) {
+        var rem = Math.max(0, Math.floor((audio.duration || 0) - audio.currentTime));
+        tm.textContent = Math.floor(rem / 60) + ':' + String(rem % 60).padStart(2, '0');
       }
     });
 
     audio.addEventListener('loadedmetadata', function() {
-      const tl = document.getElementById('dtl-' + id);
-      if (tl) {
-        const dur = Math.floor(audio.duration);
-        const mins = Math.floor(dur / 60);
-        const secs = dur % 60;
-        tl.textContent = mins + ':' + String(secs).padStart(2, '0');
+      var tm = document.getElementById('tm-' + id);
+      if (tm) {
+        var d = Math.floor(audio.duration);
+        tm.textContent = Math.floor(d / 60) + ':' + String(d % 60).padStart(2, '0');
       }
     });
 
     audio.addEventListener('ended', function() {
-      window.stopAudio(id);
+      stopTrack(id);
     });
   }
 
-  const player = window._audioPlayers[id];
-  player.playing = true;
-  window._curAudio = id;
-  player.audio.play().catch(function() {
-    if (typeof mostrarToast === 'function') mostrarToast('Erro ao reproduzir. Tente baixar o MP3.');
+  var p = _audioPlayers[id];
+  p.playing = true;
+  _curAudioId = id;
+  p.audio.play().catch(function() {
+    showMsg('Erro ao reproduzir. Tente baixar o MP3.');
   });
+  // Mostrar ícone de pause
   btn.innerHTML = '<svg width="9" height="10" viewBox="0 0 9 10"><rect x="0" y="0" width="3" height="10" rx="1" fill="white"/><rect x="5" y="0" width="3" height="10" rx="1" fill="white"/></svg>';
-};
+}
 
-window.stopAudio = function(id) {
-  const player = window._audioPlayers[id];
-  if (!player) return;
-  player.playing = false;
-  player.audio.pause();
-  const btn = document.querySelector('[data-track="' + id + '"]');
+function stopTrack(id) {
+  var p = _audioPlayers[id];
+  if (!p) return;
+  p.playing = false;
+  p.audio.pause();
+  var btn = document.querySelector('[data-tid="' + id + '"]');
   if (btn) {
     btn.innerHTML = '<svg width="11" height="12" viewBox="0 0 11 12"><polygon points="1,1 10,6 1,11" fill="white"/></svg>';
   }
-};
+}
 
-window.seekAudio = function(event, id) {
-  const player = window._audioPlayers[id];
-  if (!player || !player.audio || !player.audio.duration) return;
-  const rect = event.currentTarget.getBoundingClientRect();
-  const pct = (event.clientX - rect.left) / rect.width;
-  player.audio.currentTime = pct * player.audio.duration;
-};
+function audioSeek(event, id) {
+  var p = _audioPlayers[id];
+  if (!p || !p.audio || !p.audio.duration) return;
+  var rect = event.currentTarget.getBoundingClientRect();
+  var pct = (event.clientX - rect.left) / rect.width;
+  p.audio.currentTime = pct * p.audio.duration;
+}
 
-// --- Download MP3 ---
-window.dlMP3 = function(idx) {
-  const f = window._audioFaixas[idx];
+// --- 6. DOWNLOAD MP3 ---
+function dlTrack(idx) {
+  var f = _faixas[idx];
   if (!f) return;
-  const url = f.mp3Url;
-  if (url) {
-    const a = document.createElement('a');
-    a.href = url;
+  if (f.mp3Url) {
+    var a = document.createElement('a');
+    a.href = f.mp3Url;
     a.download = f.nome + '.mp3';
     a.target = '_blank';
+    document.body.appendChild(a);
     a.click();
+    document.body.removeChild(a);
   } else {
-    if (typeof mostrarToast === 'function') mostrarToast('MP3 não disponível ainda');
+    showMsg('MP3 não disponível ainda');
   }
-};
+}
 
-// --- Gerar PDF com letra ---
-window.dlPDF = function(idx) {
-  const f = window._audioFaixas[idx];
+// --- 7. GERAR PDF COM LETRA ---
+function dlLetra(idx) {
+  var f = _faixas[idx];
   if (!f) return;
-  const nome = f.nome;
-  const genero = f.genero;
-  const letra = f.letra || '';
-  const w = window.open('', '_blank');
-  if (!w) return;
-  const html = '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">' +
-    '<style>' +
-    'body{font-family:Georgia,serif;max-width:520px;margin:56px auto;color:#1e1014;line-height:1.8;padding:0 20px}' +
-    'h1{color:#8b1a3a;font-size:1.75rem;margin-bottom:3px}' +
-    'h2{color:#c0395f;font-size:.95rem;font-style:italic;font-weight:normal;margin-bottom:22px}' +
-    'pre{white-space:pre-wrap;font-family:Georgia,serif;font-size:.95rem;line-height:1.85;color:#3a2028}' +
-    '.lbl{font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:#c9a84c;margin-bottom:5px}' +
-    '.rod{margin-top:36px;font-size:.7rem;color:#bbb;text-align:center;border-top:1px solid #f0d5e0;padding-top:10px}' +
-    '</style></head><body>' +
-    '<div class="lbl">Uma Canção Para Sua Mãe 🌸</div>' +
-    '<h1>' + nome + '</h1>' +
-    '<h2>' + genero + '</h2>' +
-    '<pre>' + letra + '</pre>' +
-    '<div class="rod">Uma Canção Para Sua Mãe · Feliz Dia das Mães! 🌸</div>' +
-    '<scr' + 'ipt>setTimeout(function(){window.print()},500)<\/scr' + 'ipt>' +
-    '</body></html>';
-  w.document.write(html);
+  var w = window.open('', '_blank');
+  if (!w) { showMsg('Permita pop-ups para baixar o PDF'); return; }
+  var doc = '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">';
+  doc += '<style>';
+  doc += 'body{font-family:Georgia,serif;max-width:520px;margin:56px auto;color:#1e1014;line-height:1.8;padding:0 20px}';
+  doc += 'h1{color:#8b1a3a;font-size:1.75rem;margin-bottom:3px}';
+  doc += 'h2{color:#c0395f;font-size:.95rem;font-style:italic;font-weight:normal;margin-bottom:22px}';
+  doc += 'pre{white-space:pre-wrap;font-family:Georgia,serif;font-size:.95rem;line-height:1.85;color:#3a2028}';
+  doc += '.lbl{font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:#c9a84c;margin-bottom:5px}';
+  doc += '.rod{margin-top:36px;font-size:.7rem;color:#bbb;text-align:center;border-top:1px solid #f0d5e0;padding-top:10px}';
+  doc += '</style></head><body>';
+  doc += '<div class="lbl">Uma Canção Para Sua Mãe 🌸</div>';
+  doc += '<h1>' + f.nome + '</h1>';
+  doc += '<h2>' + f.genero + '</h2>';
+  doc += '<pre>' + (f.letra || '') + '</pre>';
+  doc += '<div class="rod">Uma Canção Para Sua Mãe · Feliz Dia das Mães! 🌸</div>';
+  doc += '<scr' + 'ipt>setTimeout(function(){window.print()},500)<\/scr' + 'ipt>';
+  doc += '</body></html>';
+  w.document.write(doc);
   w.document.close();
-};
+}
+
+// --- Helper ---
+function showMsg(msg) {
+  var t = document.getElementById('toast');
+  if (t) {
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(function() { t.classList.remove('show'); }, 3000);
+  }
+}
