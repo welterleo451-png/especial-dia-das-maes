@@ -21,6 +21,12 @@ Pra preparar o meu café
 E quando o mundo me assustava
 Você me ensinava a ter fé
 
+[Verso 2]
+As suas renúncias silenciosas
+Os sonhos que você adiou
+Tudo o que você deixou de lado
+Pra cuidar de quem você gerou
+
 [Pré-Refrão]
 Eu nunca disse o suficiente
 Mas hoje eu quero que você saiba
@@ -56,6 +62,12 @@ Você ficou de pé por mim
 Quando as palavras me faltavam
 Seu silêncio foi o meu jardim
 
+[Verso 2]
+O tempo passou e eu cresci
+Mas o seu abraço é o mesmo
+O mundo lá fora é tão frio
+Mas no seu peito eu me aqueço
+
 [Refrão]
 Minha fortaleza, minha mãe
 Você é onde eu sempre volto
@@ -68,7 +80,17 @@ No seu amor eu encontrei o mais seguro lar
 Obrigada por ser forte
 Quando eu não conseguia ser
 Obrigada por me mostrar
-O que é de verdade querer`,
+O que é de verdade querer
+
+[Refrão Final]
+Minha fortaleza, minha mãe
+Você é onde eu sempre volto
+Minha fortaleza, minha mãe
+No seu amor eu encontrei o mais seguro lar
+
+[Final]
+Meu mais seguro lar...
+Minha mãe, minha fortaleza.`,
       },
       {
         nome: 'Amor Sem Fim',
@@ -81,6 +103,12 @@ Que atravessa o tempo e o espaço
 Que cabe em um olhar, em um abraço
 Que cura tudo, sem nenhum traço
 
+[Verso 2]
+As estações mudam a cor
+Mas o seu sorriso ilumina
+Você é o meu farol na dor
+A voz que acalma e ensina
+
 [Refrão]
 É o amor sem fim que você me dá
 Que começou antes de eu respirar
@@ -91,7 +119,11 @@ Que vai comigo até o fim
 Mãe, você não sabe o quanto você vale
 Não existe preço, não existe igual
 Você é a primeira estrela que eu avistei
-E a última que apago ao dormir`,
+E a última que apago ao dormir
+
+[Final]
+Até o fim, mãe...
+Eu te amo pra sempre.`,
       },
     ],
   },
@@ -117,6 +149,12 @@ Já andei por muitos caminhos
 Mas onde quer que eu estivesse
 Eu voltava pro seu carinho
 
+[Verso 2]
+A vida me levou pra longe
+Mas meu coração ficou aí
+Nas lembranças da nossa cozinha
+No amor que eu sempre senti
+
 [Refrão]
 Você é meu lar, mãe
 Onde eu sempre quero estar
@@ -125,7 +163,10 @@ O melhor lugar do mundo é perto de você
 Pode ser qualquer lugar
 Se você estiver lá
 Você é meu lar, mãe
-Meu eterno lar`,
+Meu eterno lar
+
+[Final]
+Eterno lar... mãe.`,
       },
       {
         nome: 'Mãe Guerreira',
@@ -138,13 +179,22 @@ Sem ninguém pra agradecer
 Carregou o peso de mil fardos
 Só pra ver os filhos crescer
 
+[Verso 2]
+As noites mal dormidas, as orações
+O medo escondido atrás do sorriso
+Você enfrentou furacões
+Pra me dar o meu paraíso
+
 [Refrão]
 Mãe guerreira, você venceu
 Com as mãos calejadas e o coração aberto
 Mãe guerreira, Deus te viu
 Em cada sacrifício, em cada gesto certo
 Você plantou amor onde só havia pedra
-E da pedra brotou vida, brotou flor`,
+E da pedra brotou vida, brotou flor
+
+[Final]
+Brotou flor... minha mãe guerreira.`,
       },
       {
         nome: 'Primeiro Abraço',
@@ -191,7 +241,25 @@ Não dá pra sentir o cheiro do seu cabelo
 Não dá pra pegar na sua mão de noite
 Quando a saudade chega mais pesada
 
+[Verso 2]
+Os dias passam voando aqui
+Mas a saudade anda devagar
+Eu conto os dias no calendário
+Pro momento de te encontrar
+
 [Refrão]
+Recebe esse abraço de longe, mãe
+Que eu mandei com todo amor que cabia em mim
+Esse abraço de longe que atravessa o Brasil
+Pra dizer que você sempre foi o meu lar
+
+[Ponte]
+E mesmo com essa tela entre nós
+Eu consigo sentir o seu calor
+A sua voz pelo telefone
+Ainda é o meu maior cobertor
+
+[Refrão Final]
 Recebe esse abraço de longe, mãe
 Que eu mandei com todo amor que cabia em mim
 Esse abraço de longe que atravessa o Brasil
@@ -208,11 +276,21 @@ O coração não sabe o que é longe
 Cada vez que fecho os olhos
 É o seu rosto que eu vejo, tão forte
 
+[Verso 2]
+Eu levo seus conselhos na mala
+E o seu sorriso na memória
+Você é a página mais linda
+Que eu tenho na minha história
+
 [Refrão]
 Longe, mas perto, mãe
 A saudade me diz que você está aqui
 Longe, mas perto, mãe
-Em cada detalhe da vida que eu construí`,
+Em cada detalhe da vida que eu construí
+
+[Final]
+Em cada detalhe, mãe.
+Longe, mas perto.`,
       },
       {
         nome: 'Você Vive em Mim',
@@ -225,13 +303,29 @@ Na forma que eu cuido, tem você
 Na teimosia que não me deixa desistir
 Na força que aparece no pior momento
 
+[Verso 2]
+Quando me olho no espelho
+Vejo um pouco do seu olhar
+E toda vez que eu tropeço
+Lembro de você a me guiar
+
 [Refrão]
 Você vive em mim, mãe
 Em cada parte do que eu me tornei
 Você vive em mim, mãe
 Em cada escolha certa que eu já tomei
 Não importa onde eu for, o que eu fizer
-Em mim, você vai estar`,
+Em mim, você vai estar
+
+[Ponte]
+A distância não pode apagar
+O que o sangue e a alma escreveram
+Nossos laços nunca vão quebrar
+Eles só se fortaleceram
+
+[Final]
+Em mim, você vai estar...
+Pra sempre.`,
       },
     ],
   },
