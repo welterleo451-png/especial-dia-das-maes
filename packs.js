@@ -6,8 +6,8 @@ const PACKS = {
     ico: '💖',
     nome: 'Pack Emoção Pura',
     tagline: 'Para a mãe guerreira e dedicada',
-    preco: 100, // TODO: Voltar para 1790 após o teste (R$ 17,90)
-    precoLabel: 'R$ 1,00', // TODO: Voltar para 'R$ 17,90' após o teste
+    preco: 1790,
+    precoLabel: 'R$ 17,90',
     previaSegundos: 35,
     faixas: [
       {
