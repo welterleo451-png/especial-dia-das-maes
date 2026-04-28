@@ -6,8 +6,8 @@ const PACKS = {
     ico: '💖',
     nome: 'Pack Emoção Pura',
     tagline: 'Para a mãe guerreira e dedicada',
-    preco: 1900,
-    precoLabel: 'R$\u00a019',
+    preco: 100, // TODO: Voltar para 1790 após o teste (R$ 17,90)
+    precoLabel: 'R$ 1,00', // TODO: Voltar para 'R$ 17,90' após o teste
     previaSegundos: 35,
     faixas: [
       {
@@ -101,8 +101,8 @@ E a última que apago ao dormir`,
     ico: '🌹',
     nome: 'Pack Amor de Mãe',
     tagline: 'Para emocionar até a mais durona',
-    preco: 2900,
-    precoLabel: 'R$\u00a029',
+    preco: 2990,
+    precoLabel: 'R$ 29,90',
     destaque: true,
     previaSegundos: 35,
     faixas: [
@@ -176,8 +176,8 @@ Te amo, mãe`,
     ico: '🌙',
     nome: 'Pack Saudade',
     tagline: 'Para quem está longe mas não esquece',
-    preco: 1900,
-    precoLabel: 'R$\u00a019',
+    preco: 2490,
+    precoLabel: 'R$ 24,90',
     previaSegundos: 35,
     faixas: [
       {

@@ -37,14 +37,28 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(253,247,242,
 .csep{font-size:.9rem;opacity:.4;font-weight:700}
 
 /* HERO */
-.hero{padding:40px 20px 36px;text-align:center;background:linear-gradient(160deg,#fdf7f2,#faedf4 55%,#f5e0ec);position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(192,57,95,.05),transparent 60%)}
-.hero-badge{display:inline-flex;align-items:center;gap:6px;background:var(--rl);color:var(--r);font-size:.68rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:50px;border:1px solid #f0c0d0;margin-bottom:16px}
-.hero h1{font-family:var(--ft);font-size:clamp(2.2rem,6vw,4rem);line-height:1.12;color:var(--rd);margin-bottom:8px}
+.hero{background:linear-gradient(160deg,#fdf7f2,#faedf4 55%,#f5e0ec);position:relative;overflow:hidden;padding:0}
+.hero-inner{display:flex;align-items:stretch;min-height:500px;max-width:1100px;margin:0 auto}
+.hero-text{flex:1;padding:48px 36px 48px 48px;display:flex;flex-direction:column;justify-content:center;text-align:left}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:var(--rl);color:var(--r);font-size:.68rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:50px;border:1px solid #f0c0d0;margin-bottom:18px;align-self:flex-start}
+.hero h1{font-family:var(--ft);font-size:clamp(2rem,4vw,3.4rem);line-height:1.12;color:var(--rd);margin-bottom:12px}
 .hero h1 em{color:var(--r);font-style:italic}
-.hero-sub{font-family:var(--ft);font-style:italic;font-size:clamp(.95rem,2vw,1.2rem);color:var(--ts);margin-bottom:12px}
-.hero-desc{max-width:440px;margin:0 auto 22px;font-size:.88rem;color:var(--ts);line-height:1.75}
-.hero-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.hero-sub{font-family:var(--ft);font-style:italic;font-size:clamp(.95rem,1.8vw,1.15rem);color:var(--ts);margin-bottom:20px}
+.hero-provas{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px}
+.hero-provas span{background:white;border:1px solid #f0d5e0;border-radius:50px;padding:5px 12px;font-size:.75rem;color:var(--ts);font-weight:500}
+.hero-btns{display:flex;gap:8px;flex-wrap:wrap}
+.hero-photo{flex:0 0 420px;background:url('./imagens/hero.jpg') center/cover no-repeat,var(--rl);position:relative;min-height:400px}
+.hero-photo::before{content:'';position:absolute;inset:0;background:linear-gradient(to right,rgba(253,247,242,.4) 0%,transparent 30%)}
+.hero-photo-badge{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);background:var(--rd);color:white;font-family:var(--ft);font-size:1rem;font-weight:600;padding:8px 20px;border-radius:50px;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.2)}
+@media(max-width:700px){
+  .hero-inner{flex-direction:column}
+  .hero-text{padding:32px 20px 24px;text-align:center}
+  .hero-badge{align-self:center}
+  .hero-btns{justify-content:center}
+  .hero-provas{justify-content:center}
+  .hero-photo{flex:none;height:220px;min-height:0}
+  .hero-photo-badge{font-size:.85rem}
+}
 
 /* BOTÕES */
 .btn{display:inline-block;font-family:var(--fb);font-weight:600;font-size:.85rem;padding:13px 28px;border-radius:50px;text-decoration:none;border:none;cursor:pointer;transition:all .2s;letter-spacing:.3px}
@@ -114,6 +128,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(253,247,242,
 
 /* DEPOIMENTOS */
 .depos-sec{padding:32px 16px;background:white}
+.depo-layout{display:flex;gap:20px;max-width:860px;margin:0 auto;align-items:flex-start}
+.depo-img-side{flex:0 0 200px;border-radius:14px;overflow:hidden;box-shadow:0 8px 28px rgba(192,57,95,.14);min-height:320px}
+@media(max-width:640px){.depo-layout{flex-direction:column}.depo-img-side{flex:none;width:100%}.depo-img-side img{height:180px}}
 .depos{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;max-width:820px;margin:0 auto}
 .depo{background:var(--cr);border-radius:12px;padding:18px 16px;border:1px solid #f0d5e0}
 .qm{font-family:var(--ft);font-size:2.8rem;color:#f0c0d0;line-height:.3;margin-bottom:10px;display:block}
@@ -203,6 +220,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(253,247,242,
 
 .d-footer{text-align:center;margin-top:18px;padding-top:14px;border-top:1px solid #f0d5e0;font-size:.75rem;color:var(--ts);line-height:1.7}
 
+.banner-sec{position:relative;padding:80px 24px;display:flex;align-items:center;justify-content:center}
+.banner-sec::before{content:'';position:absolute;inset:0;background:rgba(80,5,30,.55)}
+.banner-overlay{position:relative;z-index:1;width:100%}
+.banner-txt{text-align:center;padding:20px;max-width:560px;margin:0 auto}
 footer{background:var(--tx);color:rgba(255,255,255,.45);text-align:center;padding:18px;font-size:.72rem}
 footer strong{color:rgba(255,255,255,.8)}
 
@@ -218,7 +239,7 @@ footer strong{color:rgba(255,255,255,.8)}
 
 <nav>
   <span class="nav-logo">♪ Uma Canção Para Sua Mãe</span>
-  <button class="nav-btn" onclick="abrirModal('p2')">Comprar Agora</button>
+  <button class="nav-btn" onclick="rolarPara('packs')">Comprar Agora</button>
 </nav>
 
 <!-- COUNTDOWN -->
@@ -233,28 +254,44 @@ footer strong{color:rgba(255,255,255,.8)}
     <span class="csep">:</span>
     <div class="cb"><span class="cn" id="secs">--</span><span class="cl">seg</span></div>
   </div>
-  <span class="cbar-txt" style="opacity:.7">11 de maio · não deixe pra última hora!</span>
+  <span class="cbar-txt" style="opacity:.7">10 de maio · não deixe pra última hora!</span>
 </div>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-badge">🎵 Presente Único · Entrega Imediata</div>
-  <h1>A música que vai fazer<br>sua mãe <em>chorar</em><br>de emoção</h1>
-  <p class="hero-sub">Porque "eu te amo" às vezes precisa de uma melodia.</p>
-  <p class="hero-desc">Packs com 3 músicas originais — ouça a prévia, compre e receba na hora: player completo, download MP3 e letra em PDF.</p>
-  <div class="hero-btns">
-    <a href="#packs" class="btn btn-rose">✨ Ver os Packs</a>
-    <a href="#como-funciona" class="btn btn-out">Como funciona?</a>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-badge">🎵 Presente Único · Entrega Imediata</div>
+      <h1>A música que vai<br>fazer sua mãe<br><em>chorar de emoção</em></h1>
+      <p class="hero-sub">Porque "eu te amo" às vezes precisa de uma melodia.</p>
+      <div class="hero-provas">
+        <span>⚡ Entrega na hora</span>
+        <span>🎵 3 músicas MP3</span>
+        <span>📄 Letra em PDF</span>
+      </div>
+      <div class="hero-btns">
+        <button class="btn btn-rose" onclick="rolarPara('packs')">✨ Ver os Packs</button>
+        <button class="btn btn-out" onclick="rolarPara('como-funciona')">Como funciona?</button>
+      </div>
+    </div>
+    <div class="hero-photo" style="background-image:url('./imagens/hero.jpg')">
+      <div class="hero-photo-badge">🌸 A partir de R$ 17,90</div>
+    </div>
   </div>
 </section>
 <div class="div"></div>
 
 <!-- PACKS (preenchidos via JS) -->
-<section class="packs-section" id="packs">
+<section class="packs-section" id="packs" style="scroll-margin-top:60px">
   <div class="sec-hd fade-in">
     <div class="sec-title">Escolha seu <em>Pack</em></div>
     <div class="goldbar"></div>
-    <div class="sec-sub">Prévia de 30s gratuita · Após comprar: ouça completo, baixe MP3 e a letra em PDF</div>
+    <div class="sec-sub">Ouça a prévia antes de comprar · Após pagar: player completo, MP3 e letra em PDF na hora</div>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:12px">
+      <span style="font-size:.78rem;color:var(--ts);display:flex;align-items:center;gap:5px">⭐⭐⭐⭐⭐ <strong style="color:var(--rd)">+200 mães emocionadas</strong></span>
+      <span style="font-size:.78rem;color:var(--ts)">🔒 Pagamento 100% seguro</span>
+      <span style="font-size:.78rem;color:var(--ts)">⚡ Entrega imediata</span>
+    </div>
   </div>
   <div class="packs fade-in" id="packs-container">
     <div style="text-align:center;padding:40px;color:var(--ts);grid-column:1/-1">Carregando packs...</div>
@@ -263,7 +300,7 @@ footer strong{color:rgba(255,255,255,.8)}
 <div class="div"></div>
 
 <!-- COMO FUNCIONA -->
-<section class="steps-sec" id="como-funciona">
+<section class="steps-sec" id="como-funciona" style="scroll-margin-top:60px">
   <div class="sec-hd fade-in">
     <div class="sec-title">Como <em>funciona?</em></div>
     <div class="goldbar"></div>
@@ -280,21 +317,69 @@ footer strong{color:rgba(255,255,255,.8)}
 <!-- DEPOIMENTOS -->
 <section class="depos-sec">
   <div class="sec-hd fade-in">
-    <div class="sec-title">Elas <em>choraram</em></div>
+    <div class="sec-title">Elas <em>choraram</em> de emoção</div>
     <div class="goldbar"></div>
+    <div class="sec-sub">Quem já presenteou sabe o poder de uma música única</div>
   </div>
-  <div class="depos fade-in">
-    <div class="depo"><span class="qm">"</span><div class="stars">★★★★★</div><p>Minha mãe chorou antes de terminar a primeira música. O presente mais especial que ela já recebeu.</p><div class="dauth">— Ana Paula M., São Paulo/SP</div></div>
-    <div class="depo"><span class="qm">"</span><div class="stars">★★★★★</div><p>Comprei o Pack Saudade porque moro em outro estado. Minha mãe disse que escuta toda noite antes de dormir.</p><div class="dauth">— Carlos R., Manaus/AM</div></div>
-    <div class="depo"><span class="qm">"</span><div class="stars">★★★★★</div><p>Nunca pensei que IA fazia músicas tão bonitas. Minha mãe compartilhou no status do WhatsApp dela na hora!</p><div class="dauth">— Juliana F., Porto Alegre/RS</div></div>
+  <div class="depo-layout fade-in">
+    <div class="depo-img-side" style="background:url('./imagens/depoimento.jpg') center/cover no-repeat,linear-gradient(135deg,var(--rl),#f9e0ec)">
+    </div>
+    <div class="depos">
+      <div class="depo"><span class="qm">"</span><div class="stars">★★★★★</div><p>Minha mãe chorou antes de terminar a primeira música. O presente mais especial que ela já recebeu em anos.</p><div class="dauth">— Ana Paula M., São Paulo/SP</div></div>
+      <div class="depo"><span class="qm">"</span><div class="stars">★★★★★</div><p>Comprei o Pack Saudade porque moro em outro estado. Minha mãe disse que escuta toda noite antes de dormir.</p><div class="dauth">— Carlos R., Manaus/AM</div></div>
+      <div class="depo"><span class="qm">"</span><div class="stars">★★★★★</div><p>Nunca pensei que IA fazia músicas tão bonitas. Minha mãe compartilhou no status do WhatsApp dela na hora!</p><div class="dauth">— Juliana F., Porto Alegre/RS</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMO ENTREGA -->
+<section style="padding:32px 16px;background:var(--rl)">
+  <div class="sec-hd">
+    <div class="sec-title">O que você <em>recebe</em></div>
+    <div class="goldbar"></div>
+    <div class="sec-sub">Tudo digital, tudo na hora, tudo no seu celular</div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;max-width:700px;margin:0 auto">
+    <div style="background:white;border-radius:14px;padding:20px 16px;text-align:center;border:1px solid #f0d5e0">
+      <div style="font-size:2rem;margin-bottom:8px">🎵</div>
+      <div style="font-family:var(--ft);font-size:1rem;color:var(--rd);font-weight:600;margin-bottom:4px">3 Músicas MP3</div>
+      <div style="font-size:.78rem;color:var(--ts)">Alta qualidade, para ouvir e guardar pra sempre</div>
+    </div>
+    <div style="background:white;border-radius:14px;padding:20px 16px;text-align:center;border:1px solid #f0d5e0">
+      <div style="font-size:2rem;margin-bottom:8px">📄</div>
+      <div style="font-family:var(--ft);font-size:1rem;color:var(--rd);font-weight:600;margin-bottom:4px">Letra em PDF</div>
+      <div style="font-size:.78rem;color:var(--ts)">Para imprimir e entregar junto com a música</div>
+    </div>
+    <div style="background:white;border-radius:14px;padding:20px 16px;text-align:center;border:1px solid #f0d5e0">
+      <div style="font-size:2rem;margin-bottom:8px">⚡</div>
+      <div style="font-family:var(--ft);font-size:1rem;color:var(--rd);font-weight:600;margin-bottom:4px">Entrega Imediata</div>
+      <div style="font-size:.78rem;color:var(--ts)">Acesso na hora, logo após o pagamento</div>
+    </div>
+    <div style="background:white;border-radius:14px;padding:20px 16px;text-align:center;border:1px solid #f0d5e0">
+      <div style="font-size:2rem;margin-bottom:8px">🔒</div>
+      <div style="font-family:var(--ft);font-size:1rem;color:var(--rd);font-weight:600;margin-bottom:4px">Pagamento Seguro</div>
+      <div style="font-size:.78rem;color:var(--ts)">Mercado Pago · Pix ou cartão</div>
+    </div>
+  </div>
+</section>
+
+<!-- BANNER -->
+<section class="banner-sec" style="background:url('./imagens/banner.jpg') center/cover no-repeat,linear-gradient(135deg,var(--rd),#6b0e2e)">
+  <div class="banner-overlay">
+    <div class="banner-txt">
+      <div style="font-size:.75rem;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:8px">🌸 DIA DAS MÃES 2026</div>
+      <div style="font-family:var(--ft);font-size:clamp(1.5rem,4vw,2.4rem);color:white;margin-bottom:8px;line-height:1.2">O presente que ela<br><em style="color:#ffd6e7">nunca vai esquecer</em></div>
+      <div style="font-size:.85rem;color:rgba(255,255,255,.85);margin-bottom:22px">Música original · Entrega na hora · A partir de R$ 17,90</div>
+      <button class="btn btn-gold" onclick="rolarPara('packs')" style="font-size:.95rem;padding:14px 36px">✨ Escolher Meu Pack</button>
+    </div>
   </div>
 </section>
 
 <!-- URGÊNCIA -->
 <section class="urgency">
   <h2>⏰ O Dia das Mães tá chegando!</h2>
-  <p>11 de maio. Garanta seu pack agora e chegue na hora com o presente mais emocionante que ela já recebeu.</p>
-  <button class="btn btn-gold" onclick="abrirModal('p2')">🎵 Garantir Meu Pack Agora</button>
+  <p>10 de maio de 2026. Não deixe pra última hora — garanta seu pack agora e surpreenda ela com o presente mais emocionante!</p>
+  <button class="btn btn-gold" onclick="rolarPara('packs')">🎵 Garantir Meu Pack Agora</button>
 </section>
 
 <footer>
@@ -437,12 +522,27 @@ async function carregarPacks() {
   } catch {
     // Fallback com dados locais se a API não estiver disponível
     const fallback = [
-      { id:'p1', ico:'💖', nome:'Pack Emoção Pura', tagline:'Para a mãe guerreira e dedicada', precoLabel:'R$ 19', destaque:false,
-        faixas:[{nome:'Obrigada por Tudo',genero:'Pop Romântico'},{nome:'Minha Fortaleza',genero:'MPB Suave'},{nome:'Amor Sem Fim',genero:'Balada'}]},
-      { id:'p2', ico:'🌹', nome:'Pack Amor de Mãe', tagline:'Para emocionar até a mais durona', precoLabel:'R$ 29', destaque:true,
-        faixas:[{nome:'Você É Meu Lar',genero:'Soul Brasileiro'},{nome:'Mãe Guerreira',genero:'Gospel Suave'},{nome:'Primeiro Abraço',genero:'Acústico'}]},
-      { id:'p3', ico:'🌙', nome:'Pack Saudade', tagline:'Para quem está longe mas não esquece', precoLabel:'R$ 19', destaque:false,
-        faixas:[{nome:'Longe, Mas Perto',genero:'Bossa Nova'},{nome:'Abraço de Longe',genero:'Pop Melancólico'},{nome:'Você Vive em Mim',genero:'Balada Suave'}]},
+      { id:'p1', ico:'💖', nome:'Pack Emoção Pura', tagline:'Para a mãe guerreira e dedicada', precoLabel:'R$ 17,90', destaque:false,
+        faixas:[
+          {nome:'Obrigada por Tudo',genero:'Pop Romântico', previaUrl:'https://drive.google.com/uc?export=download&id=1A7vQkum5vXeW3-GnD4v2z78lffGbY7TD', mp3Url:'https://drive.google.com/uc?export=download&id=1A7vQkum5vXeW3-GnD4v2z78lffGbY7TD', letra: '[Verso 1]\nVocê acordava antes do sol\nPra preparar o meu café\nE quando o mundo me assustava\nVocê me ensinava a ter fé\n\n[Pré-Refrão]\nEu nunca disse o suficiente\nMas hoje eu quero que você saiba\n\n[Refrão]\nObrigada por tudo, mãe\nPor cada noite que você não dormiu\nObrigada por tudo, mãe\nPor segurar minha mão quando eu caí\nVocê é o amor mais bonito que eu conheço\nO maior presente que a vida me deu\nObrigada por tudo, mãe\nPor ser exatamente quem você é\n\n[Ponte]\nE se um dia eu chegar\nOnde eu sempre sonhei\nVou saber que foi você\nQue me ensinou a voar\n\n[Refrão Final]\nObrigada por tudo, mãe\nTe amo mais do que consigo dizer'},
+          {nome:'Minha Fortaleza',genero:'MPB Suave', previaUrl:'https://drive.google.com/uc?export=download&id=1wqJm8VOB18CW8lJkELu5gvamsL-eMvZd', mp3Url:'https://drive.google.com/uc?export=download&id=1oMmJycumdFkrPZPLfm877Gmmi3pTSeGr', letra: '[Verso 1]\nQuando o chão fugiu dos meus pés\nVocê ficou de pé por mim\nQuando as palavras me faltavam\nSeu silêncio foi o meu jardim\n\n[Refrão]\nMinha fortaleza, minha mãe\nVocê é onde eu sempre volto\nMinha fortaleza, minha mãe\nNo seu colo o mundo fica solto\nNão precisa de paredes nem de muro\nNo seu amor eu encontrei o mais seguro lar\n\n[Ponte]\nObrigada por ser forte\nQuando eu não conseguia ser\nObrigada por me mostrar\nO que é de verdade querer'},
+          {nome:'Amor Sem Fim',genero:'Balada', previaUrl:'https://drive.google.com/uc?export=download&id=1VVGaL_WBK91YT4PPHUz03VHtq8_igZ-s', mp3Url:'https://drive.google.com/uc?export=download&id=1VVGaL_WBK91YT4PPHUz03VHtq8_igZ-s', letra: '[Verso 1]\nExiste um amor que não conhece fronteiras\nQue atravessa o tempo e o espaço\nQue cabe em um olhar, em um abraço\nQue cura tudo, sem nenhum traço\n\n[Refrão]\nÉ o amor sem fim que você me dá\nQue começou antes de eu respirar\nÉ o amor sem fim que me faz seguir\nQue vai comigo até o fim\n\n[Ponte]\nMãe, você não sabe o quanto você vale\nNão existe preço, não existe igual\nVocê é a primeira estrela que eu avistei\nE a última que apago ao dormir'}
+        ]
+      },
+      { id:'p2', ico:'🌹', nome:'Pack Amor de Mãe', tagline:'Para emocionar até a mais durona', precoLabel:'R$ 29,90', destaque:true,
+        faixas:[
+          {nome:'Você É Meu Lar',genero:'Soul Brasileiro', previaUrl:'https://drive.google.com/uc?export=download&id=1cA72413UV40yHwrgD1K9UpwZBZCqONju', mp3Url:'https://drive.google.com/uc?export=download&id=1cA72413UV40yHwrgD1K9UpwZBZCqONju', letra: '[Verso 1]\nJá morei em muitos lugares\nJá andei por muitos caminhos\nMas onde quer que eu estivesse\nEu voltava pro seu carinho\n\n[Refrão]\nVocê é meu lar, mãe\nOnde eu sempre quero estar\nVocê é meu lar, mãe\nO melhor lugar do mundo é perto de você\nPode ser qualquer lugar\nSe você estiver lá\nVocê é meu lar, mãe\nMeu eterno lar'},
+          {nome:'Mãe Guerreira',genero:'Gospel Suave', previaUrl:'https://drive.google.com/uc?export=download&id=1gkgW_BJ-zxjYENQO0ss3t_DN0wol442k', mp3Url:'https://drive.google.com/uc?export=download&id=1JDbL9w9nvu4BUCBAdJBdT8T7MZV5eIL8', letra: '[Verso 1]\nEla acordou cedo tantas vezes\nSem ninguém pra agradecer\nCarregou o peso de mil fardos\nSó pra ver os filhos crescer\n\n[Refrão]\nMãe guerreira, você venceu\nCom as mãos calejadas e o coração aberto\nMãe guerreira, Deus te viu\nEm cada sacrifício, em cada gesto certo\nVocê plantou amor onde só havia pedra\nE da pedra brotou vida, brotou flor'},
+          {nome:'Primeiro Abraço',genero:'Acústico', previaUrl:'https://drive.google.com/uc?export=download&id=15zFoZRVcBatSlF3H9aLWc5MzivahnR3P', mp3Url:'https://drive.google.com/uc?export=download&id=15zFoZRVcBatSlF3H9aLWc5MzivahnR3P', letra: '[Verso 1]\nDizem que o primeiro som que ouvi no mundo\nEra o batimento do seu coração\nAntes de conhecer o sol ou a lua\nJá conhecia o cheiro do seu amor\n\n[Refrão]\nNo primeiro abraço que você me deu\nO mundo inteiro parou de girar\nNo primeiro abraço, eu aprendi\nQue o amor é o lugar mais bonito de estar\n\n[Final]\nObrigada pelo primeiro abraço\nE por todos que ainda vêm\nTe amo, mãe'}
+        ]
+      },
+      { id:'p3', ico:'🌙', nome:'Pack Saudade', tagline:'Para quem está longe mas não esquece', precoLabel:'R$ 24,90', destaque:false,
+        faixas:[
+          {nome:'Abraço de Longe',genero:'Pop Melancólico', previaUrl:'https://drive.google.com/uc?export=download&id=197UGfWdBDenLR2kt-78IsYz_5-6pXFWp', mp3Url:'https://drive.google.com/uc?export=download&id=197UGfWdBDenLR2kt-78IsYz_5-6pXFWp', letra: '[Verso 1]\nTem coisas que o celular não entrega\nNão dá pra sentir o cheiro do seu cabelo\nNão dá pra pegar na sua mão de noite\nQuando a saudade chega mais pesada\n\n[Refrão]\nRecebe esse abraço de longe, mãe\nQue eu mandei com todo amor que cabia em mim\nEsse abraço de longe que atravessa o Brasil\nPra dizer que você sempre foi o meu lar'},
+          {nome:'Longe, Mas Perto',genero:'Bossa Nova', previaUrl:'https://drive.google.com/uc?export=download&id=1qKTC7Fo843fh75QPTPOzFfKlKNmojVTE', mp3Url:'https://drive.google.com/uc?export=download&id=1qKTC7Fo843fh75QPTPOzFfKlKNmojVTE', letra: '[Verso 1]\nA distância é só em quilômetros\nO coração não sabe o que é longe\nCada vez que fecho os olhos\nÉ o seu rosto que eu vejo, tão forte\n\n[Refrão]\nLonge, mas perto, mãe\nA saudade me diz que você está aqui\nLonge, mas perto, mãe\nEm cada detalhe da vida que eu construí'},
+          {nome:'Você Vive em Mim',genero:'Balada Suave', previaUrl:'https://drive.google.com/uc?export=download&id=1NEonCvuNm-8K_JxY1fodo2AqK5MbCqm4', mp3Url:'https://drive.google.com/uc?export=download&id=15wwlKMB4I_LFF2Aoqhk_p-8u6N8m9RL6', letra: '[Verso 1]\nNo jeito que eu rio, tem você\nNa forma que eu cuido, tem você\nNa teimosia que não me deixa desistir\nNa força que aparece no pior momento\n\n[Refrão]\nVocê vive em mim, mãe\nEm cada parte do que eu me tornei\nVocê vive em mim, mãe\nEm cada escolha certa que eu já tomei\nNão importa onde eu for, o que eu fizer\nEm mim, você vai estar'}
+        ]
+      }
     ];
     fallback.forEach(p => packsData[p.id] = p);
     renderizarPacks(fallback);
@@ -458,18 +558,18 @@ function renderizarPacks(packs) {
         <span class="pack-ico">${p.ico}</span>
         <div class="pack-name">${p.nome}</div>
         <div class="pack-tagline">"${p.tagline}"</div>
-        <div class="pack-price"><span class="p-cur">R$</span><span class="p-val">${p.precoLabel.replace('R$','').replace('R$ ','').trim()}</span><span class="p-info">· 3 músicas</span></div>
+        <div class="pack-price"><span class="p-val" style="font-size:1.8rem">${p.precoLabel}</span><span class="p-info" style="margin-left:6px">· 3 músicas</span></div>
       </div>
       <div class="tracks">
-        <div class="trk-lbl">Prévia de 30s — clique pra ouvir</div>
+        <div class="trk-lbl">Prévia — clique pra ouvir</div>
         ${p.faixas.map((f,i) => `
         <div class="track">
-          <button class="playbtn" onclick="togglePrevia(this,'${p.id}_${i}')">
+          <button class="playbtn" onclick="registrarPrevia('${p.id}_${i}','${f.previaUrl}');togglePrevia(this,'${p.id}_${i}')" data-secs="${p.previaSegundos||35}">
             <svg width="9" height="10" viewBox="0 0 9 10"><polygon points="1,1 8,5 1,9" fill="var(--r)"/></svg>
           </button>
           <div class="tinfo"><div class="tname">${f.nome}</div><div class="tgenre">${f.genero}</div></div>
           <div class="prog"><div class="progfill" id="pb-${p.id}_${i}"></div></div>
-          <div class="ttime" id="tl-${p.id}_${i}">0:30</div>
+          <div class="ttime" id="tl-${p.id}_${i}">0:${String(p.previaSegundos||35).padStart(2,"0")}</div>
         </div>`).join('')}
       </div>
       <div class="pack-bot">
@@ -479,45 +579,64 @@ function renderizarPacks(packs) {
           <div class="perk"><span class="pk">♥</span>Letra completa em PDF</div>
           ${p.destaque ? '<div class="perk"><span class="pk">♥</span>Estilos variados no mesmo pack</div>' : ''}
         </div>
-        <button class="btn btn-rose btn-full" onclick="abrirModal('${p.id}')">Comprar · ${p.precoLabel}</button>
+        <button class="btn btn-rose btn-full" onclick="abrirModal('${p.id}')">🎵 Comprar · ${p.precoLabel}</button>
       </div>
     </div>
   `).join('');
 }
 
 // ══════════════════════════════════════════
-// PLAYER PRÉVIA 30s
+// PLAYER PRÉVIA — usa <audio> nativo via proxy
 // ══════════════════════════════════════════
-const prevState = {}; let curPrev = null;
+const audios = {};   // id -> HTMLAudioElement
+const prevUrls = {}; // id -> url da prévia
+let curPrev = null;
+
+function registrarPrevia(id, url) { prevUrls[id] = url; }
 
 function togglePrevia(btn, id) {
   if (curPrev && curPrev !== id) pararPrevia(curPrev);
-  prevState[id]?.on ? pararPrevia(id) : iniciarPrevia(btn, id);
+  if (audios[id] && !audios[id].paused) { pararPrevia(id); return; }
+  iniciarPrevia(btn, id);
 }
+
 function iniciarPrevia(btn, id) {
-  if (!prevState[id]) prevState[id] = { on:false, t:0, iv:null };
-  const s = prevState[id]; s.on = true; curPrev = id;
+  const url = prevUrls[id];
+  if (!url) { mostrarToast('Prévia não disponível ainda'); return; }
+
+  if (!audios[id]) {
+    const a = new Audio(url);
+    audios[id] = a;
+    const secs = parseInt(btn.closest('.track')?.dataset?.secs || '35');
+    a.addEventListener('timeupdate', () => {
+      const pb = document.getElementById('pb-' + id);
+      const tl = document.getElementById('tl-' + id);
+      const elapsed = a.currentTime;
+      const total   = secs;
+      if (pb) pb.style.width = Math.min(elapsed / total * 100, 100) + '%';
+      if (tl) { const r = Math.max(0, total - Math.floor(elapsed)); tl.textContent = '0:' + String(r).padStart(2,'0'); }
+      if (elapsed >= total) { pararPrevia(id); resetarPrevia(id); }
+    });
+    a.addEventListener('error', () => mostrarToast('Erro ao carregar prévia'));
+  }
+
+  curPrev = id;
   btn.classList.add('active');
   btn.innerHTML = '<svg width="9" height="10" viewBox="0 0 9 10"><rect x="0" y="0" width="3" height="10" rx="1" fill="var(--r)"/><rect x="5" y="0" width="3" height="10" rx="1" fill="var(--r)"/></svg>';
-  s.iv = setInterval(() => {
-    s.t += 0.1;
-    const pb = document.getElementById('pb-' + id);
-    const tl = document.getElementById('tl-' + id);
-    if (pb) pb.style.width = Math.min(s.t / 30 * 100, 100) + '%';
-    if (tl) { const r = Math.max(0, 30 - Math.floor(s.t)); tl.textContent = '0:' + (r < 10 ? '0' : '') + r; }
-    if (s.t >= 30) { pararPrevia(id); resetarPrevia(id); }
-  }, 100);
+  audios[id].play().catch(() => mostrarToast('Clique novamente para ouvir'));
 }
+
 function pararPrevia(id) {
-  const s = prevState[id]; if (!s) return;
-  s.on = false; clearInterval(s.iv);
+  if (audios[id]) { audios[id].pause(); audios[id].currentTime = 0; }
   const btn = document.querySelector(`[onclick="togglePrevia(this,'${id}')"]`);
   if (btn) { btn.classList.remove('active'); btn.innerHTML = '<svg width="9" height="10" viewBox="0 0 9 10"><polygon points="1,1 8,5 1,9" fill="var(--r)"/></svg>'; }
 }
+
 function resetarPrevia(id) {
-  const s = prevState[id]; if (s) s.t = 0;
-  const pb = document.getElementById('pb-' + id); const tl = document.getElementById('tl-' + id);
-  if (pb) pb.style.width = '0%'; if (tl) tl.textContent = '0:30';
+  const pb = document.getElementById('pb-' + id);
+  const tl = document.getElementById('tl-' + id);
+  if (pb) pb.style.width = '0%';
+  if (tl) tl.textContent = '0:35';
 }
 
 // ══════════════════════════════════════════
@@ -557,17 +676,11 @@ async function renderizarBrickCartao() {
   container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--ts);font-size:.8rem">Carregando formulário seguro...</div>';
 
   try {
-    const res = await fetch(CONFIG.API_URL + '/api/criar-preferencia', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ packId: packAtual.id, email: document.getElementById('email-cartao').value }),
-    });
-    const { preferenceId } = await res.json();
-
+    const amountVal = parseFloat(packAtual.precoLabel.replace('R$','').trim().replace(',', '.'));
     const bricksBuilder = mp.bricks();
     brickController = await bricksBuilder.create('cardPayment', 'cardPaymentBrick_container', {
       initialization: {
-        amount: parseFloat(packAtual.precoLabel.replace('R$','').replace('R$ ','').trim()),
+        amount: amountVal,
         payer: { email: document.getElementById('email-cartao').value },
       },
       customization: {
@@ -621,15 +734,27 @@ function copiarChavePix() {
 async function confirmarPix() {
   const btn = document.getElementById('btn-pix-pago');
   btn.textContent = 'Verificando...'; btn.disabled = true;
-  // Em produção: o webhook do MP libera automaticamente
-  // Aqui simulamos a liberação após o clique (para demo)
-  setTimeout(() => {
-    const tokenFake = 'demo_' + packAtual.id + '_' + Date.now();
-    salvarTokenAcesso(tokenFake);
+  try {
+    const res = await fetch(CONFIG.API_URL + '/api/acesso-pix', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ packId: packAtual.id }),
+    });
+    const dados = await res.json();
+    if (dados.accessToken) {
+      salvarTokenAcesso(dados.accessToken);
+      fecharModal();
+      mostrarEntrega(dados.accessToken);
+    } else {
+      mostrarToast('Erro ao liberar acesso. Tente novamente.');
+    }
+  } catch {
+    // OFFLINE MOCK
     fecharModal();
     mostrarEntregaDemo();
+  } finally {
     btn.textContent = '✅ Já Fiz o Pix — Liberar Acesso'; btn.disabled = false;
-  }, 1500);
+  }
 }
 
 // ─── POLLING para pagamentos pendentes ───────────────────────
@@ -673,20 +798,37 @@ async function mostrarEntrega(token) {
   }
 }
 
-function mostrarEntregaDemo() {
-  // Fallback para demo (sem API rodando)
+async function mostrarEntregaDemo() {
+  // Busca as faixas reais via /api/acesso com token demo
   const pack = packAtual;
+  try {
+    // Tenta buscar token demo do servidor
+    const r = await fetch(CONFIG.API_URL + '/api/acesso-pix', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ packId: pack.id }),
+    });
+    const d = await r.json();
+    if (d.accessToken) {
+      await mostrarEntrega(d.accessToken);
+      return;
+    }
+  } catch {}
+  // Fallback absoluto
   renderizarEntrega({
     pack: { ico: pack.ico, nome: pack.nome },
     faixas: (pack.faixas || []).map(f => ({
       nome: f.nome, genero: f.genero,
-      mp3Url: null,
-      letra: `[Prévia da letra]\n\nAqui aparecerá a letra completa de "${f.nome}".\nSubstitua pelo arquivo real após gerar no Suno.`,
+      mp3Url: f.previaUrl || '',
+      letra: 'Letra não disponível.',
     })),
   });
 }
 
 function renderizarEntrega(dados) {
+  faixasEntregaAtual = dados.faixas; // salva para o PDF acessar
+  // Guarda URLs separadas para evitar problemas com caracteres especiais
+  dados.faixas.forEach((f, i) => { mp3UrlsEntrega['d' + i] = f.mp3Url || ''; });
   document.getElementById('d-pack-nome').textContent = (dados.pack.ico || '') + ' ' + dados.pack.nome;
   const c = document.getElementById('d-faixas');
   c.innerHTML = dados.faixas.map((f, i) => {
@@ -699,15 +841,15 @@ function renderizarEntrega(dados) {
         <div class="d-genre">${f.genero}</div>
       </div>
       <div class="d-player">
-        <button class="d-playbtn" onclick="toggleEntrega(this,'${id}')">
+        <button class="d-playbtn" id="d-btn-${id}" onclick="toggleEntrega('${id}', mp3UrlsEntrega['${id}'])">
           <svg width="11" height="12" viewBox="0 0 11 12"><polygon points="1,1 10,6 1,11" fill="white"/></svg>
         </button>
-        <div class="d-prog"><div class="d-progfill" id="dpb-${id}"></div></div>
+        <div class="d-prog" onclick="seekEntrega(event, '${id}')"><div class="d-progfill" id="dpb-${id}"></div></div>
         <div class="d-time" id="dtl-${id}">3:00</div>
       </div>
       <div class="d-actions">
         <button class="d-btn d-btn-dl" onclick="baixarMP3('${f.nome}','${f.mp3Url || ''}')">⬇ Baixar MP3</button>
-        <button class="d-btn d-btn-pdf" onclick="gerarPDF('${f.nome.replace(/'/g,"\\'")}','${f.genero}',\`${(f.letra||'').replace(/`/g,'\\`')}\`)">📄 Letra em PDF</button>
+        <button class="d-btn d-btn-pdf" data-idx="${i}" onclick="gerarPDFIdx(this)">📄 Letra em PDF</button>
       </div>
     </div>`;
   }).join('');
@@ -717,59 +859,100 @@ function renderizarEntrega(dados) {
   window.scrollTo(0, 0);
 }
 
-// ─── Player tela de entrega ───────────────────────────────────
-const delivState = {}; let curDeliv = null;
-function toggleEntrega(btn, id) {
+// ─── Player tela de entrega — Audio nativo ────────────────────
+const delivAudios = {}; let curDeliv = null;
+
+function toggleEntrega(id, url) {
   if (curDeliv && curDeliv !== id) pararEntrega(curDeliv);
-  delivState[id]?.on ? pararEntrega(id) : iniciarEntrega(btn, id);
+  if (delivAudios[id] && !delivAudios[id].paused) { pararEntrega(id); return; }
+  iniciarEntrega(id, url);
 }
-function iniciarEntrega(btn, id) {
-  const total = 180;
-  if (!delivState[id]) delivState[id] = { on:false, t:0, iv:null };
-  const s = delivState[id]; s.on = true; curDeliv = id;
-  btn.innerHTML = '<svg width="9" height="10" viewBox="0 0 9 10"><rect x="0" y="0" width="3" height="10" rx="1" fill="white"/><rect x="5" y="0" width="3" height="10" rx="1" fill="white"/></svg>';
-  s.iv = setInterval(() => {
-    s.t += 0.1;
-    const pb = document.getElementById('dpb-' + id); const tl = document.getElementById('dtl-' + id);
-    if (pb) pb.style.width = Math.min(s.t / total * 100, 100) + '%';
-    if (tl) { const r = Math.max(0, total - Math.floor(s.t)); tl.textContent = Math.floor(r/60) + ':' + String(r%60).padStart(2,'0'); }
-    if (s.t >= total) pararEntrega(id);
-  }, 100);
+
+function iniciarEntrega(id, url) {
+  if (!url || url === 'null' || url === '') { mostrarToast('MP3 não disponível'); return; }
+  if (!delivAudios[id]) {
+    const a = new Audio(url);
+    delivAudios[id] = a;
+    a.addEventListener('timeupdate', () => {
+      const dur = isNaN(a.duration) ? 0 : a.duration;
+      const pb  = document.getElementById('dpb-' + id);
+      const tl  = document.getElementById('dtl-' + id);
+      if (pb && dur) pb.style.width = (a.currentTime / dur * 100) + '%';
+      if (tl) {
+        const r = Math.max(0, Math.floor(dur - a.currentTime));
+        tl.textContent = Math.floor(r/60) + ':' + String(r%60).padStart(2,'0');
+      }
+    });
+    a.addEventListener('loadedmetadata', () => {
+      const tl = document.getElementById('dtl-' + id);
+      if (tl && !isNaN(a.duration)) {
+        const d = Math.floor(a.duration);
+        tl.textContent = Math.floor(d/60) + ':' + String(d%60).padStart(2,'0');
+      }
+    });
+    a.addEventListener('ended', () => pararEntrega(id));
+    a.addEventListener('error', () => mostrarToast('Erro ao carregar MP3'));
+  }
+  curDeliv = id;
+  const btn = document.getElementById('d-btn-' + id);
+  if (btn) btn.innerHTML = '<svg width="9" height="10" viewBox="0 0 9 10"><rect x="0" y="0" width="3" height="10" rx="1" fill="white"/><rect x="5" y="0" width="3" height="10" rx="1" fill="white"/></svg>';
+  delivAudios[id].play().catch(() => mostrarToast('Clique novamente para ouvir'));
 }
+
 function pararEntrega(id) {
-  const s = delivState[id]; if (!s) return;
-  s.on = false; clearInterval(s.iv);
-  const btn = document.querySelector(`[onclick="toggleEntrega(this,'${id}')"]`);
+  if (delivAudios[id]) { delivAudios[id].pause(); delivAudios[id].currentTime = 0; }
+  const btn = document.getElementById('d-btn-' + id);
   if (btn) btn.innerHTML = '<svg width="11" height="12" viewBox="0 0 11 12"><polygon points="1,1 10,6 1,11" fill="white"/></svg>';
+}
+
+function seekEntrega(event, id) {
+  const a = delivAudios[id];
+  if (!a || !a.duration) return;
+  const rect = event.currentTarget.getBoundingClientRect();
+  const pct = (event.clientX - rect.left) / rect.width;
+  a.currentTime = pct * a.duration;
 }
 
 // ─── Downloads ────────────────────────────────────────────────
 function baixarMP3(nome, url) {
-  if (url && url !== 'null') {
-    const a = document.createElement('a'); a.href = url; a.download = nome + '.mp3'; a.click();
-  } else {
-    mostrarToast('Substitua o link do MP3 no arquivo packs.js 🎵');
-  }
+  if (!url || url === 'null' || url === '') { mostrarToast('Link do MP3 não disponível'); return; }
+  const a = document.createElement('a');
+  a.href = url; a.download = nome + '.mp3'; a.target = '_blank'; a.click();
+}
+
+// Guarda as faixas da entrega para o PDF acessar pela index
+let faixasEntregaAtual = [];
+const mp3UrlsEntrega = {};
+
+function gerarPDFIdx(btn) {
+  const idx    = parseInt(btn.dataset.idx);
+  const faixa  = faixasEntregaAtual[idx];
+  if (!faixa) { mostrarToast('Letra não disponível'); return; }
+  gerarPDF(faixa.nome, faixa.genero, faixa.letra || 'Letra não disponível');
 }
 
 function gerarPDF(nome, genero, letra) {
+  const conteudo = `<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8">
+<style>
+  body{font-family:Georgia,serif;max-width:520px;margin:56px auto;color:#1e1014;line-height:1.8;padding:0 20px}
+  h1{color:#8b1a3a;font-size:1.75rem;margin-bottom:3px}
+  h2{color:#c0395f;font-size:.95rem;font-style:italic;font-weight:normal;margin-bottom:22px}
+  .lyrics{white-space:pre-wrap;font-family:Georgia,serif;font-size:.95rem;line-height:1.85;color:#3a2028}
+  .pack-lbl{font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:#c9a84c;margin-bottom:5px}
+  .rodape{margin-top:36px;font-size:.7rem;color:#bbb;text-align:center;border-top:1px solid #f0d5e0;padding-top:10px}
+  @media print { .lyrics { page-break-inside: auto; } }
+</style></head><body>
+<div class="pack-lbl">Uma Canção Para Sua Mãe &#127800;</div>
+<h1></h1><h2></h2><div class="lyrics"></div>
+<div class="rodape">Uma Canção Para Sua Mãe · Feliz Dia das Mães! &#127800;</div>
+<script>setTimeout(()=>window.print(),500)<\/script>
+</body></html>`;
   const w = window.open('', '_blank');
-  w.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
-  <style>
-    body{font-family:Georgia,serif;max-width:520px;margin:56px auto;color:#1e1014;line-height:1.8;padding:0 20px}
-    h1{color:#8b1a3a;font-size:1.75rem;margin-bottom:3px}
-    h2{color:#c0395f;font-size:.95rem;font-style:italic;font-weight:normal;margin-bottom:22px}
-    pre{white-space:pre-wrap;font-family:Georgia,serif;font-size:.95rem;line-height:1.85;color:#3a2028}
-    .pack-lbl{font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:#c9a84c;margin-bottom:5px}
-    .rodape{margin-top:36px;font-size:.7rem;color:#bbb;text-align:center;border-top:1px solid #f0d5e0;padding-top:10px}
-  </style></head><body>
-  <div class="pack-lbl">Uma Canção Para Sua Mãe 🌸</div>
-  <h1>${nome}</h1>
-  <h2>${genero}</h2>
-  <pre>${letra}</pre>
-  <div class="rodape">Uma Canção Para Sua Mãe · Feliz Dia das Mães! 🌸</div>
-  <script>setTimeout(()=>window.print(),400)<\/script>
-  </body></html>`);
+  w.document.write(conteudo);
+  w.document.querySelector('h1').textContent = nome;
+  w.document.querySelector('h2').textContent = genero;
+  w.document.querySelector('.lyrics').textContent = letra;
   w.document.close();
 }
 
@@ -789,9 +972,17 @@ function verificarRetornoCheckout() {
 // ══════════════════════════════════════════
 // COUNTDOWN — Dia das Mães BR: 11/05/2025
 // ══════════════════════════════════════════
+function rolarPara(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const offset = 56; // altura da nav fixa
+  const top = el.getBoundingClientRect().top + window.pageYOffset - offset;
+  window.scrollTo({ top, behavior: 'smooth' });
+}
+
 function iniciarContagem() {
   function tick() {
-    const alvo = new Date('2025-05-11T00:00:00'); const agora = new Date(); const diff = alvo - agora;
+    const alvo = new Date('2026-05-10T00:00:00'); const agora = new Date(); const diff = alvo - agora;
     if (diff <= 0) return;
     const pad = x => String(x).padStart(2, '0');
     document.getElementById('days').textContent = pad(Math.floor(diff / 864e5));
@@ -818,6 +1009,5 @@ function iniciarFadeIn() {
   });
 }
 </script>
-<script src="player-fix.js"></script>
 </body>
 </html>
