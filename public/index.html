@@ -654,8 +654,13 @@ function abrirModal(packId) {
   document.getElementById('m-ico').textContent = packAtual.ico;
   document.getElementById('m-nome').textContent = packAtual.nome;
   document.getElementById('m-preco').textContent = packAtual.precoLabel;
-  document.getElementById('pix-valor').textContent = packAtual.precoLabel;
-  document.getElementById('chave-pix').textContent = CONFIG.CHAVE_PIX;
+  
+  // Limpar área do Pix a cada abertura
+  document.getElementById('pix-area-gerar').style.display = 'block';
+  document.getElementById('pix-area-pagamento').style.display = 'none';
+  const btnPix = document.getElementById('btn-gerar-pix');
+  if (btnPix) { btnPix.textContent = 'Gerar Código Pix Seguro'; btnPix.disabled = false; }
+  
   document.getElementById('overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
   selecionarPagamento('cartao');
