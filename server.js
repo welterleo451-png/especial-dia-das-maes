@@ -190,12 +190,29 @@ app.post('/api/acesso', (req, res) => {
   });
 });
 
-// Rota especial para liberacao via Pix (manual)
-app.post('/api/acesso-pix', (req, res) => {
-  const { packId } = req.body;
-  if (!PACKS[packId]) return res.status(400).json({ erro: 'Pack invalido' });
-  const token = gerarToken(packId, 'pix-' + Date.now());
-  res.json({ status: 'aprovado', accessToken: token });
+// Rota para gerar Pix no Mercado Pago
+app.post('/api/gerar-pix', async (req, res) => {
+  const { packId, email } = req.body;
+  const pack = PACKS[packId];
+  if (!pack) return res.status(400).json({ erro: 'Pack invalido' });
+  const baseUrl = (req.headers['x-forwarded-proto'] || req.protocol) + '://' + req.get('host');
+  try {
+    const payment = new Payment(client);
+    const r = await payment.create({ body: {
+      transaction_amount: pack.preco / 100,
+      description: pack.nome,
+      payment_method_id: 'pix',
+      payer: { email: email || 'cliente@site.com' },
+      metadata: { pack_id: packId },
+      notification_url: `${baseUrl}/webhook/mercadopago`,
+    }});
+    const qrCodeBase64 = r.point_of_interaction.transaction_data.qr_code_base64;
+    const qrCodeText = r.point_of_interaction.transaction_data.qr_code;
+    res.json({ paymentId: r.id, qrCodeBase64, qrCodeText });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ erro: 'Erro ao gerar Pix' });
+  }
 });
 
 app.get('/sucesso', (req, res) => res.redirect(`/?pagamento=sucesso&pid=${req.query.payment_id}`));

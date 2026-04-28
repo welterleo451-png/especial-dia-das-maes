@@ -432,16 +432,23 @@ footer strong{color:rgba(255,255,255,.8)}
       <!-- PIX -->
       <div id="campos-pix" style="display:none">
         <div class="form-group">
-          <label class="form-label">Seu e-mail (para confirmação)</label>
+          <label class="form-label">Seu e-mail (para recebimento e verificação)</label>
           <input class="form-input" type="email" id="email-pix" placeholder="seuemail@gmail.com">
         </div>
-        <div class="pix-box">
-          <div class="pix-chave">Chave Pix <strong id="chave-pix">sua.chave@pix.com</strong></div>
-          <div class="pix-val" id="pix-valor">R$ 29</div>
-          <div class="pix-nota">Copie a chave, abra o app do seu banco e faça o Pix.<br>Após o pagamento, clique no botão abaixo.</div>
-          <button class="pix-copy" onclick="copiarChavePix()">📋 Copiar chave Pix</button>
+        
+        <div id="pix-area-gerar">
+          <button class="btn btn-green btn-full" onclick="gerarPixMP()" id="btn-gerar-pix">Gerar Código Pix Seguro</button>
         </div>
-        <button class="btn btn-green btn-full" onclick="confirmarPix()" id="btn-pix-pago">✅ Já Fiz o Pix — Liberar Acesso</button>
+
+        <div id="pix-area-pagamento" style="display:none; text-align:center" class="pix-box">
+          <div style="font-size:.85rem;color:var(--ts);margin-bottom:8px">Escaneie o QR Code ou Copie o Código:</div>
+          <div style="background:#fff;padding:10px;display:inline-block;border-radius:8px;margin-bottom:12px">
+            <img id="pix-qr" src="" style="width:150px;height:150px;display:block">
+          </div>
+          <input type="text" id="pix-copia-cola" readonly style="width:100%;padding:10px;font-size:.75rem;border:1px solid #ddd;border-radius:4px;margin-bottom:12px;background:#f9f9f9;text-align:center" onclick="this.select()">
+          <button class="pix-copy" onclick="copiarCopiaECola()">📋 Copiar código Copia e Cola</button>
+          <div style="margin-top:16px;font-size:.85rem;color:var(--rd);font-weight:600" id="pix-status">⏳ Aguardando confirmação... Não feche a página.</div>
+        </div>
       </div>
 
       <div class="secure-note">🔒 Pagamento seguro via Mercado Pago · SSL criptografado</div>
@@ -727,33 +734,41 @@ async function renderizarBrickCartao() {
 }
 
 // ─── PIX ─────────────────────────────────────────────────────
-function copiarChavePix() {
-  navigator.clipboard.writeText(CONFIG.CHAVE_PIX).then(() => mostrarToast('Chave Pix copiada!'));
+function copiarCopiaECola() {
+  const input = document.getElementById('pix-copia-cola');
+  input.select();
+  navigator.clipboard.writeText(input.value).then(() => mostrarToast('Código Pix copiado!'));
 }
 
-async function confirmarPix() {
-  const btn = document.getElementById('btn-pix-pago');
-  btn.textContent = 'Verificando...'; btn.disabled = true;
+async function gerarPixMP() {
+  const email = document.getElementById('email-pix').value;
+  if (!email || !email.includes('@')) { mostrarToast('Preencha um e-mail válido.'); return; }
+  
+  const btn = document.getElementById('btn-gerar-pix');
+  btn.textContent = 'Gerando...'; btn.disabled = true;
+  
   try {
-    const res = await fetch(CONFIG.API_URL + '/api/acesso-pix', {
+    const res = await fetch(CONFIG.API_URL + '/api/gerar-pix', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ packId: packAtual.id }),
+      body: JSON.stringify({ packId: packAtual.id, email }),
     });
     const dados = await res.json();
-    if (dados.accessToken) {
-      salvarTokenAcesso(dados.accessToken);
-      fecharModal();
-      mostrarEntrega(dados.accessToken);
+    if (dados.qrCodeBase64) {
+      document.getElementById('pix-area-gerar').style.display = 'none';
+      document.getElementById('pix-area-pagamento').style.display = 'block';
+      document.getElementById('pix-qr').src = 'data:image/jpeg;base64,' + dados.qrCodeBase64;
+      document.getElementById('pix-copia-cola').value = dados.qrCodeText;
+      
+      // Começar a checar automaticamente se o Pix foi pago
+      iniciarPolling(dados.paymentId);
     } else {
-      mostrarToast('Erro ao liberar acesso. Tente novamente.');
+      mostrarToast('Erro ao gerar Pix. Tente novamente.');
+      btn.textContent = 'Gerar Código Pix Seguro'; btn.disabled = false;
     }
   } catch {
-    // OFFLINE MOCK
-    fecharModal();
-    mostrarEntregaDemo();
-  } finally {
-    btn.textContent = '✅ Já Fiz o Pix — Liberar Acesso'; btn.disabled = false;
+    mostrarToast('Erro de conexão. Tente novamente.');
+    btn.textContent = 'Gerar Código Pix Seguro'; btn.disabled = false;
   }
 }
 
@@ -769,6 +784,7 @@ async function iniciarPolling(paymentId) {
       if (dados.status === 'aprovado') {
         clearInterval(intervalo);
         salvarTokenAcesso(dados.accessToken);
+        fecharModal();
         mostrarEntrega(dados.accessToken);
       }
     } catch {}
