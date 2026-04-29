@@ -44,8 +44,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(253,247,242,
 .hero h1{font-family:var(--ft);font-size:clamp(2rem,4vw,3.4rem);line-height:1.12;color:var(--rd);margin-bottom:12px}
 .hero h1 em{color:var(--r);font-style:italic}
 .hero-sub{font-family:var(--ft);font-style:italic;font-size:clamp(.95rem,1.8vw,1.15rem);color:var(--ts);margin-bottom:20px}
-.hero-provas{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px}
-.hero-provas span{background:white;border:1px solid #f0d5e0;border-radius:50px;padding:5px 12px;font-size:.75rem;color:var(--ts);font-weight:500}
 .hero-btns{display:flex;gap:8px;flex-wrap:wrap}
 .hero-photo{flex:0 0 420px;background:url('./imagens/hero.jpg') center/cover no-repeat,var(--rl);position:relative;min-height:400px}
 .hero-photo::before{content:'';position:absolute;inset:0;background:linear-gradient(to right,rgba(253,247,242,.4) 0%,transparent 30%)}
@@ -55,21 +53,20 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(253,247,242,
   .hero-text{padding:32px 20px 24px;text-align:center}
   .hero-badge{align-self:center}
   .hero-btns{justify-content:center}
-  .hero-provas{justify-content:center}
   .hero-photo{flex:none;height:220px;min-height:0}
   .hero-photo-badge{font-size:.85rem}
 }
 
 /* BOTÕES */
-.btn{display:inline-block;font-family:var(--fb);font-weight:600;font-size:.85rem;padding:13px 28px;border-radius:50px;text-decoration:none;border:none;cursor:pointer;transition:all .2s;letter-spacing:.3px}
+.btn{display:inline-block;font-family:var(--fb);font-weight:600;font-size:.85rem;padding:13px 28px;border-radius:50px;text-decoration:none;border:none;cursor:pointer;transition:transform .3s cubic-bezier(0.16,1,0.3,1),background .3s ease,box-shadow .3s ease;letter-spacing:.3px;will-change:transform;transform:translateZ(0)}
 .btn-rose{background:var(--r);color:white;box-shadow:0 5px 20px rgba(192,57,95,.3)}
-.btn-rose:hover{background:var(--rd);transform:translateY(-2px)}
+.btn-rose:hover{background:var(--rd);transform:translateY(-2px) translateZ(0);box-shadow:0 8px 24px rgba(192,57,95,.4)}
 .btn-out{background:transparent;color:var(--r);border:1.5px solid var(--r)}
 .btn-out:hover{background:var(--rl)}
 .btn-gold{background:var(--g);color:#3a2000;box-shadow:0 5px 18px rgba(201,168,76,.3)}
-.btn-gold:hover{background:#b8952a;transform:translateY(-2px)}
+.btn-gold:hover{background:#b8952a;transform:translateY(-2px) translateZ(0);box-shadow:0 8px 22px rgba(201,168,76,.4)}
 .btn-green{background:var(--green);color:white;box-shadow:0 5px 18px rgba(45,158,107,.3)}
-.btn-green:hover{background:#1f7a50;transform:translateY(-2px)}
+.btn-green:hover{background:#1f7a50;transform:translateY(-2px) translateZ(0);box-shadow:0 8px 22px rgba(45,158,107,.4)}
 .btn-full{display:block;width:100%;text-align:center;padding:14px}
 
 .div{height:1px;background:linear-gradient(90deg,transparent,#f0c8d8,transparent)}
@@ -84,8 +81,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(253,247,242,
 /* PACKS */
 .packs-section{padding:36px 16px;background:white}
 .packs{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;max-width:920px;margin:0 auto}
-.pack{border-radius:16px;border:1.5px solid #f0d5e0;overflow:hidden;background:var(--cr);transition:transform .2s,box-shadow .2s;position:relative}
-.pack:hover{transform:translateY(-4px);box-shadow:0 14px 36px rgba(192,57,95,.12)}
+.pack{border-radius:16px;border:1.5px solid #f0d5e0;overflow:hidden;background:var(--cr);transition:transform .3s cubic-bezier(0.16,1,0.3,1),box-shadow .3s cubic-bezier(0.16,1,0.3,1);position:relative;will-change:transform,box-shadow;transform:translateZ(0)}
+.pack:hover{transform:translateY(-4px) translateZ(0);box-shadow:0 14px 36px rgba(192,57,95,.12)}
 .pack.hot{border:2px solid var(--r);box-shadow:0 6px 24px rgba(192,57,95,.15)}
 .hot-b{position:absolute;top:12px;right:12px;background:var(--r);color:white;font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border-radius:50px}
 .pack-top{padding:18px 18px 14px;background:linear-gradient(135deg,#fff8fb,#fdf2f7);border-bottom:1px solid #f5dde8}
@@ -110,13 +107,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(253,247,242,
 .tname{font-weight:600;font-size:.78rem;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tgenre{font-size:.68rem;color:var(--ts)}
 .prog{flex:1;height:3px;background:#f0d5e0;border-radius:3px;min-width:40px}
-.progfill{height:3px;background:var(--r);border-radius:3px;width:0%;transition:width .1s linear}
+.progfill{height:3px;background:var(--r);border-radius:3px;transform:scaleX(0);transform-origin:left;transition:transform .1s linear;will-change:transform}
 .ttime{font-size:.65rem;color:var(--ts);min-width:26px;text-align:right}
 
 .pack-bot{padding:12px 18px 18px}
-.perks{display:flex;flex-direction:column;gap:3px;margin-bottom:12px}
-.perk{font-size:.75rem;color:var(--ts);display:flex;align-items:center;gap:6px}
-.pk{color:var(--r)}
 
 /* COMO FUNCIONA */
 .steps-sec{padding:32px 16px;background:var(--cr)}
@@ -138,10 +132,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(253,247,242,
 .depo p{font-family:var(--ft);font-style:italic;color:var(--ts);line-height:1.65;font-size:.85rem;margin-bottom:10px}
 .dauth{font-weight:600;color:var(--rd);font-size:.75rem}
 
-/* URGÊNCIA */
-.urgency{background:linear-gradient(135deg,var(--rd),#6b0e2e);color:white;padding:36px 20px;text-align:center}
-.urgency h2{font-family:var(--ft);font-size:clamp(1.3rem,3vw,2rem);margin-bottom:6px}
-.urgency p{font-size:.85rem;opacity:.88;line-height:1.65;margin-bottom:20px;max-width:420px;margin-left:auto;margin-right:auto}
 
 /* MODAL CHECKOUT */
 .overlay{display:none;position:fixed;inset:0;background:rgba(20,5,10,.6);z-index:500;align-items:center;justify-content:center;padding:16px}
@@ -209,7 +199,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(253,247,242,
 .d-playbtn{width:32px;height:32px;border-radius:50%;background:var(--r);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:background .18s}
 .d-playbtn:hover{background:var(--rd)}
 .d-prog{flex:1;height:3px;background:#f0d5e0;border-radius:3px;cursor:pointer}
-.d-progfill{height:3px;background:var(--r);border-radius:3px;width:0%;transition:width .1s linear}
+.d-progfill{height:3px;background:var(--r);border-radius:3px;transform:scaleX(0);transform-origin:left;transition:transform .1s linear;will-change:transform}
 .d-time{font-size:.68rem;color:var(--ts);min-width:34px;text-align:right}
 .d-actions{display:flex;gap:8px}
 .d-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;font-size:.73rem;font-weight:600;padding:9px 8px;border-radius:8px;border:none;cursor:pointer;transition:all .18s;font-family:var(--fb)}
@@ -227,8 +217,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(253,247,242,
 footer{background:var(--tx);color:rgba(255,255,255,.45);text-align:center;padding:18px;font-size:.72rem}
 footer strong{color:rgba(255,255,255,.8)}
 
-.fade-in{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
-.fade-in.visible{opacity:1;transform:translateY(0)}
+.fade-in{opacity:0;transform:translateY(18px) translateZ(0);transition:opacity .6s cubic-bezier(0.16,1,0.3,1),transform .6s cubic-bezier(0.16,1,0.3,1);will-change:opacity,transform}
+.fade-in.visible{opacity:1;transform:translateY(0) translateZ(0)}
 
 /* Toast */
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:#1e1014;color:white;padding:10px 20px;border-radius:50px;font-size:.8rem;font-weight:500;z-index:999;transition:transform .3s ease;white-space:nowrap}
@@ -264,11 +254,6 @@ footer strong{color:rgba(255,255,255,.8)}
       <div class="hero-badge">🎵 Presente Único · Entrega Imediata</div>
       <h1>A música que vai<br>fazer sua mãe<br><em>chorar de emoção</em></h1>
       <p class="hero-sub">Porque "eu te amo" às vezes precisa de uma melodia.</p>
-      <div class="hero-provas">
-        <span>⚡ Entrega na hora</span>
-        <span>🎵 3 músicas MP3</span>
-        <span>📄 Letra em PDF</span>
-      </div>
       <div class="hero-btns">
         <button class="btn btn-rose" onclick="rolarPara('packs')">✨ Ver os Packs</button>
         <button class="btn btn-out" onclick="rolarPara('como-funciona')">Como funciona?</button>
@@ -289,8 +274,6 @@ footer strong{color:rgba(255,255,255,.8)}
     <div class="sec-sub">Ouça a prévia antes de comprar · Após pagar: player completo, MP3 e letra em PDF na hora</div>
     <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:12px">
       <span style="font-size:.78rem;color:var(--ts);display:flex;align-items:center;gap:5px">⭐⭐⭐⭐⭐ <strong style="color:var(--rd)">+200 mães emocionadas</strong></span>
-      <span style="font-size:.78rem;color:var(--ts)">🔒 Pagamento 100% seguro</span>
-      <span style="font-size:.78rem;color:var(--ts)">⚡ Entrega imediata</span>
     </div>
   </div>
   <div class="packs fade-in" id="packs-container">
@@ -332,54 +315,16 @@ footer strong{color:rgba(255,255,255,.8)}
   </div>
 </section>
 
-<!-- COMO ENTREGA -->
-<section style="padding:32px 16px;background:var(--rl)">
-  <div class="sec-hd">
-    <div class="sec-title">O que você <em>recebe</em></div>
-    <div class="goldbar"></div>
-    <div class="sec-sub">Tudo digital, tudo na hora, tudo no seu celular</div>
-  </div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;max-width:700px;margin:0 auto">
-    <div style="background:white;border-radius:14px;padding:20px 16px;text-align:center;border:1px solid #f0d5e0">
-      <div style="font-size:2rem;margin-bottom:8px">🎵</div>
-      <div style="font-family:var(--ft);font-size:1rem;color:var(--rd);font-weight:600;margin-bottom:4px">3 Músicas MP3</div>
-      <div style="font-size:.78rem;color:var(--ts)">Alta qualidade, para ouvir e guardar pra sempre</div>
-    </div>
-    <div style="background:white;border-radius:14px;padding:20px 16px;text-align:center;border:1px solid #f0d5e0">
-      <div style="font-size:2rem;margin-bottom:8px">📄</div>
-      <div style="font-family:var(--ft);font-size:1rem;color:var(--rd);font-weight:600;margin-bottom:4px">Letra em PDF</div>
-      <div style="font-size:.78rem;color:var(--ts)">Para imprimir e entregar junto com a música</div>
-    </div>
-    <div style="background:white;border-radius:14px;padding:20px 16px;text-align:center;border:1px solid #f0d5e0">
-      <div style="font-size:2rem;margin-bottom:8px">⚡</div>
-      <div style="font-family:var(--ft);font-size:1rem;color:var(--rd);font-weight:600;margin-bottom:4px">Entrega Imediata</div>
-      <div style="font-size:.78rem;color:var(--ts)">Acesso na hora, logo após o pagamento</div>
-    </div>
-    <div style="background:white;border-radius:14px;padding:20px 16px;text-align:center;border:1px solid #f0d5e0">
-      <div style="font-size:2rem;margin-bottom:8px">🔒</div>
-      <div style="font-family:var(--ft);font-size:1rem;color:var(--rd);font-weight:600;margin-bottom:4px">Pagamento Seguro</div>
-      <div style="font-size:.78rem;color:var(--ts)">Mercado Pago · Pix ou cartão</div>
-    </div>
-  </div>
-</section>
-
-<!-- BANNER -->
+<!-- BANNER CTA -->
 <section class="banner-sec" style="background:url('./imagens/banner.jpg') center/cover no-repeat,linear-gradient(135deg,var(--rd),#6b0e2e)">
-  <div class="banner-overlay">
+  <div class="banner-overlay fade-in">
     <div class="banner-txt">
-      <div style="font-size:.75rem;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:8px">🌸 DIA DAS MÃES 2026</div>
+      <div style="font-size:.75rem;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:8px">⏰ DIA DAS MÃES: 10 DE MAIO</div>
       <div style="font-family:var(--ft);font-size:clamp(1.5rem,4vw,2.4rem);color:white;margin-bottom:8px;line-height:1.2">O presente que ela<br><em style="color:#ffd6e7">nunca vai esquecer</em></div>
-      <div style="font-size:.85rem;color:rgba(255,255,255,.85);margin-bottom:22px">Música original · Entrega na hora · A partir de R$ 17,90</div>
-      <button class="btn btn-gold" onclick="rolarPara('packs')" style="font-size:.95rem;padding:14px 36px">✨ Escolher Meu Pack</button>
+      <div style="font-size:.85rem;color:rgba(255,255,255,.85);margin-bottom:22px">Não deixe pra última hora! Entregue o presente mais emocionante de forma imediata.</div>
+      <button class="btn btn-gold" onclick="rolarPara('packs')" style="font-size:.95rem;padding:14px 36px">✨ Garantir Meu Pack Agora</button>
     </div>
   </div>
-</section>
-
-<!-- URGÊNCIA -->
-<section class="urgency">
-  <h2>⏰ O Dia das Mães tá chegando!</h2>
-  <p>10 de maio de 2026. Não deixe pra última hora — garanta seu pack agora e surpreenda ela com o presente mais emocionante!</p>
-  <button class="btn btn-gold" onclick="rolarPara('packs')">🎵 Garantir Meu Pack Agora</button>
 </section>
 
 <footer>
@@ -580,13 +525,7 @@ function renderizarPacks(packs) {
         </div>`).join('')}
       </div>
       <div class="pack-bot">
-        <div class="perks">
-          <div class="perk"><span class="pk">♥</span>Player completo após compra</div>
-          <div class="perk"><span class="pk">♥</span>Download MP3 de cada faixa</div>
-          <div class="perk"><span class="pk">♥</span>Letra completa em PDF</div>
-          ${p.destaque ? '<div class="perk"><span class="pk">♥</span>Estilos variados no mesmo pack</div>' : ''}
-        </div>
-        <button class="btn btn-rose btn-full" onclick="abrirModal('${p.id}')">🎵 Comprar · ${p.precoLabel}</button>
+        <button class="btn btn-rose btn-full" onclick="abrirModal('${p.id}')">🎵 Garantir Pack · ${p.precoLabel}</button>
       </div>
     </div>
   `).join('');
@@ -620,7 +559,7 @@ function iniciarPrevia(btn, id) {
       const tl = document.getElementById('tl-' + id);
       const elapsed = a.currentTime;
       const total   = secs;
-      if (pb) pb.style.width = Math.min(elapsed / total * 100, 100) + '%';
+      if (pb) pb.style.transform = `scaleX(${Math.min(elapsed / total, 1)})`;
       if (tl) { const r = Math.max(0, total - Math.floor(elapsed)); tl.textContent = '0:' + String(r).padStart(2,'0'); }
       if (elapsed >= total) { pararPrevia(id); resetarPrevia(id); }
     });
@@ -642,7 +581,7 @@ function pararPrevia(id) {
 function resetarPrevia(id) {
   const pb = document.getElementById('pb-' + id);
   const tl = document.getElementById('tl-' + id);
-  if (pb) pb.style.width = '0%';
+  if (pb) pb.style.transform = 'scaleX(0)';
   if (tl) tl.textContent = '0:35';
 }
 
@@ -898,7 +837,7 @@ function iniciarEntrega(id, url) {
       const dur = isNaN(a.duration) ? 0 : a.duration;
       const pb  = document.getElementById('dpb-' + id);
       const tl  = document.getElementById('dtl-' + id);
-      if (pb && dur) pb.style.width = (a.currentTime / dur * 100) + '%';
+      if (pb && dur) pb.style.transform = `scaleX(${Math.min(a.currentTime / dur, 1)})`;
       if (tl) {
         const r = Math.max(0, Math.floor(dur - a.currentTime));
         tl.textContent = Math.floor(r/60) + ':' + String(r%60).padStart(2,'0');
@@ -1023,11 +962,12 @@ function mostrarToast(msg) {
 }
 
 function iniciarFadeIn() {
-  document.querySelectorAll('.fade-in').forEach(el => {
-    new IntersectionObserver(([e], o) => {
-      if (e.isIntersecting) { el.classList.add('visible'); o.disconnect(); }
-    }, { threshold: .08 }).observe(el);
-  });
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: .08 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 }
 </script>
 </body>
