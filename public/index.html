@@ -45,7 +45,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(253,247,242,
 .hero h1 em{color:var(--r);font-style:italic}
 .hero-sub{font-family:var(--ft);font-style:italic;font-size:clamp(.95rem,1.8vw,1.15rem);color:var(--ts);margin-bottom:20px}
 .hero-btns{display:flex;gap:8px;flex-wrap:wrap}
-.hero-photo{flex:0 0 420px;background:url('./imagens/hero.jpg') center/cover no-repeat,var(--rl);position:relative;min-height:400px}
+.hero-photo{flex:0 0 420px;background:url('./imagens/hero.webp') center/cover no-repeat,var(--rl);position:relative;min-height:400px}
 .hero-photo::before{content:'';position:absolute;inset:0;background:linear-gradient(to right,rgba(253,247,242,.4) 0%,transparent 30%)}
 .hero-photo-badge{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);background:var(--rd);color:white;font-family:var(--ft);font-size:1rem;font-weight:600;padding:8px 20px;border-radius:50px;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.2)}
 @media(max-width:700px){
@@ -259,7 +259,7 @@ footer strong{color:rgba(255,255,255,.8)}
         <button class="btn btn-out" onclick="rolarPara('como-funciona')">Como funciona?</button>
       </div>
     </div>
-    <div class="hero-photo" style="background-image:url('./imagens/hero.jpg')">
+    <div class="hero-photo" style="background-image:url('./imagens/hero.webp')">
       <div class="hero-photo-badge">🌸 A partir de R$ 17,90</div>
     </div>
   </div>
@@ -305,7 +305,7 @@ footer strong{color:rgba(255,255,255,.8)}
     <div class="sec-sub">Quem já presenteou sabe o poder de uma música única</div>
   </div>
   <div class="depo-layout fade-in">
-    <div class="depo-img-side" style="background:url('./imagens/depoimento.jpg') center/cover no-repeat,linear-gradient(135deg,var(--rl),#f9e0ec)">
+    <div class="depo-img-side" style="background:url('./imagens/depoimento.webp') center/cover no-repeat,linear-gradient(135deg,var(--rl),#f9e0ec)">
     </div>
     <div class="depos">
       <div class="depo"><span class="qm">"</span><div class="stars">★★★★★</div><p>Minha mãe chorou antes de terminar a primeira música. O presente mais especial que ela já recebeu em anos.</p><div class="dauth">— Ana Paula M., São Paulo/SP</div></div>
@@ -316,7 +316,7 @@ footer strong{color:rgba(255,255,255,.8)}
 </section>
 
 <!-- BANNER CTA -->
-<section class="banner-sec" style="background:url('./imagens/banner.jpg') center/cover no-repeat,linear-gradient(135deg,var(--rd),#6b0e2e)">
+<section class="banner-sec" style="background:url('./imagens/banner.webp') center/cover no-repeat,linear-gradient(135deg,var(--rd),#6b0e2e)">
   <div class="banner-overlay fade-in">
     <div class="banner-txt">
       <div style="font-size:.75rem;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:8px">⏰ DIA DAS MÃES: 10 DE MAIO</div>
@@ -529,6 +529,21 @@ function renderizarPacks(packs) {
       </div>
     </div>
   `).join('');
+
+  // Preload silencioso das prévias para tocar instantaneamente quando clicado
+  setTimeout(() => {
+    packs.forEach(p => {
+      p.faixas.forEach((f, i) => {
+        const id = `${p.id}_${i}`;
+        if (!audios[id]) {
+          const a = new Audio(f.previaUrl);
+          a.preload = 'auto'; // Baixa em background
+          audios[id] = a;
+          prevUrls[id] = f.previaUrl;
+        }
+      });
+    });
+  }, 1000); // 1s de delay para não travar o render inicial
 }
 
 // ══════════════════════════════════════════
