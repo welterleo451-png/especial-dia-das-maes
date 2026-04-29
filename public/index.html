@@ -180,6 +180,24 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(253,247,242,
 .spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,.4);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
 @keyframes spin{to{transform:rotate(360deg)}}
 
+/* QUIZ SECTION */
+.quiz-sec { padding: 50px 16px; background: linear-gradient(180deg, var(--cr), var(--rl)); text-align: center; }
+.quiz-container { max-width: 500px; margin: 0 auto; background: white; border-radius: 16px; padding: 32px 24px; box-shadow: 0 14px 40px rgba(192,57,95,.1); border: 1px solid #f0d5e0; }
+.quiz-step { display: none; animation: fadeIn .4s ease forwards; }
+.quiz-step.active { display: block; }
+.quiz-title { font-family: var(--ft); font-size: 1.8rem; color: var(--rd); margin-bottom: 8px; line-height: 1.1; }
+.quiz-title em { color: var(--r); font-style: italic; }
+.quiz-sub { color: var(--ts); font-size: .95rem; margin-bottom: 24px; line-height: 1.5; }
+.quiz-input { width: 100%; padding: 14px 16px; border: 2px solid #f0d5e0; border-radius: 10px; font-size: 1.05rem; font-family: var(--fb); margin-bottom: 20px; outline: none; transition: border-color .2s; text-align: center; color: var(--tx); }
+.quiz-input:focus { border-color: var(--r); }
+.quiz-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+.quiz-opt { padding: 14px; border: 2px solid #f0d5e0; border-radius: 10px; cursor: pointer; transition: all .2s; font-weight: 500; color: var(--tx); background: white; font-size: .95rem; }
+.quiz-opt:hover { border-color: #e0b0c0; background: #faf0f4; }
+.quiz-opt.selected { border-color: var(--r); background: var(--rl); color: var(--rd); font-weight: 600; box-shadow: 0 4px 12px rgba(192,57,95,.1); }
+.quiz-loading { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 30px 0; }
+.spinner-large { width: 48px; height: 48px; border: 4px solid #f0d5e0; border-top-color: var(--r); border-radius: 50%; animation: spin 1s linear infinite; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
 /* TELA DE ENTREGA */
 .delivery-screen{display:none;position:fixed;inset:0;background:white;z-index:600;overflow-y:auto}
 .delivery-screen.open{display:block}
@@ -229,7 +247,7 @@ footer strong{color:rgba(255,255,255,.8)}
 
 <nav>
   <span class="nav-logo">♪ Uma Canção Para Sua Mãe</span>
-  <button class="nav-btn" onclick="rolarPara('packs')">Comprar Agora</button>
+  <button class="nav-btn" onclick="rolarPara('interacao')">Criar Presente</button>
 </nav>
 
 <!-- COUNTDOWN -->
@@ -255,21 +273,95 @@ footer strong{color:rgba(255,255,255,.8)}
       <h1>A música que vai<br>fazer sua mãe<br><em>chorar de emoção</em></h1>
       <p class="hero-sub">Porque "eu te amo" às vezes precisa de uma melodia.</p>
       <div class="hero-btns">
-        <button class="btn btn-rose" onclick="rolarPara('packs')">✨ Ver os Packs</button>
-        <button class="btn btn-out" onclick="rolarPara('como-funciona')">Como funciona?</button>
+        <button class="btn btn-rose" onclick="rolarPara('interacao')">✨ Começar Agora</button>
       </div>
     </div>
     <div class="hero-photo" style="background-image:url('./imagens/hero.webp')">
-      <div class="hero-photo-badge">🌸 A partir de R$ 17,90</div>
+      <div class="hero-photo-badge">🌸 Emoção Garantida</div>
     </div>
   </div>
 </section>
 <div class="div"></div>
 
+<!-- QUIZ / WIZARD -->
+<section class="quiz-sec fade-in" id="interacao" style="scroll-margin-top:60px">
+  <div class="quiz-container">
+    
+    <!-- Passo 1 -->
+    <div class="quiz-step active" id="step-1">
+      <div class="quiz-title">Vamos personalizar a <em>experiência</em></div>
+      <p class="quiz-sub">Para começar, qual é o nome da sua mãe?</p>
+      <input type="text" id="mae-nome" class="quiz-input" placeholder="Ex: Maria, Dona Sônia...">
+      <button class="btn btn-rose btn-full" onclick="nextStep(2)">Continuar ✨</button>
+    </div>
+
+    <!-- Passo 2 -->
+    <div class="quiz-step" id="step-2">
+      <div class="quiz-title">Como é a <em><span id="nome-mae-display">sua mãe</span></em>?</div>
+      <p class="quiz-sub">Escolha a opção que mais combina com ela:</p>
+      <div class="quiz-options">
+        <div class="quiz-opt" onclick="selectOpt(this, 'guerreira')">Guerreira, faz de tudo por mim 💪</div>
+        <div class="quiz-opt" onclick="selectOpt(this, 'emotiva')">Emotiva, chora de emoção fácil 🥺</div>
+        <div class="quiz-opt" onclick="selectOpt(this, 'engracada')">Alegre, sempre fazendo a gente rir 😂</div>
+        <div class="quiz-opt" onclick="selectOpt(this, 'protetora')">Protetora, meu porto seguro 🏡</div>
+      </div>
+      <button class="btn btn-rose btn-full" onclick="nextStep(3)" id="btn-step-2" disabled style="opacity:0.5; cursor:not-allowed">Continuar</button>
+    </div>
+
+    <!-- Passo 3 (Estilo) -->
+    <div class="quiz-step" id="step-3">
+      <div class="quiz-title">Qual o estilo <em>musical</em> dela?</div>
+      <p class="quiz-sub">Assim selecionamos a batida ideal:</p>
+      <div class="quiz-options">
+        <div class="quiz-opt" onclick="selectOpt(this, 'mpb')">MPB e Pop Leve 🎸</div>
+        <div class="quiz-opt" onclick="selectOpt(this, 'sertanejo')">Sertanejo ou Samba 🤠</div>
+        <div class="quiz-opt" onclick="selectOpt(this, 'gospel')">Gospel e Religiosa 🙏</div>
+        <div class="quiz-opt" onclick="selectOpt(this, 'variado')">Ela ouve de tudo um pouco 🎧</div>
+      </div>
+      <button class="btn btn-rose btn-full" onclick="nextStep(4)" id="btn-step-3" disabled style="opacity:0.5; cursor:not-allowed">Continuar</button>
+    </div>
+
+    <!-- Passo 4 (Emoção) -->
+    <div class="quiz-step" id="step-4">
+      <div class="quiz-title">Que <em>emoção</em> quer causar?</div>
+      <p class="quiz-sub">O que você quer que ela sinta?</p>
+      <div class="quiz-options">
+        <div class="quiz-opt" onclick="selectOpt(this, 'chorar')">Chorar de emoção (preparar lenços) 😭</div>
+        <div class="quiz-opt" onclick="selectOpt(this, 'sorrir')">Sorrir, dançar e ficar feliz 💃</div>
+        <div class="quiz-opt" onclick="selectOpt(this, 'paz')">Sentir um abraço quentinho de paz 🫂</div>
+      </div>
+      <button class="btn btn-rose btn-full" onclick="nextStep(5)" id="btn-step-4" disabled style="opacity:0.5; cursor:not-allowed">Continuar</button>
+    </div>
+
+    <!-- Passo 5 (Mensagem) -->
+    <div class="quiz-step" id="step-5">
+      <div class="quiz-title">O que você quer <em>dizer</em>?</div>
+      <p class="quiz-sub">Qual mensagem principal as canções devem passar?</p>
+      <div class="quiz-options">
+        <div class="quiz-opt" onclick="selectOpt(this, 'obrigado')">Obrigada por nunca desistir de mim ❤️</div>
+        <div class="quiz-opt" onclick="selectOpt(this, 'saudade')">Sinto muita saudade de você ✈️</div>
+        <div class="quiz-opt" onclick="selectOpt(this, 'amor')">Você é o maior amor da minha vida 🌹</div>
+      </div>
+      <button class="btn btn-rose btn-full" onclick="nextStep(6)" id="btn-step-5" disabled style="opacity:0.5; cursor:not-allowed">Descobrir Canções</button>
+    </div>
+
+    <!-- Passo 6 (Loading) -->
+    <div class="quiz-step" id="step-6">
+      <div class="quiz-loading">
+        <div class="spinner-large"></div>
+        <div class="quiz-title" style="font-size:1.5rem" id="loading-text">Analisando respostas...</div>
+        <p class="quiz-sub">Buscando as melodias perfeitas na nossa coleção.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+<div class="div"></div>
+
 <!-- PACKS (preenchidos via JS) -->
-<section class="packs-section" id="packs" style="scroll-margin-top:60px">
+<section class="packs-section" id="packs" style="scroll-margin-top:60px; display:none;">
   <div class="sec-hd fade-in">
-    <div class="sec-title">Escolha seu <em>Pack</em></div>
+    <div class="sec-title" id="pack-personalizado-titulo">Escolha seu <em>Pack</em></div>
     <div class="goldbar"></div>
     <div class="sec-sub">Ouça a prévia antes de comprar · Após pagar: player completo, MP3 e letra em PDF na hora</div>
     <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:12px">
@@ -283,7 +375,7 @@ footer strong{color:rgba(255,255,255,.8)}
 <div class="div"></div>
 
 <!-- COMO FUNCIONA -->
-<section class="steps-sec" id="como-funciona" style="scroll-margin-top:60px">
+<section class="steps-sec" id="como-funciona" style="scroll-margin-top:60px; display:none;">
   <div class="sec-hd fade-in">
     <div class="sec-title">Como <em>funciona?</em></div>
     <div class="goldbar"></div>
@@ -322,7 +414,7 @@ footer strong{color:rgba(255,255,255,.8)}
       <div style="font-size:.75rem;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:8px">⏰ DIA DAS MÃES: 10 DE MAIO</div>
       <div style="font-family:var(--ft);font-size:clamp(1.5rem,4vw,2.4rem);color:white;margin-bottom:8px;line-height:1.2">O presente que ela<br><em style="color:#ffd6e7">nunca vai esquecer</em></div>
       <div style="font-size:.85rem;color:rgba(255,255,255,.85);margin-bottom:22px">Não deixe pra última hora! Entregue o presente mais emocionante de forma imediata.</div>
-      <button class="btn btn-gold" onclick="rolarPara('packs')" style="font-size:.95rem;padding:14px 36px">✨ Garantir Meu Pack Agora</button>
+      <button class="btn btn-gold" onclick="rolarPara('interacao')" style="font-size:.95rem;padding:14px 36px">✨ Garantir Meu Pack Agora</button>
     </div>
   </div>
 </section>
@@ -438,13 +530,153 @@ const CONFIG = {
 };
 
 // ══════════════════════════════════════════
-// ESTADO GLOBAL
+// ESTADO GLOBAL E QUIZ
 // ══════════════════════════════════════════
 let packAtual = null;
 let metodoPagamento = 'cartao';
 let mp = null;
 let brickController = null;
 let packsData = {};
+let quizData = { nome: '', vibe: '', estilo: '', emocao: '', msg: '' };
+let todosPacks = [];
+
+function determinarPackRecomendado() {
+  const { vibe, estilo, emocao, msg } = quizData;
+  let pts = { p1: 0, p2: 0, p3: 0 };
+  
+  // Passo 2: Vibe
+  if (vibe === 'guerreira' || vibe === 'engracada') pts.p1 += 1;
+  else if (vibe === 'emotiva') pts.p2 += 1;
+  else if (vibe === 'protetora') pts.p3 += 1;
+  
+  // Passo 3: Estilo Musical
+  if (estilo === 'mpb') pts.p1 += 1;
+  else if (estilo === 'gospel' || estilo === 'variado') pts.p2 += 1;
+  else if (estilo === 'sertanejo') pts.p3 += 1;
+  
+  // Passo 4: Emoção
+  if (emocao === 'sorrir') pts.p1 += 1;
+  else if (emocao === 'chorar') pts.p2 += 1;
+  else if (emocao === 'paz') pts.p3 += 1;
+  
+  // Passo 5: Mensagem (peso duplo)
+  if (msg === 'obrigado') pts.p1 += 2;
+  else if (msg === 'amor') pts.p2 += 2;
+  else if (msg === 'saudade') pts.p3 += 2;
+  
+  // Desempate de negócio: Favorecer o pack mais premium (Amor de Mãe - p2) se houver empate
+  let max = Math.max(pts.p1, pts.p2, pts.p3);
+  if (pts.p2 === max) return 'p2'; // R$ 29,90
+  if (pts.p3 === max) return 'p3'; // R$ 24,90
+  return 'p1'; // R$ 17,90
+}
+
+function mostrarOutrosPacks() {
+  document.getElementById('outros-packs-container').style.display = 'grid';
+  document.getElementById('div-btn-outros').style.display = 'none';
+}
+
+function gerarHTMLPackInner(p) {
+  return `
+      <div class="pack-top">
+        <span class="pack-ico">${p.ico}</span>
+        <div class="pack-name">${p.nome}</div>
+        <div class="pack-tagline">"${p.tagline}"</div>
+        <div class="pack-price"><span class="p-val" style="font-size:1.8rem">${p.precoLabel}</span><span class="p-info" style="margin-left:6px">· 3 músicas</span></div>
+      </div>
+      <div class="tracks">
+        <div class="trk-lbl">Prévia — clique pra ouvir</div>
+        ${p.faixas.map((f,i) => `
+        <div class="track">
+          <button class="playbtn" onclick="registrarPrevia('${p.id}_${i}','${f.previaUrl}');togglePrevia(this,'${p.id}_${i}')" data-secs="${p.previaSegundos||35}">
+            <svg width="9" height="10" viewBox="0 0 9 10"><polygon points="1,1 8,5 1,9" fill="var(--r)"/></svg>
+          </button>
+          <div class="tinfo"><div class="tname">${f.nome}</div><div class="tgenre">${f.genero}</div></div>
+          <div class="prog"><div class="progfill" id="pb-${p.id}_${i}"></div></div>
+          <div class="ttime" id="tl-${p.id}_${i}">0:${String(p.previaSegundos||35).padStart(2,"0")}</div>
+        </div>`).join('')}
+      </div>
+      <div class="pack-bot">
+        <button class="btn btn-rose btn-full" onclick="abrirModal('${p.id}')">🎵 Garantir Pack · ${p.precoLabel}</button>
+      </div>
+  `;
+}
+
+function nextStep(step) {
+  if(step === 2) {
+    const nome = document.getElementById('mae-nome').value.trim();
+    if(!nome) { mostrarToast('Por favor, digite o nome dela.'); return; }
+    quizData.nome = nome;
+    document.getElementById('nome-mae-display').textContent = nome;
+  }
+  
+  document.querySelectorAll('.quiz-step').forEach(el => el.classList.remove('active'));
+  document.getElementById('step-' + step).classList.add('active');
+
+  if(step === 6) {
+    setTimeout(() => { document.getElementById('loading-text').textContent = 'Selecionando as melhores vozes...'; }, 1500);
+    setTimeout(() => { document.getElementById('loading-text').textContent = 'Preparando os Packs...'; }, 3000);
+    setTimeout(() => {
+      document.getElementById('interacao').style.display = 'none';
+      const packsSec = document.getElementById('packs');
+      packsSec.style.display = 'block';
+      
+      const comoFunciona = document.getElementById('como-funciona');
+      if(comoFunciona) comoFunciona.style.display = 'block';
+      
+      const recId = determinarPackRecomendado();
+      const packRec = todosPacks.find(p => p.id === recId) || todosPacks[0];
+      const outros = todosPacks.filter(p => p.id !== packRec.id);
+      
+      const container = document.getElementById('packs-container');
+      container.innerHTML = `
+        <div class="pack hot" style="grid-column: 1 / -1; max-width: 450px; margin: 0 auto; border-color: var(--green); box-shadow: 0 10px 30px rgba(45,158,107,.15)">
+          <div class="hot-b" style="background:var(--green)">🎯 Combinação Perfeita</div>
+          ${gerarHTMLPackInner(packRec)}
+        </div>
+        
+        <div style="grid-column: 1 / -1; text-align: center; margin-top: 32px;" id="div-btn-outros">
+          <button class="btn btn-out" onclick="mostrarOutrosPacks()" style="padding:14px 24px; border:2px solid var(--r); background:transparent; color:var(--r); border-radius:30px; font-weight:600; cursor:pointer;">Não gostei, ver outras opções</button>
+        </div>
+        
+        <div id="outros-packs-container" style="display:none; grid-column: 1 / -1; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 10px;">
+          ${outros.map(p => `<div class="pack">${gerarHTMLPackInner(p)}</div>`).join('')}
+        </div>
+      `;
+      
+      document.getElementById('pack-personalizado-titulo').innerHTML = `A seleção perfeita para a <em>${quizData.nome}</em>`;
+      const sub = document.querySelector('#packs .sec-sub');
+      if(sub) sub.textContent = 'Analisamos suas respostas e encontramos o presente ideal.';
+      
+      packsSec.scrollIntoView({behavior: 'smooth'});
+    }, 4500);
+  }
+}
+
+function selectOpt(element, value) {
+  const parent = element.closest('.quiz-options');
+  parent.querySelectorAll('.quiz-opt').forEach(el => el.classList.remove('selected'));
+  element.classList.add('selected');
+  
+  const stepId = element.closest('.quiz-step').id;
+  if(stepId === 'step-2') {
+    quizData.vibe = value;
+    const btn = document.getElementById('btn-step-2');
+    btn.disabled = false; btn.style.opacity = 1; btn.style.cursor = 'pointer';
+  } else if(stepId === 'step-3') {
+    quizData.estilo = value;
+    const btn = document.getElementById('btn-step-3');
+    btn.disabled = false; btn.style.opacity = 1; btn.style.cursor = 'pointer';
+  } else if(stepId === 'step-4') {
+    quizData.emocao = value;
+    const btn = document.getElementById('btn-step-4');
+    btn.disabled = false; btn.style.opacity = 1; btn.style.cursor = 'pointer';
+  } else if(stepId === 'step-5') {
+    quizData.msg = value;
+    const btn = document.getElementById('btn-step-5');
+    btn.disabled = false; btn.style.opacity = 1; btn.style.cursor = 'pointer';
+  }
+}
 
 // ══════════════════════════════════════════
 // INICIALIZAÇÃO
@@ -502,33 +734,11 @@ async function carregarPacks() {
 }
 
 function renderizarPacks(packs) {
+  todosPacks = packs;
+  // A renderização principal agora acontece dentro do nextStep(4) após a personalização.
+  // Deixaremos o container vazio inicialmente para não pesar.
   const c = document.getElementById('packs-container');
-  c.innerHTML = packs.map(p => `
-    <div class="pack ${p.destaque ? 'hot' : ''}">
-      ${p.destaque ? '<div class="hot-b">⭐ Mais Pedido</div>' : ''}
-      <div class="pack-top">
-        <span class="pack-ico">${p.ico}</span>
-        <div class="pack-name">${p.nome}</div>
-        <div class="pack-tagline">"${p.tagline}"</div>
-        <div class="pack-price"><span class="p-val" style="font-size:1.8rem">${p.precoLabel}</span><span class="p-info" style="margin-left:6px">· 3 músicas</span></div>
-      </div>
-      <div class="tracks">
-        <div class="trk-lbl">Prévia — clique pra ouvir</div>
-        ${p.faixas.map((f,i) => `
-        <div class="track">
-          <button class="playbtn" onclick="registrarPrevia('${p.id}_${i}','${f.previaUrl}');togglePrevia(this,'${p.id}_${i}')" data-secs="${p.previaSegundos||35}">
-            <svg width="9" height="10" viewBox="0 0 9 10"><polygon points="1,1 8,5 1,9" fill="var(--r)"/></svg>
-          </button>
-          <div class="tinfo"><div class="tname">${f.nome}</div><div class="tgenre">${f.genero}</div></div>
-          <div class="prog"><div class="progfill" id="pb-${p.id}_${i}"></div></div>
-          <div class="ttime" id="tl-${p.id}_${i}">0:${String(p.previaSegundos||35).padStart(2,"0")}</div>
-        </div>`).join('')}
-      </div>
-      <div class="pack-bot">
-        <button class="btn btn-rose btn-full" onclick="abrirModal('${p.id}')">🎵 Garantir Pack · ${p.precoLabel}</button>
-      </div>
-    </div>
-  `).join('');
+  c.innerHTML = '';
 
   // Preload silencioso das prévias para tocar instantaneamente quando clicado
   setTimeout(() => {
@@ -948,7 +1158,11 @@ function verificarRetornoCheckout() {
 // COUNTDOWN — Dia das Mães BR: 11/05/2025
 // ══════════════════════════════════════════
 function rolarPara(id) {
-  const el = document.getElementById(id);
+  let el = document.getElementById(id);
+  // Se o usuário já passou pelo quiz e tentar rolar para 'interacao', vai pro 'packs'
+  if (id === 'interacao' && el && el.style.display === 'none') {
+    el = document.getElementById('packs');
+  }
   if (!el) return;
   const offset = 56; // altura da nav fixa
   const top = el.getBoundingClientRect().top + window.pageYOffset - offset;
