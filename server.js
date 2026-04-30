@@ -211,16 +211,20 @@ app.post('/api/gerar-pix', async (req, res) => {
       payment_method_id: 'pix',
       payer: { 
         email: email || 'cliente@site.com',
-        first_name: 'Cliente',
-        last_name: 'Especial'
-      },
-      metadata: { pack_id: packId },
-      notification_url: `${baseUrl}/webhook/mercadopago`,
+      }
     }});
     
-    // Na v2 do SDK, os dados ficam direto no objeto de resposta
-    const qrCodeBase64 = r.point_of_interaction.transaction_data.qr_code_base64;
-    const qrCodeText = r.point_of_interaction.transaction_data.qr_code;
+    console.log('MP Resposta:', JSON.stringify(r));
+    
+    // Fallback para diferentes estruturas de resposta
+    const transactionData = r.point_of_interaction?.transaction_data;
+    const qrCodeBase64 = transactionData?.qr_code_base64;
+    const qrCodeText = transactionData?.qr_code;
+    
+    if (!qrCodeText) {
+      throw new Error('QR Code não gerado pela API do Mercado Pago. Verifique se o PIX está ativo na sua conta.');
+    }
+
     
     res.json({ paymentId: r.id, qrCodeBase64, qrCodeText });
   } catch (err) {
