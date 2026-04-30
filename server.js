@@ -225,10 +225,12 @@ app.post('/api/gerar-pix', async (req, res) => {
     res.json({ paymentId: r.id, qrCodeBase64, qrCodeText });
   } catch (err) {
     console.error('Erro MP PIX:', err.message);
-    if (err.cause) console.error('Causa:', JSON.stringify(err.cause));
-    res.status(500).json({ erro: 'Erro ao gerar Pix no Mercado Pago' });
+    const detail = err.cause ? JSON.stringify(err.cause) : err.message;
+    res.status(500).json({ erro: 'Erro ao gerar Pix no Mercado Pago', detail });
   }
 });
+
+
 
 
 app.get('/sucesso', (req, res) => res.redirect(`/?pagamento=sucesso&pid=${req.query.payment_id}`));
