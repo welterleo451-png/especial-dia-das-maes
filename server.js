@@ -200,25 +200,36 @@ app.post('/api/gerar-pix', async (req, res) => {
   const { packId, email } = req.body;
   const pack = PACKS[packId];
   if (!pack) return res.status(400).json({ erro: 'Pack invalido' });
+  
   const baseUrl = (req.headers['x-forwarded-proto'] || req.protocol) + '://' + req.get('host');
+  
   try {
     const payment = new Payment(client);
     const r = await payment.create({ body: {
       transaction_amount: pack.preco / 100,
       description: pack.nome,
       payment_method_id: 'pix',
-      payer: { email: email || 'cliente@site.com' },
+      payer: { 
+        email: email || 'cliente@site.com',
+        first_name: 'Cliente',
+        last_name: 'Especial'
+      },
       metadata: { pack_id: packId },
       notification_url: `${baseUrl}/webhook/mercadopago`,
     }});
+    
+    // Na v2 do SDK, os dados ficam direto no objeto de resposta
     const qrCodeBase64 = r.point_of_interaction.transaction_data.qr_code_base64;
     const qrCodeText = r.point_of_interaction.transaction_data.qr_code;
+    
     res.json({ paymentId: r.id, qrCodeBase64, qrCodeText });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ erro: 'Erro ao gerar Pix' });
+    console.error('Erro MP PIX:', err.message);
+    if (err.cause) console.error('Causa:', JSON.stringify(err.cause));
+    res.status(500).json({ erro: 'Erro ao gerar Pix no Mercado Pago' });
   }
 });
+
 
 app.get('/sucesso', (req, res) => res.redirect(`/?pagamento=sucesso&pid=${req.query.payment_id}`));
 app.get('/falha',   (_req, res) => res.redirect('/?pagamento=falha'));
