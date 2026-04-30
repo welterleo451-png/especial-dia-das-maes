@@ -90,6 +90,11 @@ app.get('/audio/:fileId', async (req, res) => {
   }
 });
 
+// Serve a public key do MP para o frontend
+app.get('/api/mp-public-key', (_req, res) => {
+  res.json({ publicKey: process.env.MP_PUBLIC_KEY || '' });
+});
+
 app.get('/', (_req, res) => res.sendFile(__dirname + '/public/index.html'));
 
 app.get('/api/packs', (_req, res) => {

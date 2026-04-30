@@ -329,6 +329,35 @@ Pra sempre.`,
       },
     ],
   },
+  // ── Tiers da Retrospectiva ──
+  basic: {
+    id: 'basic',
+    ico: '🎁',
+    nome: 'Retrospectiva Básica',
+    tagline: 'Preview com 3 telas',
+    preco: 1490,
+    precoLabel: 'R$ 14,90',
+    faixas: [],
+  },
+  complete: {
+    id: 'complete',
+    ico: '💝',
+    nome: 'Retrospectiva Completa',
+    tagline: 'Todas as telas + música',
+    preco: 1990,
+    precoLabel: 'R$ 19,90',
+    destaque: true,
+    faixas: [],
+  },
+  lifetime: {
+    id: 'lifetime',
+    ico: '👑',
+    nome: 'Retrospectiva Vitalícia',
+    tagline: 'Completa + Download + Acesso Vitalício',
+    preco: 2790,
+    precoLabel: 'R$ 27,90',
+    faixas: [],
+  },
 };
 
 module.exports = PACKS;
