@@ -1,13 +1,7 @@
 /**
  * ══════════════════════════════════════════════════════════
  *  PRESENTE DIGITAL PARA MAMÃE — script.js
- *  Autor: gerado com Claude (Anthropic)
- *
- *  Estrutura principal:
- *  1. Estado global da aplicação
- *  2. Lógica do Formulário Wizard (6 etapas)
- *  3. Lógica da Retrospectiva (Stories)
- *  4. Utilitários e Integrações
+ *  Versão Estável Restaurada (Premium Layout)
  * ══════════════════════════════════════════════════════════
  */
 
@@ -31,6 +25,8 @@ if (window.RETRO_DATA) {
 
 const TOTAL_STEPS = 6;
 let currentStep = 1;
+
+// Referências DOM
 const formSection = document.getElementById('form-section');
 const progressFill = document.getElementById('form-progress-fill');
 const stepCurrentEl = document.getElementById('step-current');
@@ -42,14 +38,21 @@ const storiesProgressEl = document.getElementById('stories-progress');
 
 const stepIcons = ['💝', '👩', '✨', '🏡', '🖼️', '✉️'];
 
+/* ════════════════════════════════════════════
+   1. LÓGICA DO FORMULÁRIO (WIZARD)
+   ════════════════════════════════════════════ */
+
 function updateFormUI() {
   const pct = (currentStep / TOTAL_STEPS) * 100;
   if (progressFill) progressFill.style.width = pct + '%';
   if (stepCurrentEl) stepCurrentEl.textContent = currentStep;
   if (btnBack) btnBack.style.visibility = currentStep === 1 ? 'hidden' : 'visible';
+  
   if (btnNext) {
     btnNext.textContent = currentStep === TOTAL_STEPS ? '🎁 Gerar Retrospectiva' : 'Continuar →';
+    btnNext.classList.toggle('is-generate', currentStep === TOTAL_STEPS);
   }
+  
   if (formIcon) formIcon.textContent = stepIcons[currentStep - 1];
 }
 
@@ -68,22 +71,37 @@ function goToStep(targetStep, direction) {
   const current = document.getElementById(`step-${currentStep}`);
   const next = document.getElementById(`step-${targetStep}`);
   if (!current || !next) return;
-  current.classList.add('hidden');
-  next.classList.remove('hidden');
-  currentStep = targetStep;
-  updateFormUI();
+
+  current.classList.add('step-exiting');
+  setTimeout(() => {
+    current.classList.add('hidden');
+    current.classList.remove('step-exiting');
+    next.classList.remove('hidden');
+    next.classList.add(direction === 'forward' ? 'step-entering' : 'step-entering-back');
+    
+    next.addEventListener('animationend', () => {
+      next.classList.remove('step-entering', 'step-entering-back');
+    }, { once: true });
+
+    currentStep = targetStep;
+    updateFormUI();
+  }, 300);
 }
 
-btnNext.addEventListener('click', (e) => {
-  if (e) e.preventDefault();
-  if (!validateStep(currentStep)) return;
-  if (currentStep < TOTAL_STEPS) goToStep(currentStep + 1, 'forward');
-  else gerarRecordacao(e);
-});
+if (btnNext) {
+  btnNext.addEventListener('click', (e) => {
+    if (e) e.preventDefault();
+    if (!validateStep(currentStep)) return;
+    if (currentStep < TOTAL_STEPS) goToStep(currentStep + 1, 'forward');
+    else gerarRecordacao(e);
+  });
+}
 
-btnBack.addEventListener('click', () => {
-  if (currentStep > 1) goToStep(currentStep - 1, 'back');
-});
+if (btnBack) {
+  btnBack.addEventListener('click', () => {
+    if (currentStep > 1) goToStep(currentStep - 1, 'back');
+  });
+}
 
 function collectFormData() {
   state.momName = document.getElementById('mom-name').value.trim();
@@ -121,45 +139,56 @@ function setupPhotoUploads() {
 
 function setupRadioPills() {
   document.querySelectorAll('.radio-pill').forEach(pill => {
+    const input = pill.querySelector('input');
     pill.addEventListener('click', () => {
       document.querySelectorAll('.radio-pill').forEach(p => p.classList.remove('active'));
       pill.classList.add('active');
+      if (input) input.checked = true;
     });
   });
 }
 
-/* ── RETRO MOTOR ── */
+/* ════════════════════════════════════════════
+   2. MOTOR DA RETROSPECTIVA (SLIDES)
+   ════════════════════════════════════════════ */
+
 let activeStoryIndex = 0;
 let storyTimer = null;
-const STORY_DURATION = 6000;
+const STORY_DURATION = 5000;
 
 function buildStoriesData() {
   const { momName, momNickname, gifterName, photos, yearsTogether, momPhrase, bestFood, bestMemory, hobbies, traditions, qualities, dedication } = state;
   return [
-    { title: `Para a melhor mãe: ${momName}`, subtitle: 'Uma história de amor que começou há muito tempo...', image: photos[0] },
-    { title: `${yearsTogether} anos de momentos incríveis`, subtitle: `Você sempre diz: "${momPhrase}" e a gente cai na risada!`, image: photos[1] },
-    { title: 'O sabor da felicidade', subtitle: `Nada supera o seu ${bestFood}. É o tempero da nossa vida!`, image: photos[2] },
-    { title: 'Nossa melhor memória', subtitle: `${bestMemory}. Um dia que ficou guardado para sempre.`, image: photos[3] },
-    { title: 'Você é única', subtitle: `Pelo seu jeito ${qualities}, por amar ${hobbies} e nossas tradições de ${traditions}.`, image: photos[4] },
-    { title: 'Minha gratidão eterna', subtitle: dedication, isFinal: true }
+    { title: `Para a melhor mãe: ${momName}`, subtitle: 'Uma história de amor que começou há muito tempo...', image: photos[0], icon: '💝' },
+    { title: `${yearsTogether} anos de momentos incríveis`, subtitle: `Você sempre diz: "${momPhrase}" e a gente cai na risada!`, image: photos[1], icon: '✨' },
+    { title: 'O sabor da felicidade', subtitle: `Nada supera o seu ${bestFood}. É o tempero da nossa vida!`, image: photos[2], icon: '🍽️' },
+    { title: 'Nossa melhor memória', subtitle: `${bestMemory}. Um dia que ficou guardado para sempre.`, image: photos[3], icon: '📸' },
+    { title: 'Você é única', subtitle: `Pelo seu jeito ${qualities}, por amar ${hobbies} e nossas tradições de ${traditions}.`, image: photos[4], icon: '🏡' },
+    { title: 'Minha gratidão eterna', subtitle: dedication, isFinal: true, icon: '✉️' }
   ];
 }
 
 function renderStories(data) {
+  if (!storiesContainer || !storiesProgressEl) return;
   storiesContainer.innerHTML = '';
   storiesProgressEl.innerHTML = '';
+  
   data.forEach((item, i) => {
     const story = document.createElement('div');
     story.className = 'story' + (i === 0 ? ' active' : '');
+    
     story.innerHTML = `
-      <div class="story-bg" style="background-image: url(${item.image || ''})"></div>
+      <div class="story-bg" style="background-image: url('${item.image || ''}')"></div>
+      <div class="story-overlay"></div>
       <div class="story-content">
+        <div class="story-icon-badge">${item.icon || '💝'}</div>
         <h2>${item.title}</h2>
         <p>${item.subtitle}</p>
-        ${item.isFinal && !state.unlocked ? '<div class="blur-overlay"></div>' : ''}
+        ${item.isFinal && !state.unlocked ? '<div class="premium-lock"><span>Bloqueado até o pagamento</span></div>' : ''}
       </div>
     `;
     storiesContainer.appendChild(story);
+
     const seg = document.createElement('div');
     seg.className = 'progress-segment';
     seg.innerHTML = '<div class="progress-segment-fill"></div>';
@@ -170,6 +199,7 @@ function renderStories(data) {
 function showStory(index) {
   const stories = document.querySelectorAll('.story');
   if (index < 0 || index >= stories.length) return;
+  
   clearTimeout(storyTimer);
   stories.forEach(s => s.classList.remove('active'));
   stories[index].classList.add('active');
@@ -201,27 +231,34 @@ function initRetro() {
   if (right) right.onclick = () => showStory(activeStoryIndex + 1);
 }
 
-/* ── GERAÇÃO E SALVAMENTO ── */
+/* ════════════════════════════════════════════
+   3. GERAÇÃO E PAGAMENTO
+   ════════════════════════════════════════════ */
+
 async function gerarRecordacao(e) {
   if (e) e.preventDefault();
   collectFormData();
+  
+  const btn = document.querySelector('.btn-submit');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerText = 'Gerando sua surpresa...';
+  }
+
+  // Mostra a prévia
   const storiesData = buildStoriesData();
   renderStories(storiesData);
   
-  // Esconde site
-  ['.hero', '.site-header', '.how-it-works', '.cta-final', '.site-footer'].forEach(sel => {
-    const el = document.querySelector(sel);
-    if (el) el.style.display = 'none';
-  });
-  
   const retro = document.getElementById('retro-section');
-  retro.style.display = 'block';
-  retro.classList.remove('hidden');
-  retro.style.position = 'fixed';
-  retro.style.top = '0'; retro.style.left = '0'; retro.style.zIndex = '999999';
+  if (retro) {
+    retro.style.display = 'block';
+    retro.classList.remove('hidden');
+    retro.style.position = 'fixed';
+    retro.style.top = '0'; retro.style.left = '0'; retro.style.zIndex = '999999';
+  }
   
   document.body.classList.add('retro-view-mode');
-  formSection.classList.add('hidden');
+  if (formSection) formSection.classList.add('hidden');
   
   initRetro();
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -232,8 +269,13 @@ async function gerarRecordacao(e) {
      audio.play().catch(() => {});
   }
 
-  // Salva em background
+  // Tenta salvar no banco
   salvarRetrospectiva().then(id => { if(id) state.retroId = id; });
+
+  // Checkout automático após 15s
+  setTimeout(() => {
+    if (!state.unlocked) abrirModal();
+  }, 15000);
 }
 
 async function salvarRetrospectiva() {
@@ -248,7 +290,6 @@ async function salvarRetrospectiva() {
   } catch { return null; }
 }
 
-/* ── MERCADO PAGO E CHECKOUT ── */
 let mp = null;
 let brickController = null;
 
@@ -258,9 +299,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const data = await res.json();
     if (data.publicKey) mp = new MercadoPago(data.publicKey, { locale: 'pt-BR' });
   } catch {}
+  
   initCountdown();
   setupPhotoUploads();
   setupRadioPills();
+  updateFormUI();
 });
 
 function abrirModal() {
@@ -324,8 +367,6 @@ async function gerarPix() {
 function sucessoPagamento() {
   fecharModal();
   state.unlocked = true;
-  const retro = document.getElementById('retro-section');
-  if(retro) retro.style.display = 'block';
   const shareContainer = document.getElementById('share-btn-container');
   if(shareContainer) shareContainer.classList.remove('hidden');
   renderStories(buildStoriesData());
@@ -334,7 +375,7 @@ function sucessoPagamento() {
 
 function compartilhar() {
   const link = `${window.location.origin}/retro/${state.retroId || ''}`;
-  const msg = encodeURIComponent(`💝 Presente especial para você: ${link}`);
+  const msg = encodeURIComponent(`💝 Olá! Preparei um presente especial: ${link}`);
   window.open(`https://wa.me/?text=${msg}`, '_blank');
 }
 
