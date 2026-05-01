@@ -1228,7 +1228,9 @@ function copiarCopiaECola() {
 
 async function gerarPix() {
   // GATILHO DE DOWNSELL: Intercepta o pagamento se for o plano de 14,90
-  if (state.selectedTier === 'complete' && state.selectedPrice === 14.90 && !state.downsellShown) {
+  const isBasico = state.selectedTier === 'complete' && (state.selectedPrice >= 14.80 && state.selectedPrice <= 15.00);
+
+  if (isBasico && !state.downsellShown) {
     state.downsellShown = true;
     mostrarDownsell();
     return;
@@ -1238,8 +1240,10 @@ async function gerarPix() {
   if (!email || !email.includes('@')) { mostrarToast('Preencha um e-mail válido.'); return; }
   
   const btn = document.getElementById('btn-pix');
-  btn.disabled = true;
-  btn.textContent = 'Gerando Pix...'; btn.disabled = true;
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = 'Gerando Pix...';
+  }
   
   try {
     const resp = await fetch('/api/gerar-pix', {

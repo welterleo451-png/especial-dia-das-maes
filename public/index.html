@@ -313,7 +313,7 @@
 
         <div id="campos-pix" style="display:none; margin-top:16px">
           <div id="pix-area-gerar">
-            <button class="btn-unlock" id="btn-gerar-pix" onclick="gerarPixMP()" style="width:100%">Gerar Código Pix Seguro</button>
+            <button class="btn-pix" id="btn-pix" onclick="gerarPix()">⚡ Gerar Pix</button>
           </div>
           <div id="pix-area-pagamento" style="display:none;text-align:center">
             <div class="pix-box"><div class="pix-chave">Pague via <strong>PIX Copia e Cola</strong></div><div class="pix-val" id="pix-val-display">R$ 19,90</div><div class="pix-nota">Pagamento aprovado em segundos!</div></div>
@@ -323,6 +323,33 @@
             <div style="margin-top:16px;font-size:.75rem;color:#888">⏳ Aguardando confirmação...</div>
           </div>
         </div>
+
+        <style>
+        .story-title {
+            font-family: 'Syne', sans-serif;
+            font-weight: 900;
+            font-size: 3.5rem;
+            line-height: 0.9;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            max-width: 100%;
+        }
+
+        .story-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            opacity: 0.8;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        </style>
 
         <div id="campos-cartao" style="display:none; margin-top:16px">
           <div id="cardPaymentBrick_container"></div>
