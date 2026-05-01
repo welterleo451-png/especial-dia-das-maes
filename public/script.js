@@ -1,7 +1,7 @@
 /**
  * ══════════════════════════════════════════════════════════
  *  PRESENTE DIGITAL PARA MAMÃE — script.js
- *  VERSÃO FINAL DEFINITIVA (IGUAL AO VÍDEO)
+ *  VERSÃO FINAL: RÉPLICA EXATA DO VÍDEO
  * ══════════════════════════════════════════════════════════
  */
 
@@ -23,12 +23,11 @@ const btnNext = document.getElementById('btn-next');
 const storiesContainer = document.getElementById('stories-container');
 const storiesProgressEl = document.getElementById('stories-progress');
 
-/* ── 1. CONTAGEM REGRESSIVA ── */
+/* ── 1. CONTAGEM ── */
 function initCountdown() {
   const target = new Date('2026-05-11T00:00:00').getTime();
   const el = document.getElementById('countdown-timer');
   if (!el) return;
-  
   setInterval(() => {
     const diff = target - new Date().getTime();
     if (diff <= 0) { el.textContent = "É hoje! 💝"; return; }
@@ -80,18 +79,13 @@ function setupPhotoUploads() {
       const reader = new FileReader();
       reader.onload = (event) => {
         state.photos[index] = event.target.result;
-        const preview = document.getElementById(input.dataset.preview);
-        if (preview) {
-          preview.style.backgroundImage = `url(${event.target.result})`;
-          preview.innerHTML = '';
-        }
       };
       reader.readAsDataURL(file);
     });
   });
 }
 
-/* ── 3. RETROSPECTIVA ── */
+/* ── 3. RETRO (IGUAL AO VÍDEO) ── */
 let activeStoryIndex = 0;
 let storyTimer = null;
 const STORY_DURATION = 5000;
@@ -100,12 +94,12 @@ function renderStories() {
   storiesContainer.innerHTML = '';
   storiesProgressEl.innerHTML = '';
   const data = [
-    { title: `Para: ${document.getElementById('mom-name').value}`, subtitle: 'Homenagem...', image: state.photos[0] },
+    { title: `Para: ${document.getElementById('mom-name').value}`, subtitle: 'Sua história...', image: state.photos[0] },
     { title: 'Frase', subtitle: document.getElementById('mom-phrase').value, image: state.photos[1] },
-    { title: 'Comida', subtitle: document.getElementById('best-food').value, image: state.photos[2] },
+    { title: 'Sabor', subtitle: document.getElementById('best-food').value, image: state.photos[2] },
     { title: 'Memória', subtitle: document.getElementById('best-memory').value, image: state.photos[3] },
-    { title: 'Qualidades', subtitle: document.getElementById('qualities').value, image: state.photos[4] },
-    { title: 'Dedicatória', subtitle: document.getElementById('dedication').value }
+    { title: 'Personalidade', subtitle: document.getElementById('qualities').value, image: state.photos[4] },
+    { title: 'Te amo!', subtitle: document.getElementById('dedication').value }
   ];
 
   data.forEach((item, i) => {
@@ -148,21 +142,36 @@ function showStory(index) {
 }
 
 function gerarRecordacao() {
-  renderStories();
+  // 1. Esconde o conteúdo do site e mostra a retro em tela cheia (SEM FUNDO PRETO FORÇADO)
+  document.getElementById('site-content').style.display = 'none';
+  document.getElementById('main-nav').style.display = 'none';
+  document.querySelector('.topbar').style.display = 'none';
+  
   const retro = document.getElementById('retro-section');
   retro.style.display = 'block';
-  retro.classList.add('active'); // Ativa o layout no CSS
-  retro.scrollIntoView({ behavior: 'smooth' });
+  retro.classList.remove('hidden');
+  
+  // Estilo Mobile Stories (IGUAL AO VÍDEO)
+  retro.style.position = 'fixed';
+  retro.style.top = '0'; retro.style.left = '0';
+  retro.style.width = '100vw'; retro.style.height = '100vh';
+  retro.style.zIndex = '999999';
+  retro.style.background = '#fff'; // Fundo branco/claro conforme o vídeo
+  
+  renderStories();
   activeStoryIndex = 0;
   showStory(0);
+  
   document.getElementById('touch-left').onclick = () => showStory(activeStoryIndex - 1);
   document.getElementById('touch-right').onclick = () => showStory(activeStoryIndex + 1);
+
   const audio = document.getElementById('bg-audio');
-  audio.src = document.querySelector('input[name="gender"]:checked').value === 'feminino' ? 'audio/mulher.mp3' : 'audio/homem.mp3';
+  const gender = document.querySelector('input[name="gender"]:checked').value;
+  audio.src = gender === 'feminino' ? 'audio/mulher.mp3' : 'audio/homem.mp3';
   audio.play().catch(() => {});
 }
 
-/* ── 4. UTILITÁRIOS ── */
+/* ── 4. AUXILIARES ── */
 function irParaForm() {
   const form = document.getElementById('form-section');
   form.classList.remove('hidden');
@@ -171,7 +180,7 @@ function irParaForm() {
 
 function abrirModal() { document.getElementById('overlay').classList.add('open'); }
 function fecharModal() { document.getElementById('overlay').classList.remove('open'); }
-function fecharRetro() { document.getElementById('retro-section').style.display = 'none'; }
+function fecharRetro() { window.location.reload(); } // Recarrega para voltar ao site original
 
 document.addEventListener('DOMContentLoaded', () => {
   initCountdown();
@@ -184,4 +193,3 @@ window.abrirModal = abrirModal;
 window.fecharModal = fecharModal;
 window.fecharRetro = fecharRetro;
 window.gerarRecordacao = gerarRecordacao;
-window.compartilhar = () => { window.open(`https://wa.me/?text=${encodeURIComponent('💝 Presente Digital!')}`); };
