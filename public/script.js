@@ -1187,7 +1187,8 @@ async function renderizarBrickCartao() {
         },
         onSubmit: async (cardFormData) => {
           // DISPARAR DOWNSELL (Cartão): Se estiver no plano de 14.90 e ainda não viu a oferta
-          if (state.selectedTier === 'complete' && state.selectedPrice === 14.90 && !state.downsellShown) {
+          const isBasico = state.selectedTier === 'complete' && (state.selectedPrice >= 14.80 && state.selectedPrice <= 15.00);
+          if (isBasico && !state.downsellShown) {
             state.downsellShown = true;
             mostrarDownsell();
             return;
@@ -1526,3 +1527,42 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function irParaForm() { abrirForm(); document.getElementById('form-section').scrollIntoView({ behavior: 'smooth' }); }
+
+// ── FUNÇÕES DOWNSELL ──
+function mostrarDownsell() {
+  const overlay = document.getElementById('downsell-overlay');
+  if (overlay) overlay.style.display = 'flex';
+}
+
+function fecharDownsell() {
+  const overlay = document.getElementById('downsell-overlay');
+  if (overlay) overlay.style.display = 'none';
+}
+
+function recusarDownsell() {
+  fecharDownsell();
+  mostrarToast('Continuando com o plano básico...');
+  // O fluxo de pagamento continuará normalmente pois não retornamos na próxima tentativa
+}
+
+async function aceitarDownsell() {
+  fecharDownsell();
+  mostrarToast('Excelente escolha! Aplicando oferta...');
+  
+  // Atualiza estado para o downsell
+  state.selectedTier = 'lifetime_downsell';
+  state.selectedPrice = 19.90;
+  
+  // Se for cartão, precisamos remontar o brick com o novo valor
+  if (state.paymentMethod === 'card') {
+    if (brickController) {
+      await brickController.unmount();
+      brickController = null;
+    }
+    renderizarBrickCartao();
+    mostrarToast('Valor atualizado para R$ 19,90 no cartão!');
+  } else {
+    // Se for Pix, já gera o novo código direto
+    gerarPix();
+  }
+}
