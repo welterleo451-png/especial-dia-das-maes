@@ -167,29 +167,11 @@
           <div class="testi-user">
             <img src="https://i.pravatar.cc/100?u=6" alt="User" />
             <div class="user-info">
-              <strong>Juliana Costa</strong>
-              <span>Criou há 1 semana</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ╔══════════════════════════════════╗ -->
-  <!-- ║        SEÇÃO: FORMULÁRIO         ║ -->
-  <!-- ╚══════════════════════════════════╝ -->
-  <section id="form-section" class="hidden">
-    <!-- Barra de progresso das etapas -->
-    <div class="form-progress-bar">
-      <div class="form-progress-fill" id="form-progress-fill"></div>
-    </div>
-    <div class="step-indicator">
-      <span id="step-current">1</span><span class="step-sep">/</span><span id="step-total">6</span>
-    </div>
-
+                <section id="form-section" class="hidden">
     <div class="form-card">
+      <div class="step-indicator">
+        <span id="step-current">1</span> / <span id="step-total">6</span>
+      </div>
       <div class="form-icon" id="form-icon">💝</div>
       
       <!-- ETAPA 1 -->
@@ -197,18 +179,18 @@
         <h2 class="step-title">Olá! Vamos começar<br/>com quem você é.</h2>
         <div class="field-group">
           <label class="field-label">Seu nome</label>
-          <input class="field-input" type="text" id="gifter-name" placeholder="Ex: Ana, João…" />
+          <input class="field-input" type="text" id="user-name" placeholder="Ex: Ana, João…" />
         </div>
         <div class="field-group">
           <label class="field-label">Seu gênero</label>
           <div class="radio-group">
-            <label class="radio-pill"><input type="radio" name="gender" value="masculino" /><span>🧒 Masculino</span></label>
-            <label class="radio-pill"><input type="radio" name="gender" value="feminino" /><span>👧 Feminino</span></label>
+            <label class="radio-pill"><input type="radio" name="user-gender" value="masculino" /><span>👦 Masculino</span></label>
+            <label class="radio-pill"><input type="radio" name="user-gender" value="feminino" /><span>👧 Feminino</span></label>
           </div>
         </div>
       </div>
 
-      <!-- ETAPAS 2-6 (Omitidas aqui para brevidade, mas mantidas no script) -->
+      <!-- Outros passos (IDs sincronizados com o script.js) -->
       <div class="step hidden" id="step-2">
         <h2 class="step-title">Agora fala de<br/>quem mais importa.</h2>
         <div class="field-group">
@@ -222,20 +204,43 @@
       </div>
       
       <div class="step hidden" id="step-3">
-        <h2 class="step-title">Os detalhes que<br/>fazem sorrir.</h2>
-        <div class="field-group"><input class="field-input" type="text" id="mom-phrase" placeholder="Frase dela" /></div>
+        <h2 class="step-title">Um detalhe<br/>especial.</h2>
+        <div class="field-group">
+          <label class="field-label">Uma frase que ela sempre diz</label>
+          <input class="field-input" type="text" id="mom-phrase" placeholder="Ex: Eu te avisei!" />
+        </div>
       </div>
 
       <div class="step hidden" id="step-4">
-        <h2 class="step-title">Hobbies e Paixões</h2>
-        <div class="field-group"><input class="field-input" type="text" id="hobbies" /></div>
+        <h2 class="step-title">A música que ela<br/>ama ouvir.</h2>
+        <div class="field-group">
+          <div class="radio-group">
+            <label class="radio-pill"><input type="radio" name="audio-gender" value="homem" /><span>🎤 Cantor</span></label>
+            <label class="radio-pill"><input type="radio" name="audio-gender" value="mulher" /><span>🎤 Cantora</span></label>
+          </div>
+        </div>
       </div>
 
       <div class="step hidden" id="step-5">
-        <h2 class="step-title">Escolha as Fotos</h2>
+        <h2 class="step-title">Escolha as fotos<br/>mais lindas.</h2>
         <div class="photo-uploads">
-           <!-- Inputs de foto simplificados -->
-           <input type="file" class="photo-input" data-preview="p1" id="photo-1" />
+           <input type="file" id="photo-1" class="hidden" accept="image/*" />
+           <button type="button" class="btn-primary" onclick="document.getElementById('photo-1').click()">Selecionar Foto</button>
+        </div>
+      </div>
+
+      <div class="step hidden" id="step-6">
+        <h2 class="step-title">Uma mensagem<br/>do fundo do coração.</h2>
+        <textarea class="field-input" id="dedication" rows="4" placeholder="Escreva aqui sua mensagem..."></textarea>
+      </div>
+
+      <div class="form-nav">
+        <button class="btn-back hidden" id="btn-back" onclick="prevStep()">← Voltar</button>
+        <button class="btn-next" id="btn-next" onclick="nextStep()">Continuar →</button>
+      </div>
+    </div>
+  </section>
+          <input type="file" class="photo-input" data-preview="p1" id="photo-1" />
         </div>
       </div>
 
