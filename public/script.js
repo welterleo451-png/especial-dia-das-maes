@@ -1,7 +1,7 @@
 /**
  * ══════════════════════════════════════════════════════════
  *  PRESENTE DIGITAL PARA MAMÃE — script.js
- *  Versão Premium Mobile-First (Stories Style)
+ *  Versão Fiel ao Vídeo (Design Integrado Claro)
  * ══════════════════════════════════════════════════════════
  */
 
@@ -115,7 +115,7 @@ function setupPhotoUploads() {
 }
 
 /* ════════════════════════════════════════════
-   2. MOTOR DA RETROSPECTIVA (SLIDES TIKTOK STYLE)
+   2. MOTOR DA RETROSPECTIVA (SLIDES INTEGRADOS)
    ════════════════════════════════════════════ */
 
 let activeStoryIndex = 0;
@@ -125,11 +125,11 @@ const STORY_DURATION = 6000;
 function buildStoriesData() {
   const { momName, photos, yearsTogether, momPhrase, bestFood, bestMemory, hobbies, traditions, qualities, dedication } = state;
   return [
-    { title: `Para a melhor mãe: ${momName}`, subtitle: 'Uma história de amor que começou há muito tempo...', image: photos[0], icon: '💝' },
-    { title: `${yearsTogether} anos de momentos incríveis`, subtitle: `Você sempre diz: "${momPhrase}"`, image: photos[1], icon: '✨' },
+    { title: `Para a melhor mãe: ${momName}`, subtitle: 'Uma história de amor...', image: photos[0], icon: '💝' },
+    { title: `${yearsTogether} anos incríveis`, subtitle: `Você sempre diz: "${momPhrase}"`, image: photos[1], icon: '✨' },
     { title: 'O sabor da felicidade', subtitle: `Nada supera o seu ${bestFood}`, image: photos[2], icon: '🍽️' },
     { title: 'Nossa melhor memória', subtitle: bestMemory, image: photos[3], icon: '📸' },
-    { title: 'Você é única', subtitle: `Pelo seu jeito ${qualities}, por amar ${hobbies}`, image: photos[4], icon: '🏡' },
+    { title: 'Você é única', subtitle: `Pelo seu jeito ${qualities}`, image: photos[4], icon: '🏡' },
     { title: 'Minha gratidão eterna', subtitle: dedication, isFinal: true, icon: '✉️' }
   ];
 }
@@ -140,13 +140,11 @@ function renderStories(data) {
   storiesProgressEl.innerHTML = '';
   
   data.forEach((item, i) => {
-    // Progress bar segment
     const seg = document.createElement('div');
     seg.className = 'progress-segment';
     seg.innerHTML = '<div class="progress-segment-fill"></div>';
     storiesProgressEl.appendChild(seg);
 
-    // Story slide
     const story = document.createElement('div');
     story.className = 'story' + (i === 0 ? ' active' : '');
     story.innerHTML = `
@@ -154,9 +152,8 @@ function renderStories(data) {
       <div class="story-overlay"></div>
       <div class="story-content">
         <div class="story-icon-badge">${item.icon || '💝'}</div>
-        <h2 class="story-title">${item.title}</h2>
-        <p class="story-text">${item.subtitle}</p>
-        ${item.isFinal && !state.unlocked ? '<div class="premium-lock"><span>Desbloqueie para ver completo</span></div>' : ''}
+        <h2>${item.title}</h2>
+        <p>${item.subtitle}</p>
       </div>
     `;
     storiesContainer.appendChild(story);
@@ -194,8 +191,8 @@ function initRetro() {
   showStory(0);
   const left = document.getElementById('touch-left');
   const right = document.getElementById('touch-right');
-  if (left) left.onclick = (e) => { e.stopPropagation(); showStory(activeStoryIndex - 1); };
-  if (right) right.onclick = (e) => { e.stopPropagation(); showStory(activeStoryIndex + 1); };
+  if (left) left.onclick = () => showStory(activeStoryIndex - 1);
+  if (right) right.onclick = () => showStory(activeStoryIndex + 1);
 }
 
 /* ════════════════════════════════════════════
@@ -206,10 +203,6 @@ async function gerarRecordacao(e) {
   if (e) e.preventDefault();
   collectFormData();
   
-  const btn = document.querySelector('.btn-next');
-  if (btn) { btn.disabled = true; btn.innerText = 'Salvando surpresa...'; }
-
-  // Mostra a prévia imediatamente (Design Premium)
   const storiesData = buildStoriesData();
   renderStories(storiesData);
   
@@ -217,26 +210,26 @@ async function gerarRecordacao(e) {
   if (retro) {
     retro.style.display = 'block';
     retro.classList.remove('hidden');
-    // Força o estilo integrado mas em tela cheia mobile
-    retro.style.position = 'fixed';
-    retro.style.top = '0'; retro.style.left = '0';
-    retro.style.width = '100vw'; retro.style.height = '100vh';
-    retro.style.zIndex = '100000';
-    retro.style.background = '#000';
+    // ESTILO INTEGRADO (VÍDEO 4)
+    retro.style.position = 'relative';
+    retro.style.width = '100%';
+    retro.style.height = '600px'; // Tamanho aproximado do vídeo
+    retro.style.margin = '20px 0';
+    retro.style.background = 'transparent';
+    retro.style.zIndex = '1';
   }
   
-  document.body.style.overflow = 'hidden';
-  if (formSection) formSection.classList.add('hidden');
+  // Rola até a prévia
+  if (retro) retro.scrollIntoView({ behavior: 'smooth' });
   
   initRetro();
-  
+
   const audio = document.getElementById('bg-audio');
   if (audio) {
      audio.src = (state.gender === 'feminino') ? 'audio/mulher.mp3' : 'audio/homem.mp3';
      audio.play().catch(() => {});
   }
 
-  // Tenta salvar em background
   salvarRetrospectiva().then(id => { if(id) state.retroId = id; });
 }
 
@@ -253,14 +246,11 @@ async function salvarRetrospectiva() {
 }
 
 /* ════════════════════════════════════════════
-   4. MODAIS E UTILITÁRIOS
+   4. UTILITÁRIOS
    ════════════════════════════════════════════ */
 
 function irParaForm() {
   if (formSection) formSection.classList.remove('hidden');
-  const hero = document.getElementById('hero');
-  if (hero) hero.style.display = 'none';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function abrirModal() {
@@ -271,14 +261,6 @@ function abrirModal() {
 function fecharModal() {
   const overlay = document.getElementById('overlay');
   if (overlay) overlay.classList.remove('open');
-}
-
-function fecharRetro() {
-  const retro = document.getElementById('retro-section');
-  if (retro) retro.style.display = 'none';
-  document.body.style.overflow = '';
-  const audio = document.getElementById('bg-audio');
-  if (audio) audio.pause();
 }
 
 function mostrarToast(msg) {
@@ -294,13 +276,12 @@ document.addEventListener('DOMContentLoaded', () => {
   updateFormUI();
 });
 
-// Vinculação Global
+// Globais
 window.irParaForm = irParaForm;
 window.abrirModal = abrirModal;
 window.fecharModal = fecharModal;
-window.fecharRetro = fecharRetro;
 window.gerarRecordacao = gerarRecordacao;
 window.compartilhar = () => {
   const link = `${window.location.origin}/retro/${state.retroId || ''}`;
-  window.open(`https://wa.me/?text=${encodeURIComponent('💝 Preparei um presente especial para você: ' + link)}`);
+  window.open(`https://wa.me/?text=${encodeURIComponent('💝 Presente: ' + link)}`);
 };
