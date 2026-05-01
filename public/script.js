@@ -217,16 +217,18 @@ async function gerarRecordacao(e) {
   if (retro) {
     retro.style.display = 'block';
     retro.classList.remove('hidden');
-    // Força o estilo de tela cheia sem quebrar o layout
+    // Estética original: Overlay em tela cheia
     retro.style.position = 'fixed';
-    retro.style.top = '0'; retro.style.left = '0';
-    retro.style.width = '100%'; retro.style.height = '100%';
-    retro.style.zIndex = '99999';
+    retro.style.top = '0';
+    retro.style.left = '0';
+    retro.style.width = '100vw';
+    retro.style.height = '100vh';
     retro.style.background = '#000';
+    retro.style.zIndex = '100000';
   }
   
   document.body.style.overflow = 'hidden';
-  if (formSection) formSection.classList.add('hidden');
+  // NÃO escondemos mais o hero/formSection agressivamente para evitar o flash branco
   
   initRetro();
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -237,7 +239,6 @@ async function gerarRecordacao(e) {
      audio.play().catch(() => {});
   }
 
-  // Tenta salvar no banco em background
   salvarRetrospectiva().then(id => { if(id) state.retroId = id; });
 }
 
