@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Retrospectiva</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800;900&family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #000; font-family: 'DM Sans', sans-serif; height: 100vh; overflow: hidden; }
+        
+        .story {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; transition: opacity 0.6s ease; color: #fff; text-align: center; padding: 30px;
+        }
+        .story.active { opacity: 1; }
+        
+        /* Backgrounds Wrapped */
+        .bg-1 { background: linear-gradient(135deg, #ff3cac 0%, #784ba0 100%); }
+        .bg-2 { background: linear-gradient(135deg, #2af598 0%, #009efd 100%); }
+        .bg-3 { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        
+        .story-content { z-index: 2; }
+        .emoji { font-size: 50px; margin-bottom: 20px; display: block; }
+        .title { font-family: 'Syne', sans-serif; font-weight: 900; font-size: 2.2rem; line-height: 1.1; text-transform: uppercase; margin-bottom: 15px; }
+        .quote { font-style: italic; font-size: 1.2rem; opacity: 0.9; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 15px; }
+        .label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; opacity: 0.7; }
+
+        .progress-bar { position: absolute; top: 15px; left: 10px; right: 10px; display: flex; gap: 5px; z-index: 10; }
+        .seg { flex: 1; height: 3px; background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden; }
+        .fill { width: 0; height: 100%; background: #fff; }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="pb"></div>
+    <div id="stories"></div>
+
+    <script>
+        const storiesData = [
+            { bg: 'bg-1', emoji: '💝', label: 'Uma surpresa para', title: 'Mamãe Maria', quote: 'A melhor mãe do mundo.' },
+            { bg: 'bg-2', emoji: '📅', label: 'Anos de história', title: '25 Anos', quote: '"Você já comeu, filho?"' },
+            { bg: 'bg-3', emoji: '🌟', label: 'O que mais amamos', title: 'Seu Sorriso', quote: 'Que ilumina nossos dias.' }
+        ];
+
+        const storiesContainer = document.getElementById('stories');
+        const pb = document.getElementById('pb');
+        
+        storiesData.forEach((s, i) => {
+            const div = document.createElement('div');
+            div.className = `story ${s.bg}`;
+            div.innerHTML = `
+                <div class="story-content">
+                    <span class="emoji">${s.emoji}</span>
+                    <p class="label">${s.label}</p>
+                    <h1 class="title">${s.title}</h1>
+                    <p class="quote">${s.quote}</p>
+                </div>
+            `;
+            storiesContainer.appendChild(div);
+            
+            const seg = document.createElement('div');
+            seg.className = 'seg';
+            seg.innerHTML = `<div class="fill" id="fill-${i}"></div>`;
+            pb.appendChild(seg);
+        });
+
+        let current = 0;
+        function show(idx) {
+            const ss = document.querySelectorAll('.story');
+            const fs = document.querySelectorAll('.fill');
+            
+            ss.forEach(s => s.classList.remove('active'));
+            ss[idx].classList.add('active');
+            
+            const el = fs[idx];
+            el.style.transition = 'none';
+            el.style.width = '0%';
+            
+            setTimeout(() => {
+                el.style.transition = 'width 4s linear';
+                el.style.width = '100%';
+            }, 50);
+
+            setTimeout(() => {
+                current = (current + 1) % ss.length;
+                if (current === 0) fs.forEach(f => f.style.width = '0');
+                show(current);
+            }, 4050);
+        }
+
+        show(0);
+    </script>
+</body>
+</html>

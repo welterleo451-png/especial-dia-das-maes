@@ -1577,9 +1577,6 @@ function irParaForm() {
 document.addEventListener('DOMContentLoaded', () => {
   initCountdown();
   
-  // Inicializa a DEMO na landing page
-  initDemoPreview();
-
   // Modo de visualização da mãe (Link Único)
   if (window.RETRO_DATA) {
     console.log('Modo Mãe: Iniciando presente...');
@@ -1602,83 +1599,3 @@ document.addEventListener('DOMContentLoaded', () => {
     sucessoPagamento();
   }
 });
-
-/**
- * initDemoPreview()
- * ─────────────────
- * Cria uma retrospectiva de exemplo dentro do container de celular da landing page.
- */
-function initDemoPreview() {
-  const container = document.getElementById('demo-stories-container');
-  if (!container) return;
-
-  // Dados fake para a demo
-  const dummyState = {
-    gifterName: 'Leonardo',
-    momName: 'Maria',
-    momNickname: 'Mãezinha',
-    yearsTogether: 25,
-    momPhrase: 'Você já comeu?',
-    bestFood: 'Lasanha deliciosa',
-    bestMemory: 'Nossa viagem para a praia',
-    hobbies: 'Cuidar das flores',
-    traditions: 'Almoço de domingo',
-    qualities: 'Amor incondicional',
-    dedication: 'Você é a pessoa mais importante da minha vida!',
-    photos: [null, null, null, null, null]
-  };
-
-  // Temporariamente troca o estado para gerar os stories da demo
-  const realState = { ...state };
-  Object.assign(state, dummyState);
-  const stories = buildStoriesData();
-  // Restaura o estado real
-  Object.assign(state, realState);
-
-  // Função interna para renderizar APENAS na demo
-  container.innerHTML = `
-    <div class="demo-stories-inner" style="width:100%; height:100%; position:relative; background:#000;">
-       ${stories.map((s, i) => `
-         <div class="story demo-story ${s.bgClass} ${i === 0 ? 'active' : ''}" style="opacity: ${i === 0 ? '1' : '0'}; transition: opacity 0.5s ease; position:absolute; top:0; left:0; width:100%; height:100%; padding:20px; box-sizing:border-box; color:#fff;">
-            ${s.html}
-         </div>
-       `).join('')}
-       <div class="demo-progress" style="position:absolute; top:10px; left:10px; right:10px; display:flex; gap:4px; z-index:10;">
-          ${stories.map((_, i) => `<div class="demo-seg" style="flex:1; height:2px; background:rgba(255,255,255,0.3); position:relative; overflow:hidden;"><div class="demo-fill" id="demo-fill-${i}" style="width:0; height:100%; background:#fff;"></div></div>`).join('')}
-       </div>
-    </div>
-  `;
-
-  let idx = 0;
-  function next() {
-    const s = container.querySelectorAll('.demo-story');
-    const f = container.querySelectorAll('.demo-fill');
-    
-    // Reseta preenchimento anterior
-    f[idx].style.width = '100%';
-    s[idx].style.opacity = '0';
-    s[idx].classList.remove('active');
-    
-    idx = (idx + 1) % s.length;
-    
-    if (idx === 0) {
-      f.forEach(el => el.style.width = '0');
-    }
-    
-    s[idx].style.opacity = '1';
-    s[idx].classList.add('active');
-    animateFill(f[idx], next);
-  }
-
-  function animateFill(el, callback) {
-    el.style.transition = 'none';
-    el.style.width = '0%';
-    setTimeout(() => {
-      el.style.transition = 'width 4s linear';
-      el.style.width = '100%';
-    }, 10);
-    setTimeout(callback, 4000);
-  }
-
-  animateFill(container.querySelector('#demo-fill-0'), next);
-}
