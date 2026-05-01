@@ -1,184 +1,246 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Especial Dia das Mães 💝 Presente Digital Personalizado</title>
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Presente Digital para Mamãe 💝</title>
+
+  <!-- Google Fonts: Syne (display bold) + DM Sans (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- TOPBAR -->
-  <div class="topbar">
-    <span>✨ Surpreenda sua mãe com algo único este ano! <strong>Oferta Limitada</strong></span>
-  </div>
+  <!-- ╔══════════════════════════════════╗ -->
+  <!-- ║        SEÇÃO: FORMULÁRIO         ║ -->
+  <!-- ╚══════════════════════════════════╝ -->
+  <section id="form-section">
 
-  <!-- NAV -->
-  <nav class="navbar" id="main-nav">
-    <div class="nav-container">
-      <a href="#" class="nav-logo"><span>💝</span> Minha Mãe 2026</a>
-      <div class="nav-links">
-        <a href="#how-it-works">Como funciona</a>
-        <a href="#features">Vantagens</a>
-        <a href="#testimonials">Depoimentos</a>
-      </div>
-      <a href="#form-section" class="nav-cta" onclick="irParaForm()">Começar Agora</a>
+    <!-- Barra de progresso das etapas -->
+    <div class="form-progress-bar">
+      <div class="form-progress-fill" id="form-progress-fill"></div>
     </div>
-  </nav>
 
-  <!-- ══ CONTEÚDO PRINCIPAL ══ -->
-  <main id="site-content">
-    <!-- HERO -->
-    <section class="hero" id="hero">
-      <div class="hero-container">
-        <div class="hero-text">
-          <div class="hero-badge">🎁 Presente Exclusivo 2026</div>
-          <h1>Um presente que ela<br/><em>jamais vai esquecer.</em></h1>
-          <p>Crie uma retrospectiva digital personalizada com as melhores fotos e histórias da sua mãe. Uma homenagem emocionante em menos de 2 minutos.</p>
-          <div id="countdown" style="margin-bottom: 24px; font-weight: bold; color: #7c3aed;">
-            Faltam <span id="countdown-timer">--d --h --m --s</span> para o Dia das Mães
-          </div>
-          <button onclick="irParaForm()" class="btn-primary">Criar Presente Agora</button>
+    <!-- Indicador de etapa -->
+    <div class="step-indicator">
+      <span id="step-current">1</span><span class="step-sep">/</span><span id="step-total">4</span>
+    </div>
+
+    <!-- Contêiner central do card do formulário -->
+    <div class="form-card">
+
+      <!-- Ícone decorativo no topo do card -->
+      <div class="form-icon" id="form-icon">💝</div>
+
+      <!-- ── ETAPA 1: Quem presenteia ── -->
+      <div class="step" id="step-1">
+        <h2 class="step-title">Olá! Vamos começar<br/>com quem você é.</h2>
+        <p class="step-subtitle">Isso personaliza a experiência para você.</p>
+
+        <div class="field-group">
+          <label class="field-label" for="gifter-name">Seu nome</label>
+          <input class="field-input" type="text" id="gifter-name" placeholder="Ex: Ana, João…" autocomplete="off" />
         </div>
-        <div class="hero-visual">
-          <div class="hero-phone">
-            <div class="phone-screen">
-              <div class="phone-header">Preview Exclusivo</div>
-              <div class="phone-emoji">💝</div>
-              <div class="phone-title">Para: Minha Rainha</div>
-              <div class="phone-subtitle">Uma história de amor...</div>
-            </div>
+
+        <div class="field-group">
+          <label class="field-label">Seu gênero</label>
+          <div class="radio-group">
+            <label class="radio-pill" id="pill-m">
+              <input type="radio" name="gender" value="masculino" />
+              <span>🧒 Masculino</span>
+            </label>
+            <label class="radio-pill" id="pill-f">
+              <input type="radio" name="gender" value="feminino" />
+              <span>👧 Feminino</span>
+            </label>
           </div>
         </div>
       </div>
-    </section>
 
-    <!-- STEPS -->
-    <section class="section-steps" id="how-it-works">
-      <span class="section-badge">Como funciona?</span>
-      <h2>Tão simples quanto um abraço</h2>
-      <div class="steps-grid">
-        <div class="step-card">
-          <div class="step-number">1</div>
-          <div class="step-icon">📝</div>
-          <h3>Preencha os dados</h3>
-          <p>Conte histórias e gostos dela.</p>
+      <!-- ── ETAPA 2: Dados da mãe ── -->
+      <div class="step hidden" id="step-2">
+        <h2 class="step-title">Agora fala de<br/>quem mais importa.</h2>
+        <p class="step-subtitle">As informações que vão aparecer na retrospectiva.</p>
+
+        <div class="field-group">
+          <label class="field-label" for="mom-name">Nome da sua mãe</label>
+          <input class="field-input" type="text" id="mom-name" placeholder="Ex: Maria, Sandra…" autocomplete="off" />
         </div>
-        <div class="step-card">
-          <div class="step-number">2</div>
-          <div class="step-icon">📸</div>
-          <h3>Suba as fotos</h3>
-          <p>Escolha 5 momentos marcantes.</p>
+
+        <div class="field-group">
+          <label class="field-label" for="mom-nickname">Apelido carinhoso</label>
+          <input class="field-input" type="text" id="mom-nickname" placeholder="Ex: Mãezinha, Mamis, Vovó…" autocomplete="off" />
         </div>
-        <div class="step-card">
-          <div class="step-number">3</div>
-          <div class="step-icon">🎁</div>
-          <h3>Pronto!</h3>
-          <p>Gere a retrospectiva e surpreenda.</p>
+
+        <div class="field-group">
+          <label class="field-label" for="years-together">Anos de história juntos</label>
+          <input class="field-input" type="number" id="years-together" placeholder="Ex: 25" min="1" max="100" />
         </div>
       </div>
-    </section>
 
-    <!-- TESTIMONIALS -->
-    <section class="section-testimonials" id="testimonials">
-      <span class="section-badge">Depoimentos</span>
-      <h2>O que estão dizendo...</h2>
-      <div class="testimonials-grid">
-        <div class="testimonial-card">
-          <div class="stars">★★★★★</div>
-          <p>"Minha mãe chorou do início ao fim. Maravilhoso!"</p>
-          <div class="testimonial-author"><strong>Mariana S.</strong></div>
+      <!-- ── ETAPA 3: Curiosidades ── -->
+      <div class="step hidden" id="step-3">
+        <h2 class="step-title">Os detalhes que<br/>fazem você sorrir.</h2>
+        <p class="step-subtitle">Pequenos momentos que dizem tudo.</p>
+
+        <div class="field-group">
+          <label class="field-label" for="mom-phrase">Uma frase que ela sempre diz</label>
+          <input class="field-input" type="text" id="mom-phrase" placeholder="Ex: &quot;Você comeu?&quot;" autocomplete="off" />
         </div>
-        <div class="testimonial-card">
-          <div class="stars">★★★★★</div>
-          <p>"Resultado profissional e muito fácil de fazer."</p>
-          <div class="testimonial-author"><strong>Ricardo O.</strong></div>
+
+        <div class="field-group">
+          <label class="field-label" for="best-food">A melhor comida que ela faz</label>
+          <input class="field-input" type="text" id="best-food" placeholder="Ex: Arroz com frango assado" autocomplete="off" />
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="best-memory">Seu melhor momento com ela</label>
+          <input class="field-input" type="text" id="best-memory" placeholder="Ex: Aquela viagem de 2018" autocomplete="off" />
         </div>
       </div>
-    </section>
 
-    <!-- FORMULÁRIO -->
-    <section class="form-section hidden" id="form-section">
-      <div class="form-container">
-        <div class="form-header">
-          <div class="form-progress"><div class="form-progress-fill" id="form-progress-fill"></div></div>
-          <span class="step-indicator">Etapa <span id="step-current">1</span> de 6</span>
+      <!-- ── ETAPA 4: Personalidade ── -->
+      <div class="step hidden" id="step-4">
+        <h2 class="step-title">Os traços que<br/>a fazem especial.</h2>
+        <p class="step-subtitle">O que torna ela única no seu coração.</p>
+
+        <div class="field-group">
+          <label class="field-label" for="hobbies">Hobbies ou atividades que ela ama</label>
+          <input class="field-input" type="text" id="hobbies" placeholder="Ex: Jardinagem, cozinhar, dançar..." autocomplete="off" />
         </div>
 
-        <div id="form-steps">
-          <div class="step" id="step-1">
-            <h2 class="step-title">Seu nome completo</h2>
-            <input class="field-input" type="text" id="gifter-name" placeholder="Leonardo Silva" />
-            <div class="gender-selection">
-              <label><input type="radio" name="gender" value="masculino" />👦 Filho</label>
-              <label><input type="radio" name="gender" value="feminino" />👧 Filha</label>
-            </div>
-          </div>
-          <div class="step hidden" id="step-2">
-            <h2 class="step-title">Nome dela</h2>
-            <input class="field-input" type="text" id="mom-name" placeholder="Nome da Mãe" />
-            <input class="field-input" type="text" id="mom-nickname" placeholder="Como você a chama?" />
-            <input class="field-input" type="number" id="years-together" placeholder="Anos sendo mãe" />
-          </div>
-          <div class="step hidden" id="step-3">
-            <h2 class="step-title">Momentos</h2>
-            <input class="field-input" type="text" id="mom-phrase" placeholder="Frase que ela diz" />
-            <input class="field-input" type="text" id="best-food" placeholder="Comida dela" />
-            <input class="field-input" type="text" id="best-memory" placeholder="Memória especial" />
-          </div>
-          <div class="step hidden" id="step-4">
-            <h2 class="step-title">Sobre ela</h2>
-            <input class="field-input" type="text" id="hobbies" placeholder="O que ela ama fazer" />
-            <input class="field-input" type="text" id="qualities" placeholder="Qualidades dela" />
-          </div>
-          <div class="step hidden" id="step-5">
-            <h2 class="step-title">Fotos</h2>
-            <div class="photo-uploads">
+        <div class="field-group">
+          <label class="field-label" for="traditions">Tradições familiares especiais</label>
+          <input class="field-input" type="text" id="traditions" placeholder="Ex: Domingo em família, ceia de natal..." autocomplete="off" />
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="qualities">Qualidades que você mais admira</label>
+          <input class="field-input" type="text" id="qualities" placeholder="Ex: Paciência, amor, força..." autocomplete="off" />
+        </div>
+      </div>
+
+      <!-- ── ETAPA 5: Fotos ── -->
+      <div class="step hidden" id="step-5">
+        <h2 class="step-title">Agora as fotos<br/>que contam a história.</h2>
+        <p class="step-subtitle">Escolha 5 fotos para o álbum da retrospectiva.</p>
+
+        <div class="photo-uploads">
+
+          <div class="photo-upload-item">
+            <label class="photo-upload-label" for="photo-1">
+              <div class="photo-preview" id="preview-1">
+                <span class="photo-icon">👶</span>
+                <span class="photo-text">Foto de infância</span>
+              </div>
               <input type="file" id="photo-1" accept="image/*" class="photo-input" data-preview="preview-1" />
-              <input type="file" id="photo-2" accept="image/*" class="photo-input" data-preview="preview-2" />
-              <input type="file" id="photo-3" accept="image/*" class="photo-input" data-preview="preview-3" />
-              <input type="file" id="photo-4" accept="image/*" class="photo-input" data-preview="preview-4" />
-              <input type="file" id="photo-5" accept="image/*" class="photo-input" data-preview="preview-5" />
-            </div>
-          </div>
-          <div class="step hidden" id="step-6">
-            <h2 class="step-title">Mensagem Final</h2>
-            <textarea class="field-input" id="dedication" placeholder="Dedicatória..."></textarea>
+            </label>
           </div>
 
-          <div class="form-nav">
-            <button id="btn-back" style="visibility:hidden;">← Voltar</button>
-            <button id="btn-next">Continuar →</button>
+          <div class="photo-upload-item">
+            <label class="photo-upload-label" for="photo-2">
+              <div class="photo-preview" id="preview-2">
+                <span class="photo-icon">👨‍👩‍👧</span>
+                <span class="photo-text">Foto em família</span>
+              </div>
+              <input type="file" id="photo-2" accept="image/*" class="photo-input" data-preview="preview-2" />
+            </label>
           </div>
+
+          <div class="photo-upload-item">
+            <label class="photo-upload-label" for="photo-3">
+              <div class="photo-preview" id="preview-3">
+                <span class="photo-icon">📸</span>
+                <span class="photo-text">Foto recente</span>
+              </div>
+              <input type="file" id="photo-3" accept="image/*" class="photo-input" data-preview="preview-3" />
+            </label>
+          </div>
+
+          <div class="photo-upload-item">
+            <label class="photo-upload-label" for="photo-4">
+              <div class="photo-preview" id="preview-4">
+                <span class="photo-icon">😂</span>
+                <span class="photo-text">Momento engraçado</span>
+              </div>
+              <input type="file" id="photo-4" accept="image/*" class="photo-input" data-preview="preview-4" />
+            </label>
+          </div>
+
+          <div class="photo-upload-item">
+            <label class="photo-upload-label" for="photo-5">
+              <div class="photo-preview" id="preview-5">
+                <span class="photo-icon">💝</span>
+                <span class="photo-text">Foto especial</span>
+              </div>
+              <input type="file" id="photo-5" accept="image/*" class="photo-input" data-preview="preview-5" />
+            </label>
+          </div>
+
         </div>
       </div>
-    </section>
-  </main>
 
-  <!-- ══ RETROSPECTIVA ══ -->
+      <!-- ── ETAPA 6: Dedicatoria ── -->
+      <div class="step hidden" id="step-6">
+        <h2 class="step-title">Uma mensagem<br/>do coração.</h2>
+        <p class="step-subtitle">Escreva uma dedicatória especial para ela.</p>
+
+        <div class="field-group">
+          <label class="field-label" for="dedication">Sua mensagem</label>
+          <textarea class="field-input field-textarea" id="dedication" placeholder="Escreva aqui sua mensagem especial..." rows="4"></textarea>
+        </div>
+      </div>
+
+      <!-- Botões de navegação -->
+      <div class="form-nav">
+        <button class="btn-back" id="btn-back" style="visibility:hidden;">← Voltar</button>
+        <button class="btn-next" id="btn-next">Continuar →</button>
+      </div>
+
+    </div><!-- /form-card -->
+
+    <!-- Partículas decorativas de fundo (animadas via CSS) -->
+    <div class="bg-orbs">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+
+  </section><!-- /form-section -->
+
+
+  <!-- ╔══════════════════════════════════╗ -->
+  <!-- ║       SEÇÃO: RETROSPECTIVA       ║ -->
+  <!-- ╚══════════════════════════════════╝ -->
   <section id="retro-section" class="hidden">
-    <div class="stories-wrapper">
-      <div class="stories-progress" id="stories-progress"></div>
-      <div class="stories-container" id="stories-container"></div>
-      <div class="touch-zone touch-left" id="touch-left"></div>
-      <div class="touch-zone touch-right" id="touch-right"></div>
-    </div>
-    <button class="btn-close-retro" onclick="fecharRetro()">✕</button>
-    <audio id="bg-audio" loop></audio>
-  </section>
 
-  <!-- MODAL -->
-  <div class="overlay" id="overlay">
-    <div class="modal">
-      <h3>Quase lá! 💝</h3>
-      <p>Desbloqueie para ver completo.</p>
-      <button onclick="fecharModal()">Ver Planos</button>
+    <!-- Barra de progresso dos stories (topo) -->
+    <div class="stories-progress" id="stories-progress">
+      <!-- Gerada dinamicamente pelo JS -->
     </div>
-  </div>
+
+    <!-- Contêiner principal dos stories -->
+    <div class="stories-container" id="stories-container">
+      <!-- Stories gerados dinamicamente pelo JS -->
+    </div>
+
+    <!-- Zonas de toque: esquerda (voltar) e direita (avançar) -->
+    <div class="touch-zone touch-left"  id="touch-left"></div>
+    <div class="touch-zone touch-right" id="touch-right"></div>
+
+    <!-- Botão de fechar (reiniciar) -->
+    <button class="btn-close-retro" id="btn-close-retro" title="Reiniciar">✕</button>
+
+    <!-- Botão para gerar presente final -->
+    <button class="btn-generate-gift" id="btn-generate-gift" title="Gerar presente para compartilhar">🎁 Compartilhar</button>
+
+    <!-- Áudio dinâmico -->
+    <audio id="bg-audio" loop preload="auto"></audio>
+
+  </section><!-- /retro-section -->
 
   <script src="script.js"></script>
 </body>

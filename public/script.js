@@ -1,83 +1,67 @@
 /**
  * ══════════════════════════════════════════════════════════
  *  PRESENTE DIGITAL PARA MAMÃE — script.js
- *  RESTAURAÇÃO TOTAL DO MOTOR ORIGINAL
+ *  Autor: gerado com Claude (Anthropic)
  * ══════════════════════════════════════════════════════════
  */
 
 'use strict';
 
 const state = {
-  gifterName: '', gender: '',
-  momName: '', momNickname: '', yearsTogether: 0,
-  momPhrase: '', bestFood: '', bestMemory: '',
-  hobbies: '', traditions: '', qualities: '',
-  photos: [null, null, null, null, null],
-  dedication: '',
-  unlocked: false, selectedTier: 'complete', selectedPrice: 14.90,
-  retroId: null,
+  gifterName:   '',
+  gender:       '',
+  momName:      '',
+  momNickname:  '',
+  yearsTogether: 0,
+  momPhrase:    '',
+  bestFood:     '',
+  bestMemory:   '',
+  hobbies:      '',
+  traditions:   '',
+  qualities:    '',
+  photos:       [null, null, null, null, null],
+  dedication:   '',
 };
 
 const TOTAL_STEPS = 6;
-let currentStep = 1;
+let currentStep  = 1;
 
 // Referências DOM
-const progressFill = document.getElementById('form-progress-fill');
-const stepCurrentEl = document.getElementById('step-current');
-const btnBack = document.getElementById('btn-back');
-const btnNext = document.getElementById('btn-next');
-const storiesContainer = document.getElementById('stories-container');
-const storiesProgressEl = document.getElementById('stories-progress');
+const progressFill    = document.getElementById('form-progress-fill');
+const stepCurrentEl   = document.getElementById('step-current');
+const btnBack         = document.getElementById('btn-back');
+const btnNext         = document.getElementById('btn-next');
 
-/* ── 1. CONTAGEM REGRESSIVA ── */
-function initCountdown() {
-  const target = new Date('2026-05-11T00:00:00').getTime();
-  const el = document.getElementById('countdown-timer');
-  if (!el) return;
-  setInterval(() => {
-    const diff = target - new Date().getTime();
-    if (diff <= 0) { el.textContent = "É hoje! 💝"; return; }
-    const d = Math.floor(diff / 86400000);
-    const h = Math.floor((diff % 86400000) / 3600000);
-    const m = Math.floor((diff % 3600000) / 60000);
-    const s = Math.floor((diff % 60000) / 1000);
-    el.textContent = `${d}d ${h}h ${m}m ${s}s`;
-  }, 1000);
-}
+// Inicialização
+updateFormUI();
+setupPhotoUploads();
 
-/* ── 2. LÓGICA DO FORMULÁRIO ── */
-function updateFormUI() {
-  const pct = (currentStep / TOTAL_STEPS) * 100;
-  if (progressFill) progressFill.style.width = pct + '%';
-  if (stepCurrentEl) stepCurrentEl.textContent = currentStep;
-  if (btnBack) btnBack.style.visibility = currentStep === 1 ? 'hidden' : 'visible';
-  if (btnNext) {
-    btnNext.textContent = currentStep === TOTAL_STEPS ? '🎁 Gerar Retrospectiva' : 'Continuar →';
+btnNext.addEventListener('click', () => {
+  if (currentStep < TOTAL_STEPS) {
+    goToStep(currentStep + 1);
+  } else {
+    collectFormData();
+    launchRetro();
   }
-}
+});
+
+btnBack.addEventListener('click', () => {
+  if (currentStep > 1) goToStep(currentStep - 1);
+});
 
 function goToStep(targetStep) {
-  const current = document.getElementById(`step-${currentStep}`);
-  const next = document.getElementById(`step-${targetStep}`);
-  if (current) current.classList.add('hidden');
-  if (next) next.classList.remove('hidden');
+  document.getElementById(`step-${currentStep}`).classList.add('hidden');
+  document.getElementById(`step-${targetStep}`).classList.remove('hidden');
   currentStep = targetStep;
   updateFormUI();
 }
 
-if (btnNext) {
-  btnNext.addEventListener('click', (e) => {
-    if (e) e.preventDefault();
-    if (currentStep < TOTAL_STEPS) goToStep(currentStep + 1);
-    else gerarRecordacao();
-  });
-}
-
-if (btnBack) {
-  btnBack.addEventListener('click', (e) => {
-    if (e) e.preventDefault();
-    if (currentStep > 1) goToStep(currentStep - 1);
-  });
+function updateFormUI() {
+  const pct = (currentStep / TOTAL_STEPS) * 100;
+  progressFill.style.width = pct + '%';
+  stepCurrentEl.textContent = currentStep;
+  btnBack.style.visibility = currentStep === 1 ? 'hidden' : 'visible';
+  btnNext.textContent = currentStep === TOTAL_STEPS ? '🎁 Gerar Retrospectiva' : 'Continuar →';
 }
 
 function setupPhotoUploads() {
@@ -86,71 +70,101 @@ function setupPhotoUploads() {
       const file = e.target.files[0];
       if (!file) return;
       const reader = new FileReader();
-      reader.onload = (event) => {
-        state.photos[index] = event.target.result;
-        const preview = document.getElementById(input.dataset.preview);
-        if (preview) {
-          preview.style.backgroundImage = `url(${event.target.result})`;
-          preview.innerHTML = '';
-        }
+      reader.onload = (ev) => {
+        state.photos[index] = ev.target.result;
+        const previewEl = document.getElementById(input.getAttribute('data-preview'));
+        previewEl.style.backgroundImage = `url(${ev.target.result})`;
+        previewEl.innerHTML = '';
       };
       reader.readAsDataURL(file);
     });
   });
 }
 
-/* ── 3. MOTOR ORIGINAL DE STORIES ── */
+function collectFormData() {
+  state.gifterName = document.getElementById('gifter-name').value;
+  state.gender = document.querySelector('input[name="gender"]:checked')?.value || '';
+  state.momName = document.getElementById('mom-name').value;
+  state.momNickname = document.getElementById('mom-nickname').value || state.momName;
+  state.yearsTogether = document.getElementById('years-together').value;
+  state.momPhrase = document.getElementById('mom-phrase').value;
+  state.bestFood = document.getElementById('best-food').value;
+  state.bestMemory = document.getElementById('best-memory').value;
+  state.hobbies = document.getElementById('hobbies').value;
+  state.traditions = document.getElementById('traditions').value;
+  state.qualities = document.getElementById('qualities').value;
+  state.dedication = document.getElementById('dedication').value;
+}
+
 let activeStoryIndex = 0;
 let storyTimer = null;
 const STORY_DURATION = 5000;
 
-function renderStories() {
-  storiesContainer.innerHTML = '';
-  storiesProgressEl.innerHTML = '';
-  
-  const data = [
-    { title: `Para: ${document.getElementById('mom-name').value}`, subtitle: 'Homenagem Especial', image: state.photos[0] },
-    { title: 'Momentos', subtitle: document.getElementById('mom-phrase').value, image: state.photos[1] },
-    { title: 'Sabor', subtitle: document.getElementById('best-food').value, image: state.photos[2] },
-    { title: 'Memória', subtitle: document.getElementById('best-memory').value, image: state.photos[3] },
-    { title: 'Qualidades', subtitle: document.getElementById('qualities').value, image: state.photos[4] },
-    { title: 'Te amo!', subtitle: document.getElementById('dedication').value }
+function launchRetro() {
+  document.getElementById('form-section').classList.add('hidden');
+  document.getElementById('retro-section').classList.remove('hidden');
+  initRetro();
+}
+
+function initRetro() {
+  const stories = [
+    { bg: 'story-bg-1', title: `Para: ${state.momName}`, body: 'Uma história de amor.' },
+    { bg: 'story-bg-2', title: `${state.yearsTogether} anos`, body: `Ouvindo: "${state.momPhrase}"` },
+    { bg: 'story-bg-3', title: 'Ela ama', body: state.hobbies },
+    { bg: 'story-bg-4', title: 'Nossa memória', body: state.bestMemory },
+    { bg: 'story-bg-5', title: 'Te amo!', body: state.dedication }
   ];
 
-  data.forEach((item, i) => {
+  renderStories(stories);
+  renderProgressBar(stories.length);
+  showStory(0);
+
+  document.getElementById('touch-left').onclick = () => showStory(activeStoryIndex - 1);
+  document.getElementById('touch-right').onclick = () => showStory(activeStoryIndex + 1);
+  document.getElementById('btn-close-retro').onclick = () => window.location.reload();
+  
+  const audio = document.getElementById('bg-audio');
+  audio.src = state.gender === 'masculino' ? 'audio/homem.mp3' : 'audio/mulher.mp3';
+  audio.play().catch(() => {});
+}
+
+function renderStories(stories) {
+  const container = document.getElementById('stories-container');
+  container.innerHTML = '';
+  stories.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.className = `story ${s.bg}`;
+    div.innerHTML = `<h2>${s.title}</h2><p>${s.body}</p>`;
+    container.appendChild(div);
+  });
+}
+
+function renderProgressBar(count) {
+  const bar = document.getElementById('stories-progress');
+  bar.innerHTML = '';
+  for (let i = 0; i < count; i++) {
     const seg = document.createElement('div');
     seg.className = 'progress-segment';
     seg.innerHTML = '<div class="progress-segment-fill"></div>';
-    storiesProgressEl.appendChild(seg);
-
-    const story = document.createElement('div');
-    story.className = 'story' + (i === 0 ? ' active' : '');
-    story.innerHTML = `
-      <div class="story-bg" style="background-image: url('${item.image || ''}')"></div>
-      <div class="story-overlay"></div>
-      <div class="story-content">
-        <h2>${item.title}</h2>
-        <p>${item.subtitle}</p>
-      </div>
-    `;
-    storiesContainer.appendChild(story);
-  });
+    bar.appendChild(seg);
+  }
 }
 
 function showStory(index) {
   const stories = document.querySelectorAll('.story');
   if (index < 0 || index >= stories.length) return;
+  
   clearTimeout(storyTimer);
   stories.forEach(s => s.classList.remove('active'));
   stories[index].classList.add('active');
   activeStoryIndex = index;
-  
+
   const fills = document.querySelectorAll('.progress-segment-fill');
   fills.forEach((f, i) => {
     f.style.transition = 'none';
     f.style.width = i < index ? '100%' : '0%';
   });
-  
+
   setTimeout(() => {
     fills[index].style.transition = `width ${STORY_DURATION}ms linear`;
     fills[index].style.width = '100%';
@@ -158,50 +172,5 @@ function showStory(index) {
 
   storyTimer = setTimeout(() => {
     if (activeStoryIndex < stories.length - 1) showStory(activeStoryIndex + 1);
-    else abrirModal();
   }, STORY_DURATION);
 }
-
-function gerarRecordacao() {
-  renderStories();
-  const retro = document.getElementById('retro-section');
-  retro.style.display = 'block';
-  retro.classList.remove('hidden');
-  retro.scrollIntoView({ behavior: 'smooth' });
-  
-  activeStoryIndex = 0;
-  showStory(0);
-  
-  document.getElementById('touch-left').onclick = () => showStory(activeStoryIndex - 1);
-  document.getElementById('touch-right').onclick = () => showStory(activeStoryIndex + 1);
-
-  const audio = document.getElementById('bg-audio');
-  const gender = document.querySelector('input[name="gender"]:checked').value;
-  audio.src = gender === 'feminino' ? 'audio/mulher.mp3' : 'audio/homem.mp3';
-  audio.play().catch(() => {});
-}
-
-/* ── 4. AUXILIARES ── */
-function irParaForm() {
-  const form = document.getElementById('form-section');
-  form.classList.remove('hidden');
-  document.getElementById('hero').style.display = 'none';
-  window.scrollTo({ top: form.offsetTop - 100, behavior: 'smooth' });
-}
-
-function abrirModal() { document.getElementById('overlay').classList.add('open'); }
-function fecharModal() { document.getElementById('overlay').classList.remove('open'); }
-function fecharRetro() { document.getElementById('retro-section').style.display = 'none'; }
-
-document.addEventListener('DOMContentLoaded', () => {
-  initCountdown();
-  setupPhotoUploads();
-  updateFormUI();
-});
-
-window.irParaForm = irParaForm;
-window.abrirModal = abrirModal;
-window.fecharModal = fecharModal;
-window.fecharRetro = fecharRetro;
-window.gerarRecordacao = gerarRecordacao;
-window.compartilhar = () => { window.open(`https://wa.me/?text=${encodeURIComponent('💝 Presente Digital!')}`); };
