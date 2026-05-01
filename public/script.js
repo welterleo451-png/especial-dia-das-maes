@@ -1,20 +1,14 @@
 /**
  * ══════════════════════════════════════════════════════════
  *  PRESENTE DIGITAL PARA MAMÃE — script.js
- *  VERSÃO COMPLETA RESTAURADA + CORREÇÃO DE PRÉVIA
+ *  VERSÃO FINAL DEFINITIVA (IGUAL AO VÍDEO)
  * ══════════════════════════════════════════════════════════
  */
 
 'use strict';
 
 const state = {
-  gifterName: '', gender: '',
-  momName: '', momNickname: '', yearsTogether: 0,
-  momPhrase: '', bestFood: '', bestMemory: '',
-  hobbies: '', traditions: '', qualities: '',
   photos: [null, null, null, null, null],
-  dedication: '',
-  unlocked: false, selectedTier: 'complete', selectedPrice: 14.90,
   retroId: null,
 };
 
@@ -22,7 +16,6 @@ const TOTAL_STEPS = 6;
 let currentStep = 1;
 
 // Referências DOM
-const formSection = document.getElementById('form-section');
 const progressFill = document.getElementById('form-progress-fill');
 const stepCurrentEl = document.getElementById('step-current');
 const btnBack = document.getElementById('btn-back');
@@ -36,45 +29,23 @@ function initCountdown() {
   const el = document.getElementById('countdown-timer');
   if (!el) return;
   
-  const timer = setInterval(() => {
-    const now = new Date().getTime();
-    const diff = target - now;
-    
-    if (diff <= 0) {
-      clearInterval(timer);
-      el.textContent = "É hoje! Feliz Dia das Mães! 💝";
-      return;
-    }
-    
-    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const s = Math.floor((diff % (1000 * 60)) / 1000);
-    
+  setInterval(() => {
+    const diff = target - new Date().getTime();
+    if (diff <= 0) { el.textContent = "É hoje! 💝"; return; }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
     el.textContent = `${d}d ${h}h ${m}m ${s}s`;
   }, 1000);
 }
 
-/* ── 2. LÓGICA DO FORMULÁRIO ── */
+/* ── 2. FORMULÁRIO ── */
 function updateFormUI() {
   const pct = (currentStep / TOTAL_STEPS) * 100;
   if (progressFill) progressFill.style.width = pct + '%';
   if (stepCurrentEl) stepCurrentEl.textContent = currentStep;
   if (btnBack) btnBack.style.visibility = currentStep === 1 ? 'hidden' : 'visible';
-  if (btnNext) {
-    btnNext.textContent = currentStep === TOTAL_STEPS ? '🎁 Gerar Retrospectiva' : 'Continuar →';
-  }
-}
-
-function validateStep(step) {
-  if (step === 1) {
-    const name = document.getElementById('gifter-name').value.trim();
-    const gender = document.querySelector('input[name="gender"]:checked');
-    if (!name || !gender) { mostrarToast('Preencha seu nome e gênero'); return false; }
-    state.gifterName = name;
-    state.gender = gender.value;
-  }
-  return true;
 }
 
 function goToStep(targetStep) {
@@ -89,7 +60,6 @@ function goToStep(targetStep) {
 if (btnNext) {
   btnNext.addEventListener('click', (e) => {
     if (e) e.preventDefault();
-    if (!validateStep(currentStep)) return;
     if (currentStep < TOTAL_STEPS) goToStep(currentStep + 1);
     else gerarRecordacao();
   });
@@ -114,7 +84,6 @@ function setupPhotoUploads() {
         if (preview) {
           preview.style.backgroundImage = `url(${event.target.result})`;
           preview.innerHTML = '';
-          preview.classList.add('has-image');
         }
       };
       reader.readAsDataURL(file);
@@ -122,7 +91,7 @@ function setupPhotoUploads() {
   });
 }
 
-/* ── 3. MOTOR DA RETROSPECTIVA (INTEGRADA) ── */
+/* ── 3. RETROSPECTIVA ── */
 let activeStoryIndex = 0;
 let storyTimer = null;
 const STORY_DURATION = 5000;
@@ -130,14 +99,13 @@ const STORY_DURATION = 5000;
 function renderStories() {
   storiesContainer.innerHTML = '';
   storiesProgressEl.innerHTML = '';
-  
   const data = [
-    { title: `Para: ${document.getElementById('mom-name').value}`, subtitle: 'Uma história linda...', image: state.photos[0] },
-    { title: 'Frase da Mãe', subtitle: document.getElementById('mom-phrase').value, image: state.photos[1] },
-    { title: 'Sabor de Casa', subtitle: document.getElementById('best-food').value, image: state.photos[2] },
-    { title: 'Melhor Memória', subtitle: document.getElementById('best-memory').value, image: state.photos[3] },
+    { title: `Para: ${document.getElementById('mom-name').value}`, subtitle: 'Homenagem...', image: state.photos[0] },
+    { title: 'Frase', subtitle: document.getElementById('mom-phrase').value, image: state.photos[1] },
+    { title: 'Comida', subtitle: document.getElementById('best-food').value, image: state.photos[2] },
+    { title: 'Memória', subtitle: document.getElementById('best-memory').value, image: state.photos[3] },
     { title: 'Qualidades', subtitle: document.getElementById('qualities').value, image: state.photos[4] },
-    { title: 'Te Amo!', subtitle: document.getElementById('dedication').value }
+    { title: 'Dedicatória', subtitle: document.getElementById('dedication').value }
   ];
 
   data.forEach((item, i) => {
@@ -151,10 +119,7 @@ function renderStories() {
     story.innerHTML = `
       <div class="story-bg" style="background-image: url('${item.image || ''}')"></div>
       <div class="story-overlay"></div>
-      <div class="story-content">
-        <h2>${item.title}</h2>
-        <p>${item.subtitle}</p>
-      </div>
+      <div class="story-content"><h2>${item.title}</h2><p>${item.subtitle}</p></div>
     `;
     storiesContainer.appendChild(story);
   });
@@ -167,18 +132,15 @@ function showStory(index) {
   stories.forEach(s => s.classList.remove('active'));
   stories[index].classList.add('active');
   activeStoryIndex = index;
-  
   const fills = document.querySelectorAll('.progress-segment-fill');
   fills.forEach((f, i) => {
     f.style.transition = 'none';
     f.style.width = i < index ? '100%' : '0%';
   });
-  
   setTimeout(() => {
     fills[index].style.transition = `width ${STORY_DURATION}ms linear`;
     fills[index].style.width = '100%';
   }, 50);
-
   storyTimer = setTimeout(() => {
     if (activeStoryIndex < stories.length - 1) showStory(activeStoryIndex + 1);
     else abrirModal();
@@ -188,27 +150,22 @@ function showStory(index) {
 function gerarRecordacao() {
   renderStories();
   const retro = document.getElementById('retro-section');
-  retro.classList.remove('hidden');
   retro.style.display = 'block';
+  retro.classList.add('active'); // Ativa o layout no CSS
   retro.scrollIntoView({ behavior: 'smooth' });
-  
   activeStoryIndex = 0;
   showStory(0);
-  
   document.getElementById('touch-left').onclick = () => showStory(activeStoryIndex - 1);
   document.getElementById('touch-right').onclick = () => showStory(activeStoryIndex + 1);
-
   const audio = document.getElementById('bg-audio');
-  const gender = document.querySelector('input[name="gender"]:checked').value;
-  audio.src = gender === 'feminino' ? 'audio/mulher.mp3' : 'audio/homem.mp3';
+  audio.src = document.querySelector('input[name="gender"]:checked').value === 'feminino' ? 'audio/mulher.mp3' : 'audio/homem.mp3';
   audio.play().catch(() => {});
 }
 
-/* ── 4. UTILITÁRIOS E MODAIS ── */
+/* ── 4. UTILITÁRIOS ── */
 function irParaForm() {
   const form = document.getElementById('form-section');
   form.classList.remove('hidden');
-  document.getElementById('hero').style.display = 'none';
   window.scrollTo({ top: form.offsetTop - 100, behavior: 'smooth' });
 }
 
@@ -216,21 +173,12 @@ function abrirModal() { document.getElementById('overlay').classList.add('open')
 function fecharModal() { document.getElementById('overlay').classList.remove('open'); }
 function fecharRetro() { document.getElementById('retro-section').style.display = 'none'; }
 
-function mostrarToast(msg) {
-  const t = document.getElementById('toast');
-  if (t) {
-    t.textContent = msg; t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
-  }
-}
-
 document.addEventListener('DOMContentLoaded', () => {
   initCountdown();
   setupPhotoUploads();
   updateFormUI();
 });
 
-// Vinculação Global
 window.irParaForm = irParaForm;
 window.abrirModal = abrirModal;
 window.fecharModal = fecharModal;
