@@ -1,7 +1,7 @@
 /**
  * ══════════════════════════════════════════════════════════
  *  PRESENTE DIGITAL PARA MAMÃE — script.js
- *  Versão Estável Restaurada (Premium Layout)
+ *  RESTAURAÇÃO TOTAL (Layout Original de Alta Qualidade)
  * ══════════════════════════════════════════════════════════
  */
 
@@ -32,11 +32,8 @@ const progressFill = document.getElementById('form-progress-fill');
 const stepCurrentEl = document.getElementById('step-current');
 const btnBack = document.getElementById('btn-back');
 const btnNext = document.getElementById('btn-next');
-const formIcon = document.getElementById('form-icon');
 const storiesContainer = document.getElementById('stories-container');
 const storiesProgressEl = document.getElementById('stories-progress');
-
-const stepIcons = ['💝', '👩', '✨', '🏡', '🖼️', '✉️'];
 
 /* ════════════════════════════════════════════
    1. LÓGICA DO FORMULÁRIO (WIZARD)
@@ -47,13 +44,9 @@ function updateFormUI() {
   if (progressFill) progressFill.style.width = pct + '%';
   if (stepCurrentEl) stepCurrentEl.textContent = currentStep;
   if (btnBack) btnBack.style.visibility = currentStep === 1 ? 'hidden' : 'visible';
-  
   if (btnNext) {
     btnNext.textContent = currentStep === TOTAL_STEPS ? '🎁 Gerar Retrospectiva' : 'Continuar →';
-    btnNext.classList.toggle('is-generate', currentStep === TOTAL_STEPS);
   }
-  
-  if (formIcon) formIcon.textContent = stepIcons[currentStep - 1];
 }
 
 function validateStep(step) {
@@ -67,39 +60,28 @@ function validateStep(step) {
   return true;
 }
 
-function goToStep(targetStep, direction) {
+function goToStep(targetStep) {
   const current = document.getElementById(`step-${currentStep}`);
   const next = document.getElementById(`step-${targetStep}`);
-  if (!current || !next) return;
-
-  current.classList.add('step-exiting');
-  setTimeout(() => {
-    current.classList.add('hidden');
-    current.classList.remove('step-exiting');
-    next.classList.remove('hidden');
-    next.classList.add(direction === 'forward' ? 'step-entering' : 'step-entering-back');
-    
-    next.addEventListener('animationend', () => {
-      next.classList.remove('step-entering', 'step-entering-back');
-    }, { once: true });
-
-    currentStep = targetStep;
-    updateFormUI();
-  }, 300);
+  if (current) current.classList.add('hidden');
+  if (next) next.classList.remove('hidden');
+  currentStep = targetStep;
+  updateFormUI();
 }
 
 if (btnNext) {
   btnNext.addEventListener('click', (e) => {
     if (e) e.preventDefault();
     if (!validateStep(currentStep)) return;
-    if (currentStep < TOTAL_STEPS) goToStep(currentStep + 1, 'forward');
+    if (currentStep < TOTAL_STEPS) goToStep(currentStep + 1);
     else gerarRecordacao(e);
   });
 }
 
 if (btnBack) {
-  btnBack.addEventListener('click', () => {
-    if (currentStep > 1) goToStep(currentStep - 1, 'back');
+  btnBack.addEventListener('click', (e) => {
+    if (e) e.preventDefault();
+    if (currentStep > 1) goToStep(currentStep - 1);
   });
 }
 
@@ -137,33 +119,22 @@ function setupPhotoUploads() {
   });
 }
 
-function setupRadioPills() {
-  document.querySelectorAll('.radio-pill').forEach(pill => {
-    const input = pill.querySelector('input');
-    pill.addEventListener('click', () => {
-      document.querySelectorAll('.radio-pill').forEach(p => p.classList.remove('active'));
-      pill.classList.add('active');
-      if (input) input.checked = true;
-    });
-  });
-}
-
 /* ════════════════════════════════════════════
    2. MOTOR DA RETROSPECTIVA (SLIDES)
    ════════════════════════════════════════════ */
 
 let activeStoryIndex = 0;
 let storyTimer = null;
-const STORY_DURATION = 5000;
+const STORY_DURATION = 6000;
 
 function buildStoriesData() {
-  const { momName, momNickname, gifterName, photos, yearsTogether, momPhrase, bestFood, bestMemory, hobbies, traditions, qualities, dedication } = state;
+  const { momName, photos, yearsTogether, momPhrase, bestFood, bestMemory, hobbies, traditions, qualities, dedication } = state;
   return [
     { title: `Para a melhor mãe: ${momName}`, subtitle: 'Uma história de amor que começou há muito tempo...', image: photos[0], icon: '💝' },
-    { title: `${yearsTogether} anos de momentos incríveis`, subtitle: `Você sempre diz: "${momPhrase}" e a gente cai na risada!`, image: photos[1], icon: '✨' },
-    { title: 'O sabor da felicidade', subtitle: `Nada supera o seu ${bestFood}. É o tempero da nossa vida!`, image: photos[2], icon: '🍽️' },
-    { title: 'Nossa melhor memória', subtitle: `${bestMemory}. Um dia que ficou guardado para sempre.`, image: photos[3], icon: '📸' },
-    { title: 'Você é única', subtitle: `Pelo seu jeito ${qualities}, por amar ${hobbies} e nossas tradições de ${traditions}.`, image: photos[4], icon: '🏡' },
+    { title: `${yearsTogether} anos de momentos incríveis`, subtitle: `Você sempre diz: "${momPhrase}"`, image: photos[1], icon: '✨' },
+    { title: 'O sabor da felicidade', subtitle: `Nada supera o seu ${bestFood}`, image: photos[2], icon: '🍽️' },
+    { title: 'Nossa melhor memória', subtitle: bestMemory, image: photos[3], icon: '📸' },
+    { title: 'Você é única', subtitle: `Pelo seu jeito ${qualities}, por amar ${hobbies} e ${traditions}`, image: photos[4], icon: '🏡' },
     { title: 'Minha gratidão eterna', subtitle: dedication, isFinal: true, icon: '✉️' }
   ];
 }
@@ -177,13 +148,14 @@ function renderStories(data) {
     const story = document.createElement('div');
     story.className = 'story' + (i === 0 ? ' active' : '');
     
+    // ESTRUTURA ORIGINAL DE STORY
     story.innerHTML = `
       <div class="story-bg" style="background-image: url('${item.image || ''}')"></div>
+      <div class="story-overlay"></div>
       <div class="story-content">
         <div class="story-icon-badge">${item.icon || '💝'}</div>
         <h2>${item.title}</h2>
         <p>${item.subtitle}</p>
-        ${item.isFinal && !state.unlocked ? '<div class="premium-lock"><span>Bloqueado até o pagamento</span></div>' : ''}
       </div>
     `;
     storiesContainer.appendChild(story);
@@ -231,37 +203,29 @@ function initRetro() {
 }
 
 /* ════════════════════════════════════════════
-   3. GERAÇÃO E PAGAMENTO
+   3. GERAÇÃO E SALVAMENTO
    ════════════════════════════════════════════ */
 
 async function gerarRecordacao(e) {
   if (e) e.preventDefault();
   collectFormData();
   
-  const btn = document.querySelector('.btn-submit');
-  if (btn) {
-    btn.disabled = true;
-    btn.innerText = 'Gerando sua surpresa...';
-  }
-
-  // Mostra a prévia
   const storiesData = buildStoriesData();
   renderStories(storiesData);
-    // 4. Exibe a seção de retrospectiva em tela cheia
-    const retroSection = document.getElementById('retro-section');
-    if (retroSection) {
-      retroSection.style.display = 'block';
-      retroSection.classList.remove('hidden');
-      retroSection.style.position = 'fixed';
-      retroSection.style.top = '0'; 
-      retroSection.style.left = '0'; 
-      retroSection.style.width = '100vw';
-      retroSection.style.height = '100vh';
-      retroSection.style.background = '#000'; // FUNDO PRETO PARA CONTRASTE
-      retroSection.style.zIndex = '999999';
-    }
   
-  document.body.classList.add('retro-view-mode');
+  const retro = document.getElementById('retro-section');
+  if (retro) {
+    retro.style.display = 'block';
+    retro.classList.remove('hidden');
+    // Força o estilo de tela cheia sem quebrar o layout
+    retro.style.position = 'fixed';
+    retro.style.top = '0'; retro.style.left = '0';
+    retro.style.width = '100%'; retro.style.height = '100%';
+    retro.style.zIndex = '99999';
+    retro.style.background = '#000';
+  }
+  
+  document.body.style.overflow = 'hidden';
   if (formSection) formSection.classList.add('hidden');
   
   initRetro();
@@ -273,13 +237,8 @@ async function gerarRecordacao(e) {
      audio.play().catch(() => {});
   }
 
-  // Tenta salvar no banco
+  // Tenta salvar no banco em background
   salvarRetrospectiva().then(id => { if(id) state.retroId = id; });
-
-  // Checkout automático após 15s
-  setTimeout(() => {
-    if (!state.unlocked) abrirModal();
-  }, 15000);
 }
 
 async function salvarRetrospectiva() {
@@ -294,55 +253,41 @@ async function salvarRetrospectiva() {
   } catch { return null; }
 }
 
-let mp = null;
-let brickController = null;
+/* ════════════════════════════════════════════
+   4. MERCADO PAGO E AUXILIARES
+   ════════════════════════════════════════════ */
 
 document.addEventListener('DOMContentLoaded', async () => {
-  try {
-    const res = await fetch('/api/mp-public-key');
-    const data = await res.json();
-    if (data.publicKey) mp = new MercadoPago(data.publicKey, { locale: 'pt-BR' });
-  } catch {}
-  
   initCountdown();
   setupPhotoUploads();
-  setupRadioPills();
   updateFormUI();
 });
 
 function abrirModal() {
   const overlay = document.getElementById('overlay');
   if(overlay) overlay.classList.add('open');
-  document.body.style.overflow = 'hidden';
   selecionarPagamento('pix');
 }
 
 function fecharModal() {
   const overlay = document.getElementById('overlay');
   if(overlay) overlay.classList.remove('open');
-  document.body.style.overflow = '';
 }
 
 function selecionarPagamento(metodo) {
   state.paymentMethod = metodo;
-  const optCartao = document.getElementById('opt-cartao');
-  const optPix = document.getElementById('opt-pix');
-  if(optCartao) optCartao.classList.toggle('sel', metodo === 'cartao');
-  if(optPix) optPix.classList.toggle('sel', metodo === 'pix');
-  
-  const camposCartao = document.getElementById('campos-cartao');
-  const camposPix = document.getElementById('campos-pix');
-  if(camposCartao) camposCartao.style.display = metodo === 'cartao' ? 'block' : 'none';
-  if(camposPix) camposPix.style.display = metodo === 'pix' ? 'block' : 'none';
+  document.getElementById('opt-pix').classList.toggle('sel', metodo === 'pix');
+  document.getElementById('opt-cartao').classList.toggle('sel', metodo === 'cartao');
+  document.getElementById('campos-pix').style.display = metodo === 'pix' ? 'block' : 'none';
+  document.getElementById('campos-cartao').style.display = metodo === 'cartao' ? 'block' : 'none';
 }
 
 async function gerarPix() {
-  const emailInput = document.getElementById('email-checkout');
-  const email = emailInput ? emailInput.value : '';
+  const email = document.getElementById('email-checkout').value;
   if (!email || !email.includes('@')) return mostrarToast('E-mail inválido');
   
   const btn = document.getElementById('btn-pix');
-  if(btn) { btn.disabled = true; btn.textContent = 'Gerando...'; }
+  btn.disabled = true; btn.textContent = 'Gerando...';
 
   try {
     const resp = await fetch('/api/gerar-pix', {
@@ -365,21 +310,20 @@ async function gerarPix() {
         } catch {}
       }, 5000);
     }
-  } catch { if(btn) { btn.disabled = false; btn.textContent = 'Gerar Pix'; } }
+  } catch { btn.disabled = false; btn.textContent = 'Gerar Pix'; }
 }
 
 function sucessoPagamento() {
   fecharModal();
   state.unlocked = true;
-  const shareContainer = document.getElementById('share-btn-container');
-  if(shareContainer) shareContainer.classList.remove('hidden');
+  document.getElementById('share-btn-container').classList.remove('hidden');
   renderStories(buildStoriesData());
   showStory(0);
 }
 
 function compartilhar() {
   const link = `${window.location.origin}/retro/${state.retroId || ''}`;
-  const msg = encodeURIComponent(`💝 Olá! Preparei um presente especial: ${link}`);
+  const msg = encodeURIComponent(`💝 Olá! Preparei um presente especial para você: ${link}`);
   window.open(`https://wa.me/?text=${msg}`, '_blank');
 }
 
@@ -407,9 +351,9 @@ function initCountdown() {
 
 function irParaForm() {
   if(formSection) formSection.classList.remove('hidden');
-  document.body.style.overflow = 'hidden';
 }
 
+// Vinculação Global
 window.gerarRecordacao = gerarRecordacao;
 window.compartilhar = compartilhar;
 window.irParaForm = irParaForm;
@@ -417,5 +361,10 @@ window.abrirModal = abrirModal;
 window.fecharModal = fecharModal;
 window.selecionarPagamento = selecionarPagamento;
 window.gerarPix = gerarPix;
-window.aceitarDownsell = () => { state.selectedPrice = 19.90; fecharModal(); abrirModal(); };
-window.recusarDownsell = () => fecharModal();
+window.copiarCopiaECola = () => {
+  const input = document.getElementById('pix-copia-cola');
+  input.select(); input.setSelectionRange(0, 99999);
+  navigator.clipboard.writeText(input.value);
+  mostrarToast('Código PIX copiado!');
+};
+window.fecharSeClicarFora = (e) => { if(e.target.id === 'overlay') fecharModal(); };
