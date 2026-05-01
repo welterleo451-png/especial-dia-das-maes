@@ -1471,16 +1471,6 @@ function sucessoPagamento() {
   
   showStory(activeStoryIndex);
 }
-
-  // Se já temos o retroId, não precisamos salvar de novo agora
-  // Mas garantimos que o link de compartilhar seja atualizado
-  atualizarLinkCompartilhar();
-
-  // Forçar a reconstrução dos stories para garantir que apareçam
-  const storiesData = buildStoriesData();
-  renderStories(storiesData);
-  
-  // Reinicia do ponto onde estava ou do início se preferir
   showStory(activeStoryIndex);
 }
 
