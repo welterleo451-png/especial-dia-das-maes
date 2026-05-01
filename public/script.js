@@ -1468,9 +1468,6 @@ function sucessoPagamento() {
   // Forçar a reconstrução dos stories para garantir que apareçam
   const storiesData = buildStoriesData();
   renderStories(storiesData);
-  
-  showStory(activeStoryIndex);
-}
   showStory(activeStoryIndex);
 }
 
