@@ -1074,16 +1074,6 @@ function fecharSeClicarFora(e) {
 
 function selecionarPagamento(metodo) {
   state.paymentMethod = metodo;
-  
-  // GATILHO DE DOWNSELL ANTECIPADO: 
-  // Intercepta logo na escolha do método se for o plano básico.
-  const isBasico = state.selectedTier === 'complete' && (state.selectedPrice >= 14.80 && state.selectedPrice <= 15.00);
-  if (isBasico && !state.downsellShown) {
-    state.downsellShown = true;
-    mostrarDownsell();
-    // Não retornamos aqui para que a UI de pagamento mude, 
-    // mas o modal aparecerá por cima para oferecer o upgrade.
-  }
 
   document.getElementById('opt-cartao').classList.toggle('sel', metodo === 'cartao');
   document.getElementById('opt-pix').classList.toggle('sel', metodo === 'pix');
@@ -1241,6 +1231,14 @@ function copiarCopiaECola() {
 }
 
 async function gerarPix() {
+  // GATILHO DE DOWNSELL: Intercepta no clique de "Gerar Pix" se for plano básico
+  const isBasico = state.selectedTier === 'complete' && (state.selectedPrice >= 14.80 && state.selectedPrice <= 15.00);
+  if (isBasico && !state.downsellShown) {
+    state.downsellShown = true;
+    mostrarDownsell();
+    return;
+  }
+
   const email = document.getElementById('email-checkout').value;
   if (!email || !email.includes('@')) { mostrarToast('Preencha um e-mail válido.'); return; }
   
