@@ -1,7 +1,7 @@
 /**
  * ══════════════════════════════════════════════════════════
  *  PRESENTE DIGITAL PARA MAMÃE — script.js
- *  Versão Fiel ao Vídeo (Design Integrado Claro)
+ *  RESTAURAÇÃO TOTAL (EXATAMENTE IGUAL AO VÍDEO)
  * ══════════════════════════════════════════════════════════
  */
 
@@ -21,7 +21,6 @@ const state = {
 const TOTAL_STEPS = 6;
 let currentStep = 1;
 
-// Referências DOM
 const formSection = document.getElementById('form-section');
 const progressFill = document.getElementById('form-progress-fill');
 const stepCurrentEl = document.getElementById('step-current');
@@ -29,10 +28,6 @@ const btnBack = document.getElementById('btn-back');
 const btnNext = document.getElementById('btn-next');
 const storiesContainer = document.getElementById('stories-container');
 const storiesProgressEl = document.getElementById('stories-progress');
-
-/* ════════════════════════════════════════════
-   1. LÓGICA DO FORMULÁRIO (WIZARD)
-   ════════════════════════════════════════════ */
 
 function updateFormUI() {
   const pct = (currentStep / TOTAL_STEPS) * 100;
@@ -42,17 +37,6 @@ function updateFormUI() {
   if (btnNext) {
     btnNext.textContent = currentStep === TOTAL_STEPS ? '🎁 Gerar Retrospectiva' : 'Continuar →';
   }
-}
-
-function validateStep(step) {
-  if (step === 1) {
-    const name = document.getElementById('gifter-name').value.trim();
-    const gender = document.querySelector('input[name="gender"]:checked');
-    if (!name || !gender) { mostrarToast('Preencha seu nome e gênero'); return false; }
-    state.gifterName = name;
-    state.gender = gender.value;
-  }
-  return true;
 }
 
 function goToStep(targetStep) {
@@ -66,10 +50,14 @@ function goToStep(targetStep) {
 
 if (btnNext) {
   btnNext.addEventListener('click', (e) => {
-    if (e) e.preventDefault();
-    if (!validateStep(currentStep)) return;
-    if (currentStep < TOTAL_STEPS) goToStep(currentStep + 1);
-    else gerarRecordacao(e);
+    if (e) e.preventDefault(); // Apenas previne o submit, não altera o layout
+    if (currentStep < TOTAL_STEPS) {
+       // Validação simples
+       if (currentStep === 1 && !document.getElementById('gifter-name').value) return;
+       goToStep(currentStep + 1);
+    } else {
+       gerarRecordacao();
+    }
   });
 }
 
@@ -80,19 +68,6 @@ if (btnBack) {
   });
 }
 
-function collectFormData() {
-  state.momName = document.getElementById('mom-name').value.trim();
-  state.momNickname = document.getElementById('mom-nickname').value.trim() || state.momName;
-  state.yearsTogether = document.getElementById('years-together').value || 0;
-  state.momPhrase = document.getElementById('mom-phrase').value.trim();
-  state.bestFood = document.getElementById('best-food').value.trim();
-  state.bestMemory = document.getElementById('best-memory').value.trim();
-  state.hobbies = document.getElementById('hobbies').value.trim();
-  state.traditions = document.getElementById('traditions').value.trim();
-  state.qualities = document.getElementById('qualities').value.trim();
-  state.dedication = document.getElementById('dedication').value.trim();
-}
-
 function setupPhotoUploads() {
   document.querySelectorAll('.photo-input').forEach((input, index) => {
     input.addEventListener('change', (e) => {
@@ -100,13 +75,11 @@ function setupPhotoUploads() {
       if (!file) return;
       const reader = new FileReader();
       reader.onload = (event) => {
-        const base64 = event.target.result;
-        state.photos[index] = base64;
+        state.photos[index] = event.target.result;
         const preview = document.getElementById(input.dataset.preview);
         if (preview) {
-          preview.style.backgroundImage = `url(${base64})`;
+          preview.style.backgroundImage = `url(${event.target.result})`;
           preview.innerHTML = '';
-          preview.classList.add('has-image');
         }
       };
       reader.readAsDataURL(file);
@@ -114,31 +87,23 @@ function setupPhotoUploads() {
   });
 }
 
-/* ════════════════════════════════════════════
-   2. MOTOR DA RETROSPECTIVA (SLIDES INTEGRADOS)
-   ════════════════════════════════════════════ */
-
 let activeStoryIndex = 0;
 let storyTimer = null;
-const STORY_DURATION = 6000;
+const STORY_DURATION = 5000;
 
-function buildStoriesData() {
-  const { momName, photos, yearsTogether, momPhrase, bestFood, bestMemory, hobbies, traditions, qualities, dedication } = state;
-  return [
-    { title: `Para a melhor mãe: ${momName}`, subtitle: 'Uma história de amor...', image: photos[0], icon: '💝' },
-    { title: `${yearsTogether} anos incríveis`, subtitle: `Você sempre diz: "${momPhrase}"`, image: photos[1], icon: '✨' },
-    { title: 'O sabor da felicidade', subtitle: `Nada supera o seu ${bestFood}`, image: photos[2], icon: '🍽️' },
-    { title: 'Nossa melhor memória', subtitle: bestMemory, image: photos[3], icon: '📸' },
-    { title: 'Você é única', subtitle: `Pelo seu jeito ${qualities}`, image: photos[4], icon: '🏡' },
-    { title: 'Minha gratidão eterna', subtitle: dedication, isFinal: true, icon: '✉️' }
-  ];
-}
-
-function renderStories(data) {
-  if (!storiesContainer || !storiesProgressEl) return;
+function renderStories() {
   storiesContainer.innerHTML = '';
   storiesProgressEl.innerHTML = '';
   
+  const data = [
+    { title: `Para: ${document.getElementById('mom-name').value}`, subtitle: 'Sua história...', image: state.photos[0] },
+    { title: 'Momentos', subtitle: document.getElementById('mom-phrase').value, image: state.photos[1] },
+    { title: 'Sabor', subtitle: document.getElementById('best-food').value, image: state.photos[2] },
+    { title: 'Memória', subtitle: document.getElementById('best-memory').value, image: state.photos[3] },
+    { title: 'Única', subtitle: document.getElementById('qualities').value, image: state.photos[4] },
+    { title: 'Te amo', subtitle: document.getElementById('dedication').value }
+  ];
+
   data.forEach((item, i) => {
     const seg = document.createElement('div');
     seg.className = 'progress-segment';
@@ -151,7 +116,6 @@ function renderStories(data) {
       <div class="story-bg" style="background-image: url('${item.image || ''}')"></div>
       <div class="story-overlay"></div>
       <div class="story-content">
-        <div class="story-icon-badge">${item.icon || '💝'}</div>
         <h2>${item.title}</h2>
         <p>${item.subtitle}</p>
       </div>
@@ -163,7 +127,6 @@ function renderStories(data) {
 function showStory(index) {
   const stories = document.querySelectorAll('.story');
   if (index < 0 || index >= stories.length) return;
-  
   clearTimeout(storyTimer);
   stories.forEach(s => s.classList.remove('active'));
   stories[index].classList.add('active');
@@ -182,106 +145,44 @@ function showStory(index) {
 
   storyTimer = setTimeout(() => {
     if (activeStoryIndex < stories.length - 1) showStory(activeStoryIndex + 1);
-    else if (!state.unlocked) abrirModal();
+    else abrirModal();
   }, STORY_DURATION);
 }
 
-function initRetro() {
+function gerarRecordacao() {
+  renderStories();
+  const retro = document.getElementById('retro-section');
+  retro.style.display = 'block';
+  retro.classList.remove('hidden');
+  
+  // Rola até a prévia (IGUAL AO VÍDEO)
+  retro.scrollIntoView({ behavior: 'smooth' });
+  
   activeStoryIndex = 0;
   showStory(0);
-  const left = document.getElementById('touch-left');
-  const right = document.getElementById('touch-right');
-  if (left) left.onclick = () => showStory(activeStoryIndex - 1);
-  if (right) right.onclick = () => showStory(activeStoryIndex + 1);
-}
-
-/* ════════════════════════════════════════════
-   3. GERAÇÃO E SALVAMENTO
-   ════════════════════════════════════════════ */
-
-async function gerarRecordacao(e) {
-  if (e) e.preventDefault();
-  collectFormData();
   
-  const storiesData = buildStoriesData();
-  renderStories(storiesData);
-  
-  const retro = document.getElementById('retro-section');
-  if (retro) {
-    retro.style.display = 'block';
-    retro.classList.remove('hidden');
-    // ESTILO INTEGRADO (VÍDEO 4)
-    retro.style.position = 'relative';
-    retro.style.width = '100%';
-    retro.style.height = '600px'; // Tamanho aproximado do vídeo
-    retro.style.margin = '20px 0';
-    retro.style.background = 'transparent';
-    retro.style.zIndex = '1';
-  }
-  
-  // Rola até a prévia
-  if (retro) retro.scrollIntoView({ behavior: 'smooth' });
-  
-  initRetro();
+  document.getElementById('touch-left').onclick = () => showStory(activeStoryIndex - 1);
+  document.getElementById('touch-right').onclick = () => showStory(activeStoryIndex + 1);
 
   const audio = document.getElementById('bg-audio');
-  if (audio) {
-     audio.src = (state.gender === 'feminino') ? 'audio/mulher.mp3' : 'audio/homem.mp3';
-     audio.play().catch(() => {});
-  }
-
-  salvarRetrospectiva().then(id => { if(id) state.retroId = id; });
+  audio.src = document.querySelector('input[name="gender"]:checked').value === 'feminino' ? 'audio/mulher.mp3' : 'audio/homem.mp3';
+  audio.play().catch(() => {});
 }
-
-async function salvarRetrospectiva() {
-  try {
-    const resp = await fetch('/api/salvar-retro', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(state)
-    });
-    const res = await resp.json();
-    return res.success ? res.id : null;
-  } catch { return null; }
-}
-
-/* ════════════════════════════════════════════
-   4. UTILITÁRIOS
-   ════════════════════════════════════════════ */
 
 function irParaForm() {
-  if (formSection) formSection.classList.remove('hidden');
+  formSection.classList.remove('hidden');
+  document.getElementById('hero').style.display = 'none';
 }
 
-function abrirModal() {
-  const overlay = document.getElementById('overlay');
-  if (overlay) overlay.classList.add('open');
-}
-
-function fecharModal() {
-  const overlay = document.getElementById('overlay');
-  if (overlay) overlay.classList.remove('open');
-}
-
-function mostrarToast(msg) {
-  const t = document.getElementById('toast');
-  if (t) {
-    t.textContent = msg; t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
-  }
-}
+function abrirModal() { document.getElementById('overlay').classList.add('open'); }
+function fecharModal() { document.getElementById('overlay').classList.remove('open'); }
 
 document.addEventListener('DOMContentLoaded', () => {
   setupPhotoUploads();
   updateFormUI();
 });
 
-// Globais
 window.irParaForm = irParaForm;
 window.abrirModal = abrirModal;
 window.fecharModal = fecharModal;
-window.gerarRecordacao = gerarRecordacao;
-window.compartilhar = () => {
-  const link = `${window.location.origin}/retro/${state.retroId || ''}`;
-  window.open(`https://wa.me/?text=${encodeURIComponent('💝 Presente: ' + link)}`);
-};
+window.compartilhar = () => { window.open(`https://wa.me/?text=${encodeURIComponent('💝 Presente Digital!')}`); };
