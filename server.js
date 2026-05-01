@@ -305,3 +305,5 @@ app.get('/pendente',(_req, res) => res.redirect('/?pagamento=pendente'));
 app.listen(PORT, () => {
   console.log(`\n🌸 Servidor rodando em http://localhost:${PORT}\n`);
 });
+/ /   F o r c e   B u i l d :   0 5 / 0 1 / 2 0 2 6   0 3 : 2 0 : 5 6  
+ 
