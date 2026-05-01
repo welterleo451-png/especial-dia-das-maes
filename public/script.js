@@ -1,27 +1,21 @@
 /**
  * ══════════════════════════════════════════════════════════
  *  PRESENTE DIGITAL PARA MAMÃE — script.js
- *  RESTAURAÇÃO TOTAL (EXATAMENTE IGUAL AO VÍDEO)
+ *  CORREÇÃO FINAL: IGUAL AO VÍDEO (SEM BACKGROUND PRETO)
  * ══════════════════════════════════════════════════════════
  */
 
 'use strict';
 
 const state = {
-  gifterName: '', gender: '',
-  momName: '', momNickname: '', yearsTogether: 0,
-  momPhrase: '', bestFood: '', bestMemory: '',
-  hobbies: '', traditions: '', qualities: '',
   photos: [null, null, null, null, null],
-  dedication: '',
-  unlocked: false, selectedTier: 'complete', selectedPrice: 14.90,
   retroId: null,
 };
 
 const TOTAL_STEPS = 6;
 let currentStep = 1;
 
-const formSection = document.getElementById('form-section');
+// Referências DOM
 const progressFill = document.getElementById('form-progress-fill');
 const stepCurrentEl = document.getElementById('step-current');
 const btnBack = document.getElementById('btn-back');
@@ -50,14 +44,9 @@ function goToStep(targetStep) {
 
 if (btnNext) {
   btnNext.addEventListener('click', (e) => {
-    if (e) e.preventDefault(); // Apenas previne o submit, não altera o layout
-    if (currentStep < TOTAL_STEPS) {
-       // Validação simples
-       if (currentStep === 1 && !document.getElementById('gifter-name').value) return;
-       goToStep(currentStep + 1);
-    } else {
-       gerarRecordacao();
-    }
+    if (e) e.preventDefault();
+    if (currentStep < TOTAL_STEPS) goToStep(currentStep + 1);
+    else gerarRecordacao();
   });
 }
 
@@ -80,6 +69,7 @@ function setupPhotoUploads() {
         if (preview) {
           preview.style.backgroundImage = `url(${event.target.result})`;
           preview.innerHTML = '';
+          preview.classList.add('has-image');
         }
       };
       reader.readAsDataURL(file);
@@ -96,12 +86,12 @@ function renderStories() {
   storiesProgressEl.innerHTML = '';
   
   const data = [
-    { title: `Para: ${document.getElementById('mom-name').value}`, subtitle: 'Sua história...', image: state.photos[0] },
-    { title: 'Momentos', subtitle: document.getElementById('mom-phrase').value, image: state.photos[1] },
-    { title: 'Sabor', subtitle: document.getElementById('best-food').value, image: state.photos[2] },
-    { title: 'Memória', subtitle: document.getElementById('best-memory').value, image: state.photos[3] },
-    { title: 'Única', subtitle: document.getElementById('qualities').value, image: state.photos[4] },
-    { title: 'Te amo', subtitle: document.getElementById('dedication').value }
+    { title: `Para: ${document.getElementById('mom-name').value}`, subtitle: 'Uma história linda...', image: state.photos[0] },
+    { title: 'Frase da Mãe', subtitle: document.getElementById('mom-phrase').value, image: state.photos[1] },
+    { title: 'Sabor de Casa', subtitle: document.getElementById('best-food').value, image: state.photos[2] },
+    { title: 'Melhor Memória', subtitle: document.getElementById('best-memory').value, image: state.photos[3] },
+    { title: 'Qualidades', subtitle: document.getElementById('qualities').value, image: state.photos[4] },
+    { title: 'Te Amo!', subtitle: document.getElementById('dedication').value }
   ];
 
   data.forEach((item, i) => {
@@ -150,10 +140,12 @@ function showStory(index) {
 }
 
 function gerarRecordacao() {
+  // CRÍTICO: NÃO ADICIONAR .retro-view-mode AO BODY (Isso é o que deixa preto no vídeo)
+  
   renderStories();
   const retro = document.getElementById('retro-section');
-  retro.style.display = 'block';
   retro.classList.remove('hidden');
+  retro.style.display = 'block';
   
   // Rola até a prévia (IGUAL AO VÍDEO)
   retro.scrollIntoView({ behavior: 'smooth' });
@@ -165,13 +157,9 @@ function gerarRecordacao() {
   document.getElementById('touch-right').onclick = () => showStory(activeStoryIndex + 1);
 
   const audio = document.getElementById('bg-audio');
-  audio.src = document.querySelector('input[name="gender"]:checked').value === 'feminino' ? 'audio/mulher.mp3' : 'audio/homem.mp3';
+  const gender = document.querySelector('input[name="gender"]:checked').value;
+  audio.src = gender === 'feminino' ? 'audio/mulher.mp3' : 'audio/homem.mp3';
   audio.play().catch(() => {});
-}
-
-function irParaForm() {
-  formSection.classList.remove('hidden');
-  document.getElementById('hero').style.display = 'none';
 }
 
 function abrirModal() { document.getElementById('overlay').classList.add('open'); }
@@ -182,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateFormUI();
 });
 
-window.irParaForm = irParaForm;
 window.abrirModal = abrirModal;
 window.fecharModal = fecharModal;
-window.compartilhar = () => { window.open(`https://wa.me/?text=${encodeURIComponent('💝 Presente Digital!')}`); };
+window.gerarRecordacao = gerarRecordacao;
+window.irParaForm = () => { document.getElementById('hero').style.display = 'none'; };
