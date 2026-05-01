@@ -46,8 +46,8 @@ const state = {
   dedication:   '',
   
   unlocked: false,
-  selectedTier: 'complete',
-  selectedPrice: 19.90,
+  selectedTier: null,
+  selectedPrice: null,
   unlockedTier: '',
 };
 
@@ -1104,6 +1104,12 @@ function selecionarTier(tier, price) {
   if (state.paymentMethod === 'cartao') {
     renderizarBrickCartao();
   }
+
+  // DOWNSELL: Se escolheu o plano básico, mostra a oferta de R$ 19,90 imediatamente
+  if (tier === 'complete' && !state.downsellShown) {
+    state.downsellShown = true;
+    mostrarDownsell();
+  }
 }
 
 // ── LÓGICA DE DOWNSELL ──
@@ -1231,14 +1237,6 @@ function copiarCopiaECola() {
 }
 
 async function gerarPix() {
-  // GATILHO DE DOWNSELL: Intercepta no clique de "Gerar Pix" se for plano básico
-  const isBasico = state.selectedTier === 'complete' && (state.selectedPrice >= 14.80 && state.selectedPrice <= 15.00);
-  if (isBasico && !state.downsellShown) {
-    state.downsellShown = true;
-    mostrarDownsell();
-    return;
-  }
-
   const email = document.getElementById('email-checkout').value;
   if (!email || !email.includes('@')) { mostrarToast('Preencha um e-mail válido.'); return; }
   
