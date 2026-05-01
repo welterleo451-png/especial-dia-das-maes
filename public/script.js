@@ -1074,6 +1074,17 @@ function fecharSeClicarFora(e) {
 
 function selecionarPagamento(metodo) {
   state.paymentMethod = metodo;
+  
+  // GATILHO DE DOWNSELL ANTECIPADO: 
+  // Intercepta logo na escolha do método se for o plano básico.
+  const isBasico = state.selectedTier === 'complete' && (state.selectedPrice >= 14.80 && state.selectedPrice <= 15.00);
+  if (isBasico && !state.downsellShown) {
+    state.downsellShown = true;
+    mostrarDownsell();
+    // Não retornamos aqui para que a UI de pagamento mude, 
+    // mas o modal aparecerá por cima para oferecer o upgrade.
+  }
+
   document.getElementById('opt-cartao').classList.toggle('sel', metodo === 'cartao');
   document.getElementById('opt-pix').classList.toggle('sel', metodo === 'pix');
   
@@ -1185,17 +1196,6 @@ async function renderizarBrickCartao() {
           const loadingMsg = container.querySelector('div[style*="text-align:center"]');
           if (loadingMsg) loadingMsg.remove();
         },
-        onSubmit: async (cardFormData) => {
-          // DISPARAR DOWNSELL (Cartão)
-          const isBasico = state.selectedTier === 'complete' && (state.selectedPrice >= 14.80 && state.selectedPrice <= 15.00);
-          if (isBasico && !state.downsellShown) {
-            state.downsellShown = true;
-            // Desmonta para evitar bug de "processando" infinito no botão do brick
-            if (brickController) { brickController.unmount(); brickController = null; }
-            mostrarDownsell();
-            return;
-          }
-
           try {
             mostrarToast('Processando pagamento...');
             const resp = await fetch('/api/processar-pagamento', {
@@ -1240,15 +1240,6 @@ function copiarCopiaECola() {
 }
 
 async function gerarPix() {
-  // GATILHO DE DOWNSELL: Intercepta o pagamento se for o plano de 14,90
-  const isBasico = state.selectedTier === 'complete' && (state.selectedPrice >= 14.80 && state.selectedPrice <= 15.00);
-
-  if (isBasico && !state.downsellShown) {
-    state.downsellShown = true;
-    mostrarDownsell();
-    return;
-  }
-
   const email = document.getElementById('email-checkout').value;
   if (!email || !email.includes('@')) { mostrarToast('Preencha um e-mail válido.'); return; }
   
