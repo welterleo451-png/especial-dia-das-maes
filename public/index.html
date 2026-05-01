@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Especial Dia das Mães - Retrospectiva</title>
     
-    <!-- Google Fonts: Poppins -->
+    <!-- Google Fonts: Poppins (Incluindo peso 900 para Black) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -100,17 +100,24 @@
 <body class="antialiased overflow-x-hidden relative">
 
     <!-- ==========================================
+         TOP BAR DE URGÊNCIA
+         ========================================== -->
+    <div class="bg-purple-900 text-white text-xs md:text-sm text-center py-2 px-4 font-semibold tracking-wide shadow-md relative z-20">
+        +10.000 mães já choraram de emoção - faltam poucos dias para o Dia das Mães! 🤍
+    </div>
+
+    <!-- ==========================================
          1. LANDING PAGE
          ========================================== -->
     <header class="bg-white shadow-sm sticky top-0 z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            <div class="font-extrabold text-xl md:text-2xl text-brand flex items-center gap-2">
+            <div class="font-black tracking-tight text-xl md:text-2xl text-brand flex items-center gap-2">
                 💝 Especial Dia das Mães
             </div>
             <nav class="hidden md:flex gap-6 font-semibold text-gray-600">
-                <a href="#como-funciona" class="hover:text-brand transition">Como Funciona</a>
                 <a href="#recursos" class="hover:text-brand transition">Recursos</a>
                 <a href="#depoimentos" class="hover:text-brand transition">Depoimentos</a>
+                <a href="#como-funciona" class="hover:text-brand transition">Como Funciona</a>
             </nav>
             <button onclick="openGenerator()" class="bg-brand hover:bg-brand-dark text-white px-6 py-2 rounded-full font-bold transition shadow-lg shadow-brand/30">
                 Criar Presente
@@ -119,90 +126,103 @@
     </header>
 
     <main>
-        <!-- Hero Section -->
-        <section class="bg-brand py-20 text-center px-4 relative overflow-hidden">
-            <div class="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PGNpcmNsZSBjeD0iMTAiIGN5PSIxMCIgcj0iMiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==')]"></div>
+        <!-- Hero Section (Novo Gradiente Premium) -->
+        <section class="bg-gradient-to-br from-purple-700 via-purple-600 to-fuchsia-500 py-24 text-center px-4 relative overflow-hidden">
             <div class="max-w-3xl mx-auto relative z-10">
-                <h1 class="text-5xl md:text-7xl font-extrabold text-white mb-6 drop-shadow-md tracking-tight">
+                <h1 class="text-5xl md:text-7xl font-black text-white mb-6 drop-shadow-md tracking-tight leading-tight">
                     Demo Interativa
                 </h1>
-                <p class="text-brand-light text-lg md:text-xl font-semibold mb-10 text-white/90">
+                <p class="text-white/90 text-lg md:text-2xl font-semibold mb-10 drop-shadow-sm">
                     Crie uma homenagem emocionante em vídeo para sua mãe em minutos.
                 </p>
-                <button onclick="openGenerator()" class="bg-white text-brand hover:bg-gray-100 px-8 py-4 rounded-full font-extrabold text-xl transition flex items-center justify-center gap-3 mx-auto shadow-2xl">
+                <button onclick="openGenerator()" class="bg-white text-brand hover:bg-gray-100 px-8 py-4 rounded-full font-black text-xl md:text-2xl transition flex items-center justify-center gap-3 mx-auto shadow-2xl transform hover:scale-105 duration-300">
                     <span>▶</span> Criar Meu Presente
                 </button>
-                <p class="text-white/70 mt-4 text-sm font-semibold">Não é necessário cadastro.</p>
+                <p class="text-white/80 mt-6 text-sm font-semibold tracking-wide uppercase">Não é necessário cadastro.</p>
             </div>
         </section>
 
-        <!-- Passos -->
-        <section id="como-funciona" class="py-16 max-w-7xl mx-auto px-4">
-            <h2 class="text-3xl font-extrabold text-center text-gray-900 mb-12">Crie um presente inesquecível em 4 passos simples</h2>
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div class="bg-white p-6 rounded-3xl shadow-sm text-center border border-gray-100">
-                    <div class="w-12 h-12 bg-brand text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">1</div>
-                    <h3 class="font-bold text-lg mb-2">Fale de você</h3>
-                    <p class="text-gray-500 text-sm">Seus dados básicos para personalizarmos a experiência.</p>
-                </div>
-                <div class="bg-white p-6 rounded-3xl shadow-sm text-center border border-gray-100">
-                    <div class="w-12 h-12 bg-brand text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">2</div>
-                    <h3 class="font-bold text-lg mb-2">Sobre ela</h3>
-                    <p class="text-gray-500 text-sm">Responda perguntas rápidas sobre a história de vocês.</p>
-                </div>
-                <div class="bg-white p-6 rounded-3xl shadow-sm text-center border border-gray-100">
-                    <div class="w-12 h-12 bg-brand text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">3</div>
-                    <h3 class="font-bold text-lg mb-2">Envie as Fotos</h3>
-                    <p class="text-gray-500 text-sm">Escolha 5 momentos especiais que marcaram a vida de vocês.</p>
-                </div>
-                <div class="bg-white p-6 rounded-3xl shadow-sm text-center border border-gray-100">
-                    <div class="w-12 h-12 bg-brand text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">4</div>
-                    <h3 class="font-bold text-lg mb-2">Pronto!</h3>
-                    <p class="text-gray-500 text-sm">Nossa IA cria o vídeo emocionante instantaneamente.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Recursos -->
-        <section id="recursos" class="bg-white py-16">
+        <!-- SEÇÃO 1: Recursos (Faixa Branca Abaixo do Hero) -->
+        <section id="recursos" class="bg-white py-16 border-b border-gray-100 shadow-sm relative z-10">
             <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
-                <div>
-                    <div class="text-4xl mb-4">☁️</div>
-                    <h3 class="font-extrabold text-xl text-gray-900 mb-2">Para sempre no ar</h3>
-                    <p class="text-gray-500">Seu presente fica salvo na nuvem com um link exclusivo.</p>
+                <div class="p-4">
+                    <div class="text-5xl mb-4 transform hover:scale-110 transition duration-300">☁️</div>
+                    <h3 class="font-black text-2xl text-gray-900 mb-2 tracking-tight">Para sempre no ar</h3>
+                    <p class="text-gray-500 font-medium text-lg">Seu presente fica salvo na nuvem com um link exclusivo.</p>
                 </div>
-                <div>
-                    <div class="text-4xl mb-4">🎨</div>
-                    <h3 class="font-extrabold text-xl text-gray-900 mb-2">100% personalizável</h3>
-                    <p class="text-gray-500">Textos, fotos e áudio adaptados à sua história real.</p>
+                <div class="p-4">
+                    <div class="text-5xl mb-4 transform hover:scale-110 transition duration-300">🎨</div>
+                    <h3 class="font-black text-2xl text-gray-900 mb-2 tracking-tight">100% personalizável</h3>
+                    <p class="text-gray-500 font-medium text-lg">Textos, fotos e áudio adaptados à sua história real.</p>
                 </div>
-                <div>
-                    <div class="text-4xl mb-4">🎬</div>
-                    <h3 class="font-extrabold text-xl text-gray-900 mb-2">Com retrospectiva única</h3>
-                    <p class="text-gray-500">Design estilo "Stories" que prende a atenção e emociona.</p>
+                <div class="p-4">
+                    <div class="text-5xl mb-4 transform hover:scale-110 transition duration-300">🎬</div>
+                    <h3 class="font-black text-2xl text-gray-900 mb-2 tracking-tight">Retrospectiva única</h3>
+                    <p class="text-gray-500 font-medium text-lg">Design estilo "Stories" que prende a atenção e emociona.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Depoimentos -->
-        <section id="depoimentos" class="py-16 max-w-7xl mx-auto px-4">
-            <h2 class="text-3xl font-extrabold text-center text-gray-900 mb-12">O que nossos clientes dizem</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white p-8 rounded-3xl shadow-md border border-gray-50">
-                    <div class="flex text-yellow-400 mb-4 text-xl">★★★★★</div>
-                    <p class="text-gray-700 italic mb-6">"Minha mãe chorou horrores (de alegria, claro!). Foi o presente mais especial que já dei. Muito fácil de fazer!"</p>
-                    <p class="font-extrabold text-brand">- João e Mari</p>
+        <!-- SEÇÃO 2: Depoimentos -->
+        <section id="depoimentos" class="py-20 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4">
+                <h2 class="text-4xl md:text-5xl font-black tracking-tight text-center text-gray-900 mb-14">O que nossos clientes dizem</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white p-8 rounded-3xl shadow-md border border-gray-100 hover:shadow-lg transition">
+                        <div class="flex text-yellow-400 mb-4 text-2xl">★★★★★</div>
+                        <p class="text-gray-700 italic mb-6 text-lg">"Minha mãe chorou horrores (de alegria, claro!). Foi o presente mais especial que já dei. Muito fácil de fazer!"</p>
+                        <p class="font-black text-brand text-lg">- João e Mari</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-3xl shadow-md border border-gray-100 hover:shadow-lg transition">
+                        <div class="flex text-yellow-400 mb-4 text-2xl">★★★★★</div>
+                        <p class="text-gray-700 italic mb-6 text-lg">"Eu não tinha muito tempo, mas o resultado parece que levei semanas editando. Ficou perfeito, super recomendo."</p>
+                        <p class="font-black text-brand text-lg">- Ana Clara</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-3xl shadow-md border border-gray-100 hover:shadow-lg transition">
+                        <div class="flex text-yellow-400 mb-4 text-2xl">★★★★★</div>
+                        <p class="text-gray-700 italic mb-6 text-lg">"A qualidade das transições e o áudio no fundo deram um toque de cinema. Vale cada centavo!"</p>
+                        <p class="font-black text-brand text-lg">- Lucas e Carol</p>
+                    </div>
                 </div>
-                <div class="bg-white p-8 rounded-3xl shadow-md border border-gray-50">
-                    <div class="flex text-yellow-400 mb-4 text-xl">★★★★★</div>
-                    <p class="text-gray-700 italic mb-6">"Eu não tinha muito tempo, mas o resultado parece que levei semanas editando. Ficou perfeito, super recomendo."</p>
-                    <p class="font-extrabold text-brand">- Ana Clara</p>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 3: Passos -->
+        <section id="como-funciona" class="py-20 bg-white border-t border-gray-100">
+            <div class="max-w-7xl mx-auto px-4">
+                <h2 class="text-4xl md:text-5xl font-black tracking-tight text-center text-gray-900 mb-16">Crie um presente inesquecível em 4 passos simples</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <div class="bg-gray-50 p-8 rounded-3xl shadow-sm text-center border border-gray-100">
+                        <div class="w-14 h-14 bg-brand text-white rounded-full flex items-center justify-center text-2xl font-black mx-auto mb-6 shadow-md shadow-brand/30">1</div>
+                        <h3 class="font-black text-xl mb-3 text-gray-900 tracking-tight">Fale de você</h3>
+                        <p class="text-gray-600 font-medium">Seus dados básicos para personalizarmos a experiência.</p>
+                    </div>
+                    <div class="bg-gray-50 p-8 rounded-3xl shadow-sm text-center border border-gray-100">
+                        <div class="w-14 h-14 bg-brand text-white rounded-full flex items-center justify-center text-2xl font-black mx-auto mb-6 shadow-md shadow-brand/30">2</div>
+                        <h3 class="font-black text-xl mb-3 text-gray-900 tracking-tight">Sobre ela</h3>
+                        <p class="text-gray-600 font-medium">Responda perguntas rápidas sobre a história de vocês.</p>
+                    </div>
+                    <div class="bg-gray-50 p-8 rounded-3xl shadow-sm text-center border border-gray-100">
+                        <div class="w-14 h-14 bg-brand text-white rounded-full flex items-center justify-center text-2xl font-black mx-auto mb-6 shadow-md shadow-brand/30">3</div>
+                        <h3 class="font-black text-xl mb-3 text-gray-900 tracking-tight">Envie as Fotos</h3>
+                        <p class="text-gray-600 font-medium">Escolha 5 momentos especiais que marcaram a vida de vocês.</p>
+                    </div>
+                    <div class="bg-gray-50 p-8 rounded-3xl shadow-sm text-center border border-gray-100">
+                        <div class="w-14 h-14 bg-brand text-white rounded-full flex items-center justify-center text-2xl font-black mx-auto mb-6 shadow-md shadow-brand/30">4</div>
+                        <h3 class="font-black text-xl mb-3 text-gray-900 tracking-tight">Pronto!</h3>
+                        <p class="text-gray-600 font-medium">Nossa IA cria o vídeo emocionante instantaneamente.</p>
+                    </div>
                 </div>
-                <div class="bg-white p-8 rounded-3xl shadow-md border border-gray-50">
-                    <div class="flex text-yellow-400 mb-4 text-xl">★★★★★</div>
-                    <p class="text-gray-700 italic mb-6">"A qualidade das transições e o áudio no fundo deram um toque de cinema. Vale cada centavo!"</p>
-                    <p class="font-extrabold text-brand">- Lucas e Carol</p>
-                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 4: CTA Footer -->
+        <section class="bg-purple-900 py-20 text-center px-4 relative overflow-hidden border-t-8 border-brand">
+            <div class="max-w-3xl mx-auto relative z-10">
+                <h2 class="text-4xl md:text-5xl font-black tracking-tight text-white mb-8 drop-shadow-md">Declare seu amor para sempre</h2>
+                <button onclick="openGenerator()" class="bg-white text-purple-900 hover:bg-gray-100 px-10 py-5 rounded-full font-black text-xl md:text-2xl transition shadow-2xl mx-auto transform hover:scale-105 duration-300">
+                    Criar Meu Presente Agora
+                </button>
             </div>
         </section>
     </main>
@@ -216,12 +236,12 @@
             <!-- Header Progress -->
             <div class="p-6 pb-2 border-b border-gray-100 flex justify-between items-center">
                 <button onclick="closeModal('modal-generator')" class="text-gray-400 hover:text-gray-800 text-2xl font-bold">&times;</button>
-                <div class="text-brand font-bold text-sm bg-brand/10 px-3 py-1 rounded-full">Passo <span id="step-counter">1</span>/6</div>
+                <div class="text-brand font-black text-sm bg-brand/10 px-4 py-1 rounded-full tracking-wide">Passo <span id="step-counter">1</span>/6</div>
             </div>
             
             <!-- Progress Bar Line -->
-            <div class="w-full bg-gray-100 h-1">
-                <div id="step-progress-bar" class="bg-brand h-1 transition-all duration-300 w-1/6"></div>
+            <div class="w-full bg-gray-100 h-1.5">
+                <div id="step-progress-bar" class="bg-brand h-1.5 transition-all duration-300 w-1/6"></div>
             </div>
 
             <!-- Scrollable Content Area -->
@@ -229,21 +249,21 @@
                 
                 <!-- Passo 1 -->
                 <div id="step-1" class="step-content">
-                    <h3 class="text-2xl font-extrabold text-gray-900 mb-6">Olá! Vamos começar com quem você é.</h3>
+                    <h3 class="text-2xl font-black tracking-tight text-gray-900 mb-6">Olá! Vamos começar com quem você é.</h3>
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-1">SEU NOME</label>
+                            <label class="block text-sm font-extrabold text-gray-700 mb-1 tracking-wide">SEU NOME</label>
                             <input type="text" id="u-name" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold text-gray-800" placeholder="Ex: Lucas">
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-1">SEU GÊNERO (Para o áudio)</label>
+                            <label class="block text-sm font-extrabold text-gray-700 mb-1 tracking-wide">SEU GÊNERO (Para o áudio)</label>
                             <div class="flex gap-4">
                                 <button onclick="setGender('masculino')" id="btn-gender-m" class="flex-1 py-3 border-2 border-gray-200 rounded-2xl font-bold text-gray-600 hover:border-brand transition">👨 Masculino</button>
                                 <button onclick="setGender('feminino')" id="btn-gender-f" class="flex-1 py-3 border-2 border-gray-200 rounded-2xl font-bold text-gray-600 hover:border-brand transition">👩 Feminino</button>
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-1">SEU WHATSAPP</label>
+                            <label class="block text-sm font-extrabold text-gray-700 mb-1 tracking-wide">SEU WHATSAPP</label>
                             <input type="tel" id="u-phone" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold text-gray-800" placeholder="(11) 99999-9999">
                         </div>
                     </div>
@@ -251,18 +271,18 @@
 
                 <!-- Passo 2 -->
                 <div id="step-2" class="step-content hidden">
-                    <h3 class="text-2xl font-extrabold text-gray-900 mb-6">Agora fala de quem mais importa.</h3>
+                    <h3 class="text-2xl font-black tracking-tight text-gray-900 mb-6">Agora fala de quem mais importa.</h3>
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-1">NOME DA SUA MÃE</label>
+                            <label class="block text-sm font-extrabold text-gray-700 mb-1 tracking-wide">NOME DA SUA MÃE</label>
                             <input type="text" id="m-name" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold" placeholder="Ex: Maria">
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-1">APELIDO CARINHOSO</label>
+                            <label class="block text-sm font-extrabold text-gray-700 mb-1 tracking-wide">APELIDO CARINHOSO</label>
                             <input type="text" id="m-nickname" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold" placeholder="Ex: Rainha">
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-1">ANOS DE HISTÓRIA JUNTOS</label>
+                            <label class="block text-sm font-extrabold text-gray-700 mb-1 tracking-wide">ANOS DE HISTÓRIA JUNTOS</label>
                             <input type="number" id="m-years" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold" placeholder="Sua idade">
                         </div>
                     </div>
@@ -270,18 +290,18 @@
 
                 <!-- Passo 3 -->
                 <div id="step-3" class="step-content hidden">
-                    <h3 class="text-2xl font-extrabold text-gray-900 mb-6">Os detalhes que fazem você sorrir.</h3>
+                    <h3 class="text-2xl font-black tracking-tight text-gray-900 mb-6">Os detalhes que fazem você sorrir.</h3>
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-1">FRASE QUE ELA SEMPRE DIZ</label>
+                            <label class="block text-sm font-extrabold text-gray-700 mb-1 tracking-wide">FRASE QUE ELA SEMPRE DIZ</label>
                             <input type="text" id="m-phrase" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold" placeholder="Ex: Leva o casaco!">
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-1">MELHOR COMIDA QUE ELA FAZ</label>
+                            <label class="block text-sm font-extrabold text-gray-700 mb-1 tracking-wide">MELHOR COMIDA QUE ELA FAZ</label>
                             <input type="text" id="m-food" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold" placeholder="Ex: Lasanha de domingo">
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-1">MELHOR MOMENTO COM ELA</label>
+                            <label class="block text-sm font-extrabold text-gray-700 mb-1 tracking-wide">MELHOR MOMENTO COM ELA</label>
                             <input type="text" id="m-moment" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold" placeholder="Ex: Nossa viagem para a praia">
                         </div>
                     </div>
@@ -289,18 +309,18 @@
 
                 <!-- Passo 4 -->
                 <div id="step-4" class="step-content hidden">
-                    <h3 class="text-2xl font-extrabold text-gray-900 mb-6">Os traços que a fazem especial.</h3>
+                    <h3 class="text-2xl font-black tracking-tight text-gray-900 mb-6">Os traços que a fazem especial.</h3>
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-1">HOBBIES QUE ELA AMA</label>
+                            <label class="block text-sm font-extrabold text-gray-700 mb-1 tracking-wide">HOBBIES QUE ELA AMA</label>
                             <input type="text" id="m-hobby" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold" placeholder="Ex: Cuidar das plantas">
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-1">TRADIÇÕES FAMILIARES</label>
+                            <label class="block text-sm font-extrabold text-gray-700 mb-1 tracking-wide">TRADIÇÕES FAMILIARES</label>
                             <input type="text" id="m-tradition" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold" placeholder="Ex: Almoço em família">
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-1">QUALIDADES QUE ADMIRA</label>
+                            <label class="block text-sm font-extrabold text-gray-700 mb-1 tracking-wide">QUALIDADES QUE ADMIRA</label>
                             <input type="text" id="m-quality" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold" placeholder="Ex: Guerreira e carinhosa">
                         </div>
                     </div>
@@ -308,46 +328,46 @@
 
                 <!-- Passo 5 (Uploads) -->
                 <div id="step-5" class="step-content hidden">
-                    <h3 class="text-2xl font-extrabold text-gray-900 mb-6">Agora as fotos que contam a história.</h3>
+                    <h3 class="text-2xl font-black tracking-tight text-gray-900 mb-6">Agora as fotos que contam a história.</h3>
                     <div class="grid grid-cols-2 gap-4">
                         
                         <!-- Box 1 -->
                         <div class="relative w-full aspect-square border-2 border-dashed border-gray-300 rounded-2xl overflow-hidden bg-gray-50 flex flex-col items-center justify-center hover:bg-gray-100 transition cursor-pointer" onclick="document.getElementById('img-infancia').click()">
                             <div id="preview-infancia" class="absolute inset-0 bg-cover-center opacity-0 transition-opacity"></div>
-                            <span class="text-2xl relative z-10">👶</span>
-                            <span class="text-xs font-bold text-gray-500 mt-2 relative z-10">Infância</span>
+                            <span class="text-3xl relative z-10">👶</span>
+                            <span class="text-xs font-extrabold text-gray-600 mt-2 relative z-10 uppercase tracking-wide">Infância</span>
                             <input type="file" id="img-infancia" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'infancia')">
                         </div>
 
                         <!-- Box 2 -->
                         <div class="relative w-full aspect-square border-2 border-dashed border-gray-300 rounded-2xl overflow-hidden bg-gray-50 flex flex-col items-center justify-center hover:bg-gray-100 transition cursor-pointer" onclick="document.getElementById('img-familia').click()">
                             <div id="preview-familia" class="absolute inset-0 bg-cover-center opacity-0 transition-opacity"></div>
-                            <span class="text-2xl relative z-10">👨‍👩‍👦</span>
-                            <span class="text-xs font-bold text-gray-500 mt-2 relative z-10">Família</span>
+                            <span class="text-3xl relative z-10">👨‍👩‍👦</span>
+                            <span class="text-xs font-extrabold text-gray-600 mt-2 relative z-10 uppercase tracking-wide">Família</span>
                             <input type="file" id="img-familia" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'familia')">
                         </div>
 
                         <!-- Box 3 -->
                         <div class="relative w-full aspect-square border-2 border-dashed border-gray-300 rounded-2xl overflow-hidden bg-gray-50 flex flex-col items-center justify-center hover:bg-gray-100 transition cursor-pointer" onclick="document.getElementById('img-recente').click()">
                             <div id="preview-recente" class="absolute inset-0 bg-cover-center opacity-0 transition-opacity"></div>
-                            <span class="text-2xl relative z-10">📸</span>
-                            <span class="text-xs font-bold text-gray-500 mt-2 relative z-10">Recente</span>
+                            <span class="text-3xl relative z-10">📸</span>
+                            <span class="text-xs font-extrabold text-gray-600 mt-2 relative z-10 uppercase tracking-wide">Recente</span>
                             <input type="file" id="img-recente" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'recente')">
                         </div>
 
                         <!-- Box 4 -->
                         <div class="relative w-full aspect-square border-2 border-dashed border-gray-300 rounded-2xl overflow-hidden bg-gray-50 flex flex-col items-center justify-center hover:bg-gray-100 transition cursor-pointer" onclick="document.getElementById('img-engracada').click()">
                             <div id="preview-engracada" class="absolute inset-0 bg-cover-center opacity-0 transition-opacity"></div>
-                            <span class="text-2xl relative z-10">😂</span>
-                            <span class="text-xs font-bold text-gray-500 mt-2 relative z-10">Engraçada</span>
+                            <span class="text-3xl relative z-10">😂</span>
+                            <span class="text-xs font-extrabold text-gray-600 mt-2 relative z-10 uppercase tracking-wide">Engraçada</span>
                             <input type="file" id="img-engracada" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'engracada')">
                         </div>
 
                         <!-- Box 5 -->
-                        <div class="relative w-full col-span-2 h-24 border-2 border-dashed border-gray-300 rounded-2xl overflow-hidden bg-gray-50 flex flex-col items-center justify-center hover:bg-gray-100 transition cursor-pointer" onclick="document.getElementById('img-especial').click()">
+                        <div class="relative w-full col-span-2 h-28 border-2 border-dashed border-gray-300 rounded-2xl overflow-hidden bg-gray-50 flex flex-col items-center justify-center hover:bg-gray-100 transition cursor-pointer" onclick="document.getElementById('img-especial').click()">
                             <div id="preview-especial" class="absolute inset-0 bg-cover-center opacity-0 transition-opacity"></div>
-                            <span class="text-2xl relative z-10">✨</span>
-                            <span class="text-xs font-bold text-gray-500 mt-1 relative z-10">Especial</span>
+                            <span class="text-3xl relative z-10">✨</span>
+                            <span class="text-xs font-extrabold text-gray-600 mt-1 relative z-10 uppercase tracking-wide">Especial</span>
                             <input type="file" id="img-especial" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'especial')">
                         </div>
                     </div>
@@ -355,10 +375,10 @@
 
                 <!-- Passo 6 -->
                 <div id="step-6" class="step-content hidden">
-                    <h3 class="text-2xl font-extrabold text-gray-900 mb-6">Uma mensagem do coração.</h3>
+                    <h3 class="text-2xl font-black tracking-tight text-gray-900 mb-6">Uma mensagem do coração.</h3>
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-1">MENSAGEM FINAL (Opcional)</label>
+                            <label class="block text-sm font-extrabold text-gray-700 mb-1 tracking-wide">MENSAGEM FINAL (Opcional)</label>
                             <textarea id="m-message" rows="5" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold text-gray-800" placeholder="Escreva algo lindo para ela..."></textarea>
                         </div>
                     </div>
@@ -368,9 +388,9 @@
 
             <!-- Footer Buttons -->
             <div class="p-6 border-t border-gray-100 flex justify-between gap-4">
-                <button id="btn-prev" onclick="prevStep()" class="hidden px-6 py-4 rounded-2xl font-bold text-gray-500 hover:bg-gray-100 transition">Voltar</button>
-                <button id="btn-next" onclick="nextStep()" class="flex-1 bg-brand text-white px-6 py-4 rounded-2xl font-extrabold text-lg shadow-lg hover:bg-brand-dark transition">Continuar &rarr;</button>
-                <button id="btn-finish" onclick="generateStory()" class="hidden flex-1 bg-brand text-white px-6 py-4 rounded-2xl font-extrabold text-lg shadow-lg hover:bg-brand-dark transition">🎁 Gerar Retrospectiva</button>
+                <button id="btn-prev" onclick="prevStep()" class="hidden px-6 py-4 rounded-2xl font-extrabold text-gray-500 hover:bg-gray-100 transition">Voltar</button>
+                <button id="btn-next" onclick="nextStep()" class="flex-1 bg-brand text-white px-6 py-4 rounded-2xl font-black text-lg shadow-lg hover:bg-brand-dark transition">Continuar &rarr;</button>
+                <button id="btn-finish" onclick="generateStory()" class="hidden flex-1 bg-brand text-white px-6 py-4 rounded-2xl font-black text-lg shadow-lg hover:bg-brand-dark transition">🎁 Gerar Retrospectiva</button>
             </div>
         </div>
     </div>
@@ -380,7 +400,7 @@
          ========================================== -->
     <div id="screen-loading" class="fixed inset-0 z-[60] bg-gray-900 flex flex-col items-center justify-center hidden">
         <div class="heart-loader mb-12"></div>
-        <h2 class="text-white text-2xl font-extrabold mt-8 animate-pulse text-center px-4">Preparando algo especial...</h2>
+        <h2 class="text-white text-3xl font-black tracking-tight mt-8 animate-pulse text-center px-4">Preparando algo especial...</h2>
     </div>
 
     <!-- ==========================================
@@ -402,13 +422,13 @@
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/50"></div>
                 
                 <div class="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
-                    <h2 id="story-text" class="text-white text-3xl font-extrabold drop-shadow-lg leading-tight transition-opacity duration-300"></h2>
+                    <h2 id="story-text" class="text-white text-3xl font-black tracking-tight drop-shadow-lg leading-tight transition-opacity duration-300"></h2>
                 </div>
             </div>
 
             <!-- CTA Flutuante -->
             <div class="absolute bottom-8 left-0 w-full px-6 z-30">
-                <button onclick="openCheckout()" class="w-full bg-brand text-white py-4 rounded-full font-extrabold text-lg shadow-[0_0_20px_rgba(109,40,217,0.6)] animate-bounce">
+                <button onclick="openCheckout()" class="w-full bg-brand text-white py-4 rounded-full font-black text-lg shadow-[0_0_20px_rgba(109,40,217,0.6)] animate-bounce">
                     Desbloquear Retrospectiva Completa
                 </button>
             </div>
@@ -421,10 +441,10 @@
     <div id="modal-checkout" class="fixed inset-0 z-[80] bg-gray-900/90 backdrop-blur-md hidden flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-xl rounded-3xl shadow-2xl p-6 relative max-h-[95vh] overflow-y-auto no-scrollbar">
             
-            <button onclick="closeModal('modal-checkout')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 text-2xl font-bold">&times;</button>
+            <button onclick="closeModal('modal-checkout')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 text-3xl font-bold">&times;</button>
             
             <div class="text-center mb-8">
-                <h2 class="text-3xl font-black text-gray-900 mb-2">Quase lá!</h2>
+                <h2 class="text-3xl font-black tracking-tight text-gray-900 mb-2">Quase lá!</h2>
                 <p class="text-gray-500 font-semibold">Escolha o plano para baixar e compartilhar o vídeo em alta qualidade.</p>
             </div>
 
@@ -432,17 +452,17 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <!-- Plano Comum (Interceptado pelo Downsell) -->
                 <div id="plan-14" onclick="selectPlan14()" class="border-2 border-gray-200 rounded-3xl p-6 cursor-pointer hover:border-brand transition bg-gray-50 relative group">
-                    <h3 class="font-bold text-gray-800 text-lg mb-1">Completo</h3>
-                    <p class="text-sm text-gray-500 mb-4">Acesso por 30 dias</p>
-                    <div class="text-2xl font-black text-gray-900">R$ 14,90</div>
+                    <h3 class="font-extrabold text-gray-800 text-lg mb-1 tracking-tight">Completo</h3>
+                    <p class="text-sm text-gray-500 mb-4 font-medium">Acesso por 30 dias</p>
+                    <div class="text-3xl font-black text-gray-900 tracking-tight">R$ 14,90</div>
                 </div>
 
                 <!-- Plano Vitalício -->
                 <div id="plan-27" onclick="selectPlan27()" class="border-2 border-gray-200 rounded-3xl p-6 cursor-pointer hover:border-brand transition bg-gray-50 relative">
-                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider whitespace-nowrap">Mais Escolhido</div>
-                    <h3 class="font-bold text-gray-800 text-lg mb-1">Vitalício</h3>
-                    <p class="text-sm text-gray-500 mb-4">Acesso para sempre + Download</p>
-                    <div class="text-2xl font-black text-gray-900">R$ 27,90</div>
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest whitespace-nowrap shadow-md">Mais Escolhido</div>
+                    <h3 class="font-extrabold text-gray-800 text-lg mb-1 tracking-tight">Vitalício</h3>
+                    <p class="text-sm text-gray-500 mb-4 font-medium">Acesso para sempre + Download</p>
+                    <div class="text-3xl font-black text-gray-900 tracking-tight">R$ 27,90</div>
                 </div>
             </div>
 
@@ -450,26 +470,26 @@
             <div id="payment-area" class="hidden border-t border-gray-100 pt-6">
                 
                 <div class="mb-6">
-                    <label class="block text-sm font-bold text-gray-700 mb-1">E-MAIL PARA RECEBER O VÍDEO</label>
+                    <label class="block text-sm font-extrabold text-gray-700 mb-1 tracking-wide">E-MAIL PARA RECEBER O VÍDEO</label>
                     <input type="email" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold text-gray-800" placeholder="seu@email.com">
                 </div>
 
                 <!-- Tabs de Pagamento -->
                 <div class="flex gap-2 mb-6 bg-gray-100 p-1 rounded-2xl">
-                    <button onclick="setPaymentTab('pix')" id="tab-pix" class="flex-1 py-3 bg-white shadow-sm rounded-xl font-bold text-gray-900 text-sm">PIX</button>
-                    <button onclick="setPaymentTab('card')" id="tab-card" class="flex-1 py-3 rounded-xl font-bold text-gray-500 text-sm hover:text-gray-900">CARTÃO</button>
+                    <button onclick="setPaymentTab('pix')" id="tab-pix" class="flex-1 py-3 bg-white shadow-sm rounded-xl font-black text-gray-900 text-sm tracking-wide">PIX</button>
+                    <button onclick="setPaymentTab('card')" id="tab-card" class="flex-1 py-3 rounded-xl font-black text-gray-500 text-sm tracking-wide hover:text-gray-900">CARTÃO</button>
                 </div>
 
                 <!-- PIX Box -->
                 <div id="box-pix" class="bg-green-50 border border-green-200 rounded-2xl p-6 text-center">
-                    <h4 class="font-extrabold text-green-800 mb-2">Pague via PIX Copia e Cola</h4>
-                    <p class="text-sm text-green-700 mb-4">Liberação imediata!</p>
+                    <h4 class="font-black text-green-800 mb-2 tracking-tight text-lg">Pague via PIX Copia e Cola</h4>
+                    <p class="text-sm text-green-700 mb-4 font-semibold">Liberação imediata!</p>
                     <div class="w-40 h-40 mx-auto bg-white border border-green-200 rounded-xl mb-4 flex items-center justify-center p-2">
                         <!-- Placeholder QR Code genérico usando CSS/SVG simples -->
                         <svg width="100%" height="100%" viewBox="0 0 100 100"><rect width="100" height="100" fill="#fff"/><path d="M10,10 h20 v20 h-20 z M40,10 h50 v10 h-50 z M10,40 h20 v20 h-20 z M40,40 h20 v50 h-20 z M70,40 h20 v20 h-20 z M10,70 h20 v20 h-20 z M70,70 h20 v20 h-20 z M15,15 h10 v10 h-10 z M15,45 h10 v10 h-10 z M15,75 h10 v10 h-10 z M75,45 h10 v10 h-10 z M75,75 h10 v10 h-10 z" fill="#166534"/></svg>
                     </div>
-                    <div class="font-black text-2xl text-green-900 mb-4" id="pix-price-display">R$ 0,00</div>
-                    <button class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl transition">Copiar Código PIX</button>
+                    <div class="font-black text-3xl text-green-900 mb-4 tracking-tight" id="pix-price-display">R$ 0,00</div>
+                    <button class="w-full bg-green-600 hover:bg-green-700 text-white font-black py-4 rounded-xl transition text-lg shadow-md shadow-green-600/30">Copiar Código PIX</button>
                 </div>
 
                 <!-- Card Box -->
@@ -487,7 +507,7 @@
                     <div>
                         <input type="text" placeholder="CPF do Titular" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold">
                     </div>
-                    <button class="w-full bg-brand text-white font-extrabold py-4 rounded-2xl mt-2 text-lg">Pagar <span id="card-price-display">R$ 0,00</span></button>
+                    <button class="w-full bg-brand text-white font-black py-4 rounded-2xl mt-2 text-lg shadow-lg hover:bg-brand-dark transition">Pagar <span id="card-price-display">R$ 0,00</span></button>
                 </div>
 
             </div>
@@ -499,15 +519,15 @@
          ========================================== -->
     <div id="modal-downsell" class="fixed inset-0 z-[90] bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl p-8 text-center relative border-4 border-brand">
-            <div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-yellow-400 text-yellow-900 font-extrabold px-4 py-2 rounded-full text-sm shadow-md">
+            <div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-yellow-400 text-yellow-900 font-black px-6 py-2 rounded-full text-sm shadow-md tracking-wide whitespace-nowrap">
                 ⭐ OFERTA ESPECIAL SÓ AGORA
             </div>
             
-            <h3 class="text-2xl font-black text-gray-900 mt-4 mb-4">Não perca suas memórias!</h3>
-            <p class="text-gray-600 font-medium mb-6">Por apenas mais <strong class="text-brand text-xl">R$ 5,00</strong>, você leva o <span class="font-bold">Acesso Vitalício + Download</span> por R$ 19,90.</p>
+            <h3 class="text-3xl font-black tracking-tight text-gray-900 mt-4 mb-4 leading-tight">Não perca suas memórias!</h3>
+            <p class="text-gray-600 font-semibold mb-8 text-lg">Por apenas mais <strong class="text-brand text-2xl font-black">R$ 5,00</strong>, você leva o <span class="font-bold underline">Acesso Vitalício + Download</span> por R$ 19,90.</p>
             
-            <div class="space-y-3 flex flex-col">
-                <button onclick="acceptDownsell()" class="w-full bg-brand hover:bg-brand-dark text-white font-extrabold py-4 rounded-2xl text-lg shadow-lg transition">
+            <div class="space-y-4 flex flex-col">
+                <button onclick="acceptDownsell()" class="w-full bg-brand hover:bg-brand-dark text-white font-black py-4 rounded-2xl text-lg shadow-lg transition transform hover:scale-105 duration-300">
                     Sim! Quero o Vitalício por R$ 19,90
                 </button>
                 <button onclick="rejectDownsell()" class="w-full text-gray-400 hover:text-gray-600 font-bold py-2 underline text-sm transition">
