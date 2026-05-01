@@ -1,7 +1,7 @@
 /**
  * ══════════════════════════════════════════════════════════
  *  PRESENTE DIGITAL PARA MAMÃE — script.js
- *  Versão Original Restaurada
+ *  Versão Premium Mobile-First (Stories Style)
  * ══════════════════════════════════════════════════════════
  */
 
@@ -29,6 +29,10 @@ const btnBack = document.getElementById('btn-back');
 const btnNext = document.getElementById('btn-next');
 const storiesContainer = document.getElementById('stories-container');
 const storiesProgressEl = document.getElementById('stories-progress');
+
+/* ════════════════════════════════════════════
+   1. LÓGICA DO FORMULÁRIO (WIZARD)
+   ════════════════════════════════════════════ */
 
 function updateFormUI() {
   const pct = (currentStep / TOTAL_STEPS) * 100;
@@ -61,15 +65,17 @@ function goToStep(targetStep) {
 }
 
 if (btnNext) {
-  btnNext.addEventListener('click', () => {
+  btnNext.addEventListener('click', (e) => {
+    if (e) e.preventDefault();
     if (!validateStep(currentStep)) return;
     if (currentStep < TOTAL_STEPS) goToStep(currentStep + 1);
-    else gerarRecordacao();
+    else gerarRecordacao(e);
   });
 }
 
 if (btnBack) {
-  btnBack.addEventListener('click', () => {
+  btnBack.addEventListener('click', (e) => {
+    if (e) e.preventDefault();
     if (currentStep > 1) goToStep(currentStep - 1);
   });
 }
@@ -108,27 +114,39 @@ function setupPhotoUploads() {
   });
 }
 
-/* ── MOTOR DA RETRO ── */
+/* ════════════════════════════════════════════
+   2. MOTOR DA RETROSPECTIVA (SLIDES TIKTOK STYLE)
+   ════════════════════════════════════════════ */
+
 let activeStoryIndex = 0;
 let storyTimer = null;
-const STORY_DURATION = 5000;
+const STORY_DURATION = 6000;
 
 function buildStoriesData() {
   const { momName, photos, yearsTogether, momPhrase, bestFood, bestMemory, hobbies, traditions, qualities, dedication } = state;
   return [
-    { title: `Para a melhor mãe: ${momName}`, subtitle: 'Uma história de amor...', image: photos[0], icon: '💝' },
-    { title: `${yearsTogether} anos incríveis`, subtitle: `Você sempre diz: "${momPhrase}"`, image: photos[1], icon: '✨' },
+    { title: `Para a melhor mãe: ${momName}`, subtitle: 'Uma história de amor que começou há muito tempo...', image: photos[0], icon: '💝' },
+    { title: `${yearsTogether} anos de momentos incríveis`, subtitle: `Você sempre diz: "${momPhrase}"`, image: photos[1], icon: '✨' },
     { title: 'O sabor da felicidade', subtitle: `Nada supera o seu ${bestFood}`, image: photos[2], icon: '🍽️' },
     { title: 'Nossa melhor memória', subtitle: bestMemory, image: photos[3], icon: '📸' },
-    { title: 'Você é única', subtitle: `Pelo seu jeito ${qualities}`, image: photos[4], icon: '🏡' },
+    { title: 'Você é única', subtitle: `Pelo seu jeito ${qualities}, por amar ${hobbies}`, image: photos[4], icon: '🏡' },
     { title: 'Minha gratidão eterna', subtitle: dedication, isFinal: true, icon: '✉️' }
   ];
 }
 
 function renderStories(data) {
+  if (!storiesContainer || !storiesProgressEl) return;
   storiesContainer.innerHTML = '';
   storiesProgressEl.innerHTML = '';
+  
   data.forEach((item, i) => {
+    // Progress bar segment
+    const seg = document.createElement('div');
+    seg.className = 'progress-segment';
+    seg.innerHTML = '<div class="progress-segment-fill"></div>';
+    storiesProgressEl.appendChild(seg);
+
+    // Story slide
     const story = document.createElement('div');
     story.className = 'story' + (i === 0 ? ' active' : '');
     story.innerHTML = `
@@ -136,34 +154,35 @@ function renderStories(data) {
       <div class="story-overlay"></div>
       <div class="story-content">
         <div class="story-icon-badge">${item.icon || '💝'}</div>
-        <h2>${item.title}</h2>
-        <p>${item.subtitle}</p>
+        <h2 class="story-title">${item.title}</h2>
+        <p class="story-text">${item.subtitle}</p>
+        ${item.isFinal && !state.unlocked ? '<div class="premium-lock"><span>Desbloqueie para ver completo</span></div>' : ''}
       </div>
     `;
     storiesContainer.appendChild(story);
-    const seg = document.createElement('div');
-    seg.className = 'progress-segment';
-    seg.innerHTML = '<div class="progress-segment-fill"></div>';
-    storiesProgressEl.appendChild(seg);
   });
 }
 
 function showStory(index) {
   const stories = document.querySelectorAll('.story');
   if (index < 0 || index >= stories.length) return;
+  
   clearTimeout(storyTimer);
   stories.forEach(s => s.classList.remove('active'));
   stories[index].classList.add('active');
   activeStoryIndex = index;
+  
   const fills = document.querySelectorAll('.progress-segment-fill');
   fills.forEach((f, i) => {
     f.style.transition = 'none';
     f.style.width = i < index ? '100%' : '0%';
   });
+  
   setTimeout(() => {
     fills[index].style.transition = `width ${STORY_DURATION}ms linear`;
     fills[index].style.width = '100%';
   }, 50);
+
   storyTimer = setTimeout(() => {
     if (activeStoryIndex < stories.length - 1) showStory(activeStoryIndex + 1);
     else if (!state.unlocked) abrirModal();
@@ -173,15 +192,55 @@ function showStory(index) {
 function initRetro() {
   activeStoryIndex = 0;
   showStory(0);
-  document.getElementById('touch-left').onclick = () => showStory(activeStoryIndex - 1);
-  document.getElementById('touch-right').onclick = () => showStory(activeStoryIndex + 1);
+  const left = document.getElementById('touch-left');
+  const right = document.getElementById('touch-right');
+  if (left) left.onclick = (e) => { e.stopPropagation(); showStory(activeStoryIndex - 1); };
+  if (right) right.onclick = (e) => { e.stopPropagation(); showStory(activeStoryIndex + 1); };
 }
 
-async function gerarRecordacao() {
-  collectFormData();
-  const btn = document.querySelector('.btn-next');
-  btn.disabled = true; btn.innerText = 'Salvando...';
+/* ════════════════════════════════════════════
+   3. GERAÇÃO E SALVAMENTO
+   ════════════════════════════════════════════ */
 
+async function gerarRecordacao(e) {
+  if (e) e.preventDefault();
+  collectFormData();
+  
+  const btn = document.querySelector('.btn-next');
+  if (btn) { btn.disabled = true; btn.innerText = 'Salvando surpresa...'; }
+
+  // Mostra a prévia imediatamente (Design Premium)
+  const storiesData = buildStoriesData();
+  renderStories(storiesData);
+  
+  const retro = document.getElementById('retro-section');
+  if (retro) {
+    retro.style.display = 'block';
+    retro.classList.remove('hidden');
+    // Força o estilo integrado mas em tela cheia mobile
+    retro.style.position = 'fixed';
+    retro.style.top = '0'; retro.style.left = '0';
+    retro.style.width = '100vw'; retro.style.height = '100vh';
+    retro.style.zIndex = '100000';
+    retro.style.background = '#000';
+  }
+  
+  document.body.style.overflow = 'hidden';
+  if (formSection) formSection.classList.add('hidden');
+  
+  initRetro();
+  
+  const audio = document.getElementById('bg-audio');
+  if (audio) {
+     audio.src = (state.gender === 'feminino') ? 'audio/mulher.mp3' : 'audio/homem.mp3';
+     audio.play().catch(() => {});
+  }
+
+  // Tenta salvar em background
+  salvarRetrospectiva().then(id => { if(id) state.retroId = id; });
+}
+
+async function salvarRetrospectiva() {
   try {
     const resp = await fetch('/api/salvar-retro', {
       method: 'POST',
@@ -189,79 +248,59 @@ async function gerarRecordacao() {
       body: JSON.stringify(state)
     });
     const res = await resp.json();
-    if (res.success) {
-      state.retroId = res.id;
-      renderStories(buildStoriesData());
-      document.getElementById('retro-section').style.display = 'block';
-      document.getElementById('retro-section').classList.remove('hidden');
-      initRetro();
-      const audio = document.getElementById('bg-audio');
-      audio.src = state.gender === 'feminino' ? 'audio/mulher.mp3' : 'audio/homem.mp3';
-      audio.play().catch(() => {});
-    } else {
-      mostrarToast('Erro ao salvar. Verifique sua conexão.');
-    }
-  } catch {
-    mostrarToast('Erro de conexão.');
-  } finally {
-    btn.disabled = false; btn.innerText = 'Gerar Retrospectiva';
-  }
+    return res.success ? res.id : null;
+  } catch { return null; }
 }
 
-/* ── AUXILIARES ── */
+/* ════════════════════════════════════════════
+   4. MODAIS E UTILITÁRIOS
+   ════════════════════════════════════════════ */
+
 function irParaForm() {
-  document.getElementById('form-section').classList.remove('hidden');
-  document.getElementById('hero').style.display = 'none';
+  if (formSection) formSection.classList.remove('hidden');
+  const hero = document.getElementById('hero');
+  if (hero) hero.style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function abrirModal() {
-  document.getElementById('overlay').classList.add('open');
+  const overlay = document.getElementById('overlay');
+  if (overlay) overlay.classList.add('open');
 }
 
 function fecharModal() {
-  document.getElementById('overlay').classList.remove('open');
+  const overlay = document.getElementById('overlay');
+  if (overlay) overlay.classList.remove('open');
 }
 
 function fecharRetro() {
-  document.getElementById('retro-section').style.display = 'none';
-  document.getElementById('bg-audio').pause();
+  const retro = document.getElementById('retro-section');
+  if (retro) retro.style.display = 'none';
+  document.body.style.overflow = '';
+  const audio = document.getElementById('bg-audio');
+  if (audio) audio.pause();
 }
 
 function mostrarToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
-}
-
-function initCountdown() {
-  const target = new Date('2026-05-11T00:00:00').getTime();
-  const el = document.getElementById('countdown-timer');
-  if (!el) return;
-  setInterval(() => {
-    const diff = target - new Date().getTime();
-    const d = Math.floor(diff / 86400000);
-    const h = Math.floor((diff % 86400000) / 3600000);
-    const m = Math.floor((diff % 3600000) / 60000);
-    const s = Math.floor((diff % 60000) / 1000);
-    el.textContent = `${d}d ${h}h ${m}m ${s}s`;
-  }, 1000);
+  if (t) {
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  initCountdown();
   setupPhotoUploads();
   updateFormUI();
 });
 
-// Globais
+// Vinculação Global
 window.irParaForm = irParaForm;
 window.abrirModal = abrirModal;
 window.fecharModal = fecharModal;
 window.fecharRetro = fecharRetro;
-window.gerarPix = () => { /* lógica original */ };
-window.selecionarPagamento = (m) => { /* lógica original */ };
-window.selecionarTier = (t, p) => { state.selectedTier = t; state.selectedPrice = p; };
+window.gerarRecordacao = gerarRecordacao;
 window.compartilhar = () => {
-  const link = `${window.location.origin}/retro/${state.retroId}`;
-  window.open(`https://wa.me/?text=${encodeURIComponent('💝 Presente: ' + link)}`);
+  const link = `${window.location.origin}/retro/${state.retroId || ''}`;
+  window.open(`https://wa.me/?text=${encodeURIComponent('💝 Preparei um presente especial para você: ' + link)}`);
 };
