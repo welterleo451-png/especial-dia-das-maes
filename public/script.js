@@ -1577,25 +1577,28 @@ function irParaForm() {
 document.addEventListener('DOMContentLoaded', () => {
   initCountdown();
 
-  // Modo de visualização da mãe
+  // Modo de visualização da mãe (Link Único)
   if (window.RETRO_DATA) {
-    console.log('Iniciando presente para a mãe...');
-    // Se a mãe está vendo, garantimos que os stories apareçam
+    console.log('Modo Mãe: Iniciando presente...');
+    // Esconde a landing page inteira
+    document.body.classList.add('retro-view-mode');
+    
     const storiesData = buildStoriesData();
     renderStories(storiesData);
     
-    // Inicia o áudio se estiver desbloqueado
+    // Se o link já está pago/desbloqueado
     if (state.unlocked) {
        const audio = document.getElementById('bg-audio');
        if (audio) {
          audio.src = (state.gender === 'feminino') ? 'audio/mulher.mp3' : 'audio/homem.mp3';
-         audio.play().catch(() => console.log('Autoplay bloqueado pela mãe'));
+         audio.play().catch(() => console.log('Autoplay bloqueado. Clique necessário.'));
        }
-       initRetro(); // Inicia o motor de stories
+       initRetro(); // Inicia o motor de stories (barra de progresso, timers)
     }
+    return;
   }
 
-  // Verifica se veio de um redirecionamento de sucesso de pagamento
+  // Se o usuário acabou de pagar e foi redirecionado
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.get('pagamento') === 'sucesso') {
     sucessoPagamento();
