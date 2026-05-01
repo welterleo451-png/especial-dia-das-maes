@@ -26,7 +26,74 @@ const state = {
 const TOTAL_STEPS = 6;
 let currentStep  = 1;
 
-// Referências DOM
+// Referências DOM Principais
+const landingPage      = document.getElementById('landing-page');
+const formSection      = document.getElementById('form-section');
+const mainHeader       = document.querySelector('.main-header');
+const topbar           = document.querySelector('.topbar');
+
+/**
+ * showForm()
+ * ──────────
+ * Transição da Landing Page para o Formulário de criação.
+ */
+function showForm() {
+  // Esconde elementos da landing
+  landingPage.classList.add('hidden');
+  mainHeader.classList.add('hidden');
+  topbar.classList.add('hidden');
+  
+  // Mostra o formulário
+  formSection.classList.remove('hidden');
+  
+  // Garante que começa no step 1
+  currentStep = 1;
+  updateFormUI();
+  
+  // Scroll para o topo
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/**
+ * startCountdown()
+ * ───────────────
+ * Inicia o contador regressivo para o Dia das Mães.
+ */
+function startCountdown() {
+  // Alvo: Segundo domingo de Maio de 2026 (10 de Maio)
+  const targetDate = new Date('May 10, 2026 00:00:00').getTime();
+
+  const update = () => {
+    const now = new Date().getTime();
+    const diff = targetDate - now;
+
+    if (diff <= 0) {
+      clearInterval(timerInterval);
+      return;
+    }
+
+    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+    const vals = document.querySelectorAll('.t-val');
+    if (vals.length >= 4) {
+      vals[0].textContent = d.toString().padStart(2, '0');
+      vals[1].textContent = h.toString().padStart(2, '0');
+      vals[2].textContent = m.toString().padStart(2, '0');
+      vals[3].textContent = s.toString().padStart(2, '0');
+    }
+  };
+
+  const timerInterval = setInterval(update, 1000);
+  update();
+}
+
+// Inicializa o countdown ao carregar
+document.addEventListener('DOMContentLoaded', startCountdown);
+
+// ── Referências DOM do formulário ──
 const progressFill    = document.getElementById('form-progress-fill');
 const stepCurrentEl   = document.getElementById('step-current');
 const btnBack         = document.getElementById('btn-back');
