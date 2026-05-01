@@ -179,7 +179,6 @@ function renderStories(data) {
     
     story.innerHTML = `
       <div class="story-bg" style="background-image: url('${item.image || ''}')"></div>
-      <div class="story-overlay"></div>
       <div class="story-content">
         <div class="story-icon-badge">${item.icon || '💝'}</div>
         <h2>${item.title}</h2>
@@ -248,14 +247,19 @@ async function gerarRecordacao(e) {
   // Mostra a prévia
   const storiesData = buildStoriesData();
   renderStories(storiesData);
-  
-  const retro = document.getElementById('retro-section');
-  if (retro) {
-    retro.style.display = 'block';
-    retro.classList.remove('hidden');
-    retro.style.position = 'fixed';
-    retro.style.top = '0'; retro.style.left = '0'; retro.style.zIndex = '999999';
-  }
+    // 4. Exibe a seção de retrospectiva em tela cheia
+    const retroSection = document.getElementById('retro-section');
+    if (retroSection) {
+      retroSection.style.display = 'block';
+      retroSection.classList.remove('hidden');
+      retroSection.style.position = 'fixed';
+      retroSection.style.top = '0'; 
+      retroSection.style.left = '0'; 
+      retroSection.style.width = '100vw';
+      retroSection.style.height = '100vh';
+      retroSection.style.background = '#000'; // FUNDO PRETO PARA CONTRASTE
+      retroSection.style.zIndex = '999999';
+    }
   
   document.body.classList.add('retro-view-mode');
   if (formSection) formSection.classList.add('hidden');
