@@ -217,21 +217,14 @@ async function gerarRecordacao(e) {
   if (retro) {
     retro.style.display = 'block';
     retro.classList.remove('hidden');
-    // Estética original: Overlay em tela cheia
-    retro.style.position = 'fixed';
-    retro.style.top = '0';
-    retro.style.left = '0';
-    retro.style.width = '100vw';
-    retro.style.height = '100vh';
-    retro.style.background = '#000';
-    retro.style.zIndex = '100000';
+    // REMOVIDO: position fixed e fundo preto. Voltando ao estilo original do vídeo.
+    retro.style.position = 'relative';
+    retro.style.zIndex = '1';
+    retro.style.background = 'transparent';
   }
   
-  document.body.style.overflow = 'hidden';
-  // NÃO escondemos mais o hero/formSection agressivamente para evitar o flash branco
-  
-  initRetro();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Rola até a prévia suavemente
+  if (retro) retro.scrollIntoView({ behavior: 'smooth' });
 
   const audio = document.getElementById('bg-audio');
   if (audio) {
