@@ -1,14 +1,20 @@
 /**
  * ══════════════════════════════════════════════════════════
  *  PRESENTE DIGITAL PARA MAMÃE — script.js
- *  CORREÇÃO FINAL: IGUAL AO VÍDEO (SEM BACKGROUND PRETO)
+ *  VERSÃO COMPLETA RESTAURADA + CORREÇÃO DE PRÉVIA
  * ══════════════════════════════════════════════════════════
  */
 
 'use strict';
 
 const state = {
+  gifterName: '', gender: '',
+  momName: '', momNickname: '', yearsTogether: 0,
+  momPhrase: '', bestFood: '', bestMemory: '',
+  hobbies: '', traditions: '', qualities: '',
   photos: [null, null, null, null, null],
+  dedication: '',
+  unlocked: false, selectedTier: 'complete', selectedPrice: 14.90,
   retroId: null,
 };
 
@@ -16,6 +22,7 @@ const TOTAL_STEPS = 6;
 let currentStep = 1;
 
 // Referências DOM
+const formSection = document.getElementById('form-section');
 const progressFill = document.getElementById('form-progress-fill');
 const stepCurrentEl = document.getElementById('step-current');
 const btnBack = document.getElementById('btn-back');
@@ -23,6 +30,32 @@ const btnNext = document.getElementById('btn-next');
 const storiesContainer = document.getElementById('stories-container');
 const storiesProgressEl = document.getElementById('stories-progress');
 
+/* ── 1. CONTAGEM REGRESSIVA ── */
+function initCountdown() {
+  const target = new Date('2026-05-11T00:00:00').getTime();
+  const el = document.getElementById('countdown-timer');
+  if (!el) return;
+  
+  const timer = setInterval(() => {
+    const now = new Date().getTime();
+    const diff = target - now;
+    
+    if (diff <= 0) {
+      clearInterval(timer);
+      el.textContent = "É hoje! Feliz Dia das Mães! 💝";
+      return;
+    }
+    
+    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const s = Math.floor((diff % (1000 * 60)) / 1000);
+    
+    el.textContent = `${d}d ${h}h ${m}m ${s}s`;
+  }, 1000);
+}
+
+/* ── 2. LÓGICA DO FORMULÁRIO ── */
 function updateFormUI() {
   const pct = (currentStep / TOTAL_STEPS) * 100;
   if (progressFill) progressFill.style.width = pct + '%';
@@ -31,6 +64,17 @@ function updateFormUI() {
   if (btnNext) {
     btnNext.textContent = currentStep === TOTAL_STEPS ? '🎁 Gerar Retrospectiva' : 'Continuar →';
   }
+}
+
+function validateStep(step) {
+  if (step === 1) {
+    const name = document.getElementById('gifter-name').value.trim();
+    const gender = document.querySelector('input[name="gender"]:checked');
+    if (!name || !gender) { mostrarToast('Preencha seu nome e gênero'); return false; }
+    state.gifterName = name;
+    state.gender = gender.value;
+  }
+  return true;
 }
 
 function goToStep(targetStep) {
@@ -45,6 +89,7 @@ function goToStep(targetStep) {
 if (btnNext) {
   btnNext.addEventListener('click', (e) => {
     if (e) e.preventDefault();
+    if (!validateStep(currentStep)) return;
     if (currentStep < TOTAL_STEPS) goToStep(currentStep + 1);
     else gerarRecordacao();
   });
@@ -77,6 +122,7 @@ function setupPhotoUploads() {
   });
 }
 
+/* ── 3. MOTOR DA RETROSPECTIVA (INTEGRADA) ── */
 let activeStoryIndex = 0;
 let storyTimer = null;
 const STORY_DURATION = 5000;
@@ -140,14 +186,10 @@ function showStory(index) {
 }
 
 function gerarRecordacao() {
-  // CRÍTICO: NÃO ADICIONAR .retro-view-mode AO BODY (Isso é o que deixa preto no vídeo)
-  
   renderStories();
   const retro = document.getElementById('retro-section');
   retro.classList.remove('hidden');
   retro.style.display = 'block';
-  
-  // Rola até a prévia (IGUAL AO VÍDEO)
   retro.scrollIntoView({ behavior: 'smooth' });
   
   activeStoryIndex = 0;
@@ -162,15 +204,36 @@ function gerarRecordacao() {
   audio.play().catch(() => {});
 }
 
+/* ── 4. UTILITÁRIOS E MODAIS ── */
+function irParaForm() {
+  const form = document.getElementById('form-section');
+  form.classList.remove('hidden');
+  document.getElementById('hero').style.display = 'none';
+  window.scrollTo({ top: form.offsetTop - 100, behavior: 'smooth' });
+}
+
 function abrirModal() { document.getElementById('overlay').classList.add('open'); }
 function fecharModal() { document.getElementById('overlay').classList.remove('open'); }
+function fecharRetro() { document.getElementById('retro-section').style.display = 'none'; }
+
+function mostrarToast(msg) {
+  const t = document.getElementById('toast');
+  if (t) {
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+}
 
 document.addEventListener('DOMContentLoaded', () => {
+  initCountdown();
   setupPhotoUploads();
   updateFormUI();
 });
 
+// Vinculação Global
+window.irParaForm = irParaForm;
 window.abrirModal = abrirModal;
 window.fecharModal = fecharModal;
+window.fecharRetro = fecharRetro;
 window.gerarRecordacao = gerarRecordacao;
-window.irParaForm = () => { document.getElementById('hero').style.display = 'none'; };
+window.compartilhar = () => { window.open(`https://wa.me/?text=${encodeURIComponent('💝 Presente Digital!')}`); };
