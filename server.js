@@ -54,41 +54,32 @@ function proxyUrl(driveUrl) {
   return id ? `/audio/${id}` : driveUrl;
 }
 
-// Lista todos os IDs autorizados dos packs
 function idsAutorizados() {
   return Object.values(PACKS).flatMap(p =>
     p.faixas.flatMap(f => [driveIdDaUrl(f.mp3Url), driveIdDaUrl(f.previaUrl)].filter(Boolean))
   );
 }
 
-// PROXY DE AUDIO — resolve CORS do Google Drive
 app.get('/audio/:fileId', async (req, res) => {
   const { fileId } = req.params;
-
   if (!idsAutorizados().includes(fileId)) {
     return res.status(403).json({ erro: 'Arquivo nao autorizado' });
   }
-
   try {
     const driveUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
     const range = req.headers.range;
     const hdrs = { 'User-Agent': 'Mozilla/5.0' };
     if (range) hdrs['Range'] = range;
-
-    // Segue todos os redirects do Drive automaticamente
     const r = await fetch(driveUrl, { headers: hdrs, follow: 10 });
-
     const ct = r.headers.get('content-type') || 'audio/mpeg';
     res.setHeader('Content-Type', ct);
     res.setHeader('Accept-Ranges', 'bytes');
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Cache-Control', 'public, max-age=3600');
-
     const cl = r.headers.get('content-length');
     if (cl) res.setHeader('Content-Length', cl);
     const cr = r.headers.get('content-range');
     if (cr) { res.setHeader('Content-Range', cr); res.status(206); }
-
     r.body.pipe(res);
   } catch (err) {
     console.error('Proxy erro:', err.message);
@@ -96,7 +87,6 @@ app.get('/audio/:fileId', async (req, res) => {
   }
 });
 
-// Serve a public key do MP para o frontend
 app.get('/api/mp-public-key', (_req, res) => {
   res.json({ publicKey: process.env.MP_PUBLIC_KEY || '' });
 });
@@ -168,20 +158,11 @@ app.post('/webhook/mercadopago', async (req, res) => {
     const p = await payment.get({ id: data.id });
     if (p.status === 'approved') {
       const packId = p.metadata?.pack_id;
-      const retroId = p.metadata?.retro_id; // ID da retro que salvamos antes do pagamento
-
-      if (packId) { 
-        pagamentosConfirmados.set(String(p.id), packId); 
-        console.log(`Pago: ${p.id} Pack: ${packId}`); 
-      }
-
+      const retroId = p.metadata?.retro_id;
+      if (packId) { pagamentosConfirmados.set(String(p.id), packId); }
       if (retroId) {
         const isLifetime = packId === 'lifetime' || packId === 'lifetime_downsell';
-        await supabase
-          .from('retrospectivas')
-          .update({ unlocked: true, is_vitalicio: isLifetime, tier: packId })
-          .eq('id', retroId);
-        console.log(`Retro Desbloqueada: ${retroId}`);
+        await supabase.from('retrospectivas').update({ unlocked: true, is_vitalicio: isLifetime, tier: packId }).eq('id', retroId);
       }
     }
   } catch (err) { console.error(err); }
@@ -215,95 +196,50 @@ app.post('/api/acesso', (req, res) => {
   });
 });
 
-// Rota para salvar dados da retrospectiva antes do pagamento
 app.post('/api/salvar-retro', async (req, res) => {
   try {
-    const { data, error } = await supabase
-      .from('retrospectivas')
-      .insert([req.body])
-      .select('id')
-      .single();
-
+    const { data, error } = await supabase.from('retrospectivas').insert([req.body]).select('id').single();
     if (error) throw error;
     res.json({ success: true, id: data.id });
-  } catch (err) {
-    console.error('Erro salvar retro:', err);
-    res.status(500).json({ success: false, erro: err.message });
-  }
+  } catch (err) { res.status(500).json({ success: false, erro: err.message }); }
 });
 
-// Rota para visualizar a retrospectiva via link da mãe
 app.get('/retro/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    const { data: retro, error } = await supabase
-      .from('retrospectivas')
-      .select('*')
-      .eq('id', id)
-      .single();
-
+    const { data: retro, error } = await supabase.from('retrospectivas').select('*').eq('id', id).single();
     if (error || !retro) return res.status(404).send('Retrospectiva não encontrada.');
-
-    // Verificar expiração se não for vitalício (1 ano)
     if (!retro.is_vitalicio && retro.unlocked) {
       const umAnoMs = 365 * 24 * 60 * 60 * 1000;
-      const dataCriacao = new Date(retro.created_at).getTime();
-      if (Date.now() - dataCriacao > umAnoMs) {
-        return res.status(403).send('Este presente expirou (duração de 1 ano). Para acesso permanente, adquira o plano Vitalício.');
-      }
+      if (Date.now() - new Date(retro.created_at).getTime() > umAnoMs) return res.status(403).send('Expirado.');
     }
-
-    // Serve o index.html mas com uma flag para carregar os dados do banco
-    // Injetamos um script pequeno para o frontend saber que é um modo de visualização
     let html = require('fs').readFileSync(__dirname + '/public/index.html', 'utf8');
     const injection = `<script>window.RETRO_DATA = ${JSON.stringify(retro)};</script>`;
-    html = html.replace('</head>', `${injection}</head>`);
-    res.send(html);
-
-  } catch (err) {
-    res.status(500).send('Erro ao carregar presente.');
-  }
+    res.send(html.replace('</head>', `${injection}</head>`));
+  } catch { res.status(500).send('Erro carregar.'); }
 });
 
-// Rota para gerar Pix no Mercado Pago (atualizada com metadata de retro_id)
 app.post('/api/gerar-pix', async (req, res) => {
   const { packId, email, retroId } = req.body;
   const pack = PACKS[packId];
   if (!pack) return res.status(400).json({ erro: 'Pack invalido' });
-  
   const baseUrl = (req.headers['x-forwarded-proto'] || req.protocol) + '://' + req.get('host');
-  
   try {
     const payment = new Payment(client);
     const r = await payment.create({ body: {
-      transaction_amount: pack.preco / 100,
-      description: pack.nome,
-      payment_method_id: 'pix',
+      transaction_amount: pack.preco / 100, description: pack.nome, payment_method_id: 'pix',
       payer: { email: email || 'cliente@site.com' },
       metadata: { pack_id: packId, retro_id: retroId },
       notification_url: `${baseUrl}/webhook/mercadopago`,
     }});
-    
-    const qrCodeText = r.point_of_interaction?.transaction_data?.qr_code;
-    const qrCodeBase64 = r.point_of_interaction?.transaction_data?.qr_code_base64;
-    
-    if (!qrCodeText) throw new Error('QR Code não gerado.');
-    
-    res.json({ paymentId: r.id, qrCodeText, qrCodeBase64 });
-  } catch (err) {
-    res.status(500).json({ erro: err.message });
-  }
+    res.json({ paymentId: r.id, qrCodeText: r.point_of_interaction?.transaction_data?.qr_code, qrCodeBase64: r.point_of_interaction?.transaction_data?.qr_code_base64 });
+  } catch (err) { res.status(500).json({ erro: err.message }); }
 });
-
-
-
 
 app.get('/sucesso', (req, res) => res.redirect(`/?pagamento=sucesso&pid=${req.query.payment_id}`));
 app.get('/falha',   (_req, res) => res.redirect('/?pagamento=falha'));
 app.get('/pendente',(_req, res) => res.redirect('/?pagamento=pendente'));
 
 app.listen(PORT, () => {
-  console.log(`\n🌸 Servidor rodando em http://localhost:${PORT}\n`);
+  console.log(`🌸 Servidor rodando em PORT: ${PORT}`);
 });
-/ /   F o r c e   B u i l d :   0 5 / 0 1 / 2 0 2 6   0 3 : 2 0 : 5 6  
- 
