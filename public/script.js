@@ -729,12 +729,11 @@ function showStory(index) {
   // Valida índice
   if (index < 0 || index >= total) return;
 
-  // Mostra paywall no segundo story (índice 2) se não estiver desbloqueado
-  if (index >= 2 && !state.unlocked) {
+  // Mostra paywall no slide 6 (índice 5) se não estiver desbloqueado
+  if (index >= 5 && !state.unlocked) {
     const audio = document.getElementById('bg-audio');
     if (audio) audio.pause();
     document.getElementById('retro-preview-overlay').classList.remove('hidden');
-    // Para de avançar e não muda o story
     return;
   }
 
@@ -813,10 +812,6 @@ function nextStory() {
   const total = storiesContainer.querySelectorAll('.story').length;
   let maxIndex = total - 1;
   
-  if (state.unlockedTier === 'basic') {
-    maxIndex = 2; // na versão básica só vai até o slide 3 (index 2)
-  }
-
   if (activeStoryIndex < maxIndex) {
     showStory(activeStoryIndex + 1);
   }
@@ -1088,12 +1083,6 @@ function selecionarPagamento(metodo) {
 }
 
 function selecionarTier(tier, price) {
-  // Se optar pelo de 14.90, disparar o Downsell antes de confirmar a seleção
-  if (tier === 'complete' && price === 14.90) {
-    mostrarDownsell();
-    return;
-  }
-
   state.selectedTier = tier;
   state.selectedPrice = price;
   
@@ -1151,7 +1140,7 @@ function recusarDownsell() {
   document.getElementById(`tier-complete`).classList.add('selected');
   
   const pixValDisplay = document.getElementById('pix-val-display');
-  if (pixValDisplay) pixValDisplay.textContent = 'R$ 14,90';
+  if (pixValDisplay) pixValDisplay.textContent = 'R$ 14.90';
 
   if (brickController) { brickController.unmount(); brickController = null; }
   if (metodoPagamento === 'cartao') renderizarBrickCartao();
@@ -1187,6 +1176,13 @@ async function renderizarBrickCartao() {
           if (loadingMsg) loadingMsg.remove();
         },
         onSubmit: async (cardFormData) => {
+          // DISPARAR DOWNSELL (Cartão): Se estiver no plano de 14.90 e ainda não viu a oferta
+          if (state.selectedTier === 'complete' && state.selectedPrice === 14.90 && !state.downsellShown) {
+            state.downsellShown = true;
+            mostrarDownsell();
+            return;
+          }
+
           try {
             mostrarToast('Processando pagamento...');
             const resp = await fetch('/api/processar-pagamento', {
@@ -1230,12 +1226,20 @@ function copiarCopiaECola() {
   navigator.clipboard.writeText(input.value).then(() => mostrarToast('Código Pix copiado!'));
 }
 
-async function gerarPixMP() {
+async function gerarPix() {
+  // GATILHO DE DOWNSELL: Intercepta o pagamento se for o plano de 14,90
+  if (state.selectedTier === 'complete' && state.selectedPrice === 14.90 && !state.downsellShown) {
+    state.downsellShown = true;
+    mostrarDownsell();
+    return;
+  }
+
   const email = document.getElementById('email-checkout').value;
   if (!email || !email.includes('@')) { mostrarToast('Preencha um e-mail válido.'); return; }
   
-  const btn = document.getElementById('btn-gerar-pix');
-  btn.textContent = 'Gerando...'; btn.disabled = true;
+  const btn = document.getElementById('btn-pix');
+  btn.disabled = true;
+  btn.textContent = 'Gerando Pix...'; btn.disabled = true;
   
   try {
     const resp = await fetch('/api/gerar-pix', {
@@ -1404,6 +1408,17 @@ function sucessoPagamento() {
   // Recriar os stories para atualizar os botões finais
   const stories = buildStoriesData();
   renderStories(stories);
+  
+  // Injetar botão de compartilhar flutuante para garantir que apareça
+  const shareBtnContainer = document.createElement('div');
+  shareBtnContainer.style.cssText = 'position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:9999; width:90%; max-width:400px;';
+  shareBtnContainer.innerHTML = `
+    <button onclick="compartilhar()" style="width:100%; padding:18px; background:#25D366; color:#fff; border-radius:50px; border:none; font-weight:bold; font-size:1.1rem; box-shadow:0 10px 25px rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center; gap:10px;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 .004 5.412 0 12.048c0 2.12.554 4.189 1.605 6.04L0 24l6.117-1.605a11.79 11.79 0 005.925 1.585h.005c6.637 0 12.046-5.412 12.05-12.048a11.825 11.825 0 00-3.576-8.514z"/></svg>
+      Enviar para o WhatsApp
+    </button>
+  `;
+  document.body.appendChild(shareBtnContainer);
   
   // Volta para onde parou para continuar assistindo
   showStory(activeStoryIndex);
