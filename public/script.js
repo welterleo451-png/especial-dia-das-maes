@@ -108,7 +108,8 @@ if (formCloseBtn) {
 }
 
 // ── Listener: botão Continuar / Gerar ──
-btnNext.addEventListener('click', () => {
+btnNext.addEventListener('click', (e) => {
+  if (e) e.preventDefault();
   if (!validateStep(currentStep)) return;
 
   if (currentStep < TOTAL_STEPS) {
@@ -116,7 +117,7 @@ btnNext.addEventListener('click', () => {
   } else {
     // Última etapa → coleta dados e inicia a retrospectiva
     collectFormData();
-    launchRetro();
+    gerarRecordacao(e); // FUNÇÃO CORRETA RESTAURADA
   }
 });
 
@@ -1572,6 +1573,81 @@ function irParaForm() {
   document.body.style.overflow = 'hidden';
   document.getElementById('step-1').scrollIntoView({ behavior: 'smooth' }); 
 }
+
+/**
+ * gerarRecordacao(e)
+ * ─────────────────
+ * Chamada ao final do formulário. Salva os dados e inicia a PRÉVIA.
+ */
+async function gerarRecordacao(e) {
+  if (e) e.preventDefault(); // MATA O REFRESH
+  
+  const btn = document.querySelector('.btn-submit');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerText = 'Gerando sua surpresa...';
+  }
+
+  try {
+    // 1. Salva no Supabase e pega o ID
+    const retroId = await salvarRetrospectiva();
+    if (!retroId) throw new Error('Falha ao salvar no banco');
+
+    // 2. Constrói os stories com os dados reais
+    const storiesData = buildStoriesData();
+    
+    // 3. Renderiza no container
+    renderStories(storiesData);
+    
+    // LIMPEZA TOTAL DA TELA
+    document.querySelector('.hero').style.display = 'none';
+    document.querySelector('.site-header').style.display = 'none';
+    if(document.querySelector('.how-it-works')) document.querySelector('.how-it-works').style.display = 'none';
+    if(document.querySelector('.cta-final')) document.querySelector('.cta-final').style.display = 'none';
+    document.querySelector('.site-footer').style.display = 'none';
+    
+    // 4. Exibe a seção de retrospectiva em tela cheia
+    const retroSection = document.getElementById('retro-section');
+    retroSection.style.display = 'block';
+    retroSection.classList.remove('hidden');
+    retroSection.style.position = 'fixed';
+    retroSection.style.top = '0';
+    retroSection.style.left = '0';
+    retroSection.style.zIndex = '999999';
+    
+    // 5. Esconde o resto do site e o formulário
+    document.body.classList.add('retro-view-mode');
+    formSection.classList.add('hidden');
+    
+    // 6. Inicia o motor da retrospectiva
+    initRetro();
+    
+    // 7. Rola para o topo e toca a música de prévia
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const audio = document.getElementById('bg-audio');
+    if (audio) {
+       audio.src = (state.gender === 'feminino') ? 'audio/mulher.mp3' : 'audio/homem.mp3';
+       audio.play().catch(() => {});
+    }
+
+    // 8. Abre o checkout após alguns segundos de "Uau"
+    setTimeout(() => {
+        abrirModal();
+    }, 15000);
+
+  } catch (error) {
+    console.error('Erro ao gerar:', error);
+    mostrarToast('Erro ao salvar. Verifique sua conexão.');
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerText = 'Gerar Recordação Especial';
+    }
+  }
+}
+
+// Expõe globalmente para o formulário
+window.gerarRecordacao = gerarRecordacao;
 
 // Inicializa tudo ao carregar
 document.addEventListener('DOMContentLoaded', () => {
