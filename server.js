@@ -285,9 +285,11 @@ app.post('/api/gerar-pix', async (req, res) => {
     }});
     
     const qrCodeText = r.point_of_interaction?.transaction_data?.qr_code;
+    const qrCodeBase64 = r.point_of_interaction?.transaction_data?.qr_code_base64;
+    
     if (!qrCodeText) throw new Error('QR Code não gerado.');
     
-    res.json({ paymentId: r.id, qrCodeText });
+    res.json({ paymentId: r.id, qrCodeText, qrCodeBase64 });
   } catch (err) {
     res.status(500).json({ erro: err.message });
   }
