@@ -1196,6 +1196,7 @@ async function renderizarBrickCartao() {
           const loadingMsg = container.querySelector('div[style*="text-align:center"]');
           if (loadingMsg) loadingMsg.remove();
         },
+        onSubmit: async (cardFormData) => {
           try {
             mostrarToast('Processando pagamento...');
             const resp = await fetch('/api/processar-pagamento', {
