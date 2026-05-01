@@ -654,13 +654,9 @@ function buildStoriesData() {
           </p>
           
           <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
-            <button class="btn-unlock" onclick="compartilhar()" style="background: #fff; color: #ff3cac; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
-              🔗 Compartilhar Presente
-            </button>
-            
-            ${state.unlockedTier === 'lifetime' ? `
+            ${state.unlockedTier === 'lifetime' || state.unlockedTier === 'lifetime_downsell' ? `
               <button class="btn-download-story" onclick="baixarTudo()">
-                📥 Baixar Fotos e Mensagem
+                📥 Baixar Recordação Vitalícia
               </button>
             ` : ''}
           </div>
@@ -1480,12 +1476,11 @@ function compartilhar() {
   // O link agora é a URL única da retrospectiva no banco
   const linkRetro = retroId ? `${siteUrl}/retro/${retroId}` : siteUrl;
   
-  const mensagem = `💝 *Presente Especial de Dia das Mães* 💝\n\n` +
+  const mensagem = `💝 *PARA A MELHOR MÃE DO MUNDO* 💝\n\n` +
     `Oi${momNickname ? ', ' + momNickname : ''}! 🌸\n\n` +
-    `O *${gifterName || 'seu filho(a)'}* preparou uma surpresa inesquecível para você!\n\n` +
-    `É uma retrospectiva cheia de amor, com fotos e momentos especiais que vocês viveram juntos. 📸✨\n\n` +
-    `Acesse agora e se emocione:\n${linkRetro}\n\n` +
-    `Feliz Dia das Mães! 💖🥰`;
+    `Eu preparei um presente muito especial para você! É uma retrospectiva com a nossa história e todo o meu amor em fotos e música. ✨\n\n` +
+    `Acesse agora para ver a sua surpresa:\n${linkRetro}\n\n` +
+    `Com amor, ${gifterName || 'seu filho(a)'} ❤️`;
 
   const urlWhatsApp = `https://wa.me/?text=${encodeURIComponent(mensagem)}`;
   window.open(urlWhatsApp, '_blank');
@@ -1572,16 +1567,32 @@ function initCountdown() {
   setInterval(update, 1000);
 }
 
+function irParaForm() { 
+  formSection.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('step-1').scrollIntoView({ behavior: 'smooth' }); 
+}
+
 // Inicializa tudo ao carregar
 document.addEventListener('DOMContentLoaded', () => {
   initCountdown();
 
   // Modo de visualização da mãe
-  if (window.RETRO_DATA && state.unlocked) {
+  if (window.RETRO_DATA) {
     console.log('Iniciando presente para a mãe...');
+    // Se a mãe está vendo, garantimos que os stories apareçam
     const storiesData = buildStoriesData();
     renderStories(storiesData);
-    return; // Não executa o resto se for modo de visualização
+    
+    // Inicia o áudio se estiver desbloqueado
+    if (state.unlocked) {
+       const audio = document.getElementById('bg-audio');
+       if (audio) {
+         audio.src = (state.gender === 'feminino') ? 'audio/mulher.mp3' : 'audio/homem.mp3';
+         audio.play().catch(() => console.log('Autoplay bloqueado pela mãe'));
+       }
+       initRetro(); // Inicia o motor de stories
+    }
   }
 
   // Verifica se veio de um redirecionamento de sucesso de pagamento
@@ -1590,58 +1601,3 @@ document.addEventListener('DOMContentLoaded', () => {
     sucessoPagamento();
   }
 });
-
-function irParaForm() { abrirForm(); document.getElementById('form-section').scrollIntoView({ behavior: 'smooth' }); }
-
-// ── FUNÇÕES DOWNSELL ──
-function mostrarDownsell() {
-  const overlay = document.getElementById('downsell-overlay');
-  if (overlay) overlay.style.display = 'flex';
-}
-
-function fecharDownsell() {
-  const overlay = document.getElementById('downsell-overlay');
-  if (overlay) overlay.style.display = 'none';
-}
-
-function recusarDownsell() {
-  fecharDownsell();
-  mostrarToast('Continuando com o plano básico...');
-  // O fluxo de pagamento continuará normalmente pois não retornamos na próxima tentativa
-}
-
-async function aceitarDownsell() {
-  fecharDownsell();
-  mostrarToast('Excelente escolha! Aplicando oferta...');
-  
-  // Atualiza estado para o downsell
-  state.selectedTier = 'lifetime_downsell';
-  state.selectedPrice = 19.90;
-  
-  // Atualiza visualmente o card selecionado
-  document.querySelectorAll('.tier-card').forEach(el => el.classList.remove('selected'));
-  const lifetimeCard = document.getElementById('tier-lifetime');
-  if (lifetimeCard) lifetimeCard.classList.add('selected');
-
-  // Atualiza o valor visual no Pix
-  const pixValDisplay = document.getElementById('pix-val-display');
-  if (pixValDisplay) pixValDisplay.textContent = 'R$ 19,90';
-  
-  // Se for cartão, precisamos remontar o brick com o novo valor
-  if (state.paymentMethod === 'card') {
-    if (brickController) {
-      await brickController.unmount();
-      brickController = null;
-    }
-    renderizarBrickCartao();
-    mostrarToast('Valor atualizado para R$ 19,90 no cartão!');
-  } else {
-    // Se for Pix, já gera o novo código direto SE o email já estiver preenchido
-    const email = document.getElementById('email-checkout').value;
-    if (email && email.includes('@')) {
-       gerarPix();
-    } else {
-       mostrarToast('Escolha o método de pagamento e informe seu e-mail.');
-    }
-  }
-}
