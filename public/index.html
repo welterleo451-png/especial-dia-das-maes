@@ -1,33 +1,34 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Especial Dia das Mães 💝 Presente Digital Personalizado</title>
-  <meta name="description" content="Crie um presente digital inesquecível para o Dia das Mães com fotos, música e retrospectiva animada." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://sdk.mercadopago.com/js/v2"></script>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- ══ TOP BAR ══ -->
-  <div class="topbar" id="topbar-countdown">
-    💜 +10.000 mães já choraram de emoção — faltam <strong><span id="countdown-timer">...</span></strong> para o Dia das Mães! 💜
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <span>✨ Surpreenda sua mãe com algo único este ano! <strong>Oferta Limitada</strong></span>
   </div>
 
-  <!-- ══ NAVBAR ══ -->
+  <!-- NAV -->
   <nav class="navbar">
     <div class="nav-container">
-      <a href="#" class="nav-logo">💝 <span>Especial Dia das Mães</span></a>
+      <a href="#" class="nav-logo">
+        <span>💝</span> Minha Mãe 2026
+      </a>
       <div class="nav-links">
-        <a href="#como-funciona">Como Funciona</a>
-        <a href="#recursos">Recursos</a>
-        <a href="#depoimentos">Depoimentos</a>
+        <a href="#how-it-works">Como funciona</a>
+        <a href="#features">Vantagens</a>
+        <a href="#testimonials">Depoimentos</a>
       </div>
-      <button onclick="irParaForm()" class="nav-cta">Criar Presente</button>
+      <a href="#form-section" class="nav-cta">Começar Agora</a>
     </div>
   </nav>
 
@@ -35,141 +36,173 @@
   <section class="hero" id="hero">
     <div class="hero-container">
       <div class="hero-text">
-        <span class="hero-badge">O presente que emociona, pronto em 5 minutos.</span>
-        <h1>Declare seu amor <em>para sempre.</em></h1>
-        <p>Crie um presente digital com fotos, música e uma retrospectiva animada. Pronto em 5 minutos.</p>
-        <button onclick="irParaForm()" class="btn-primary">Surpreenda sua mãe agora ↗</button>
+        <div class="hero-badge">🎁 Presente Exclusivo 2026</div>
+        <h1>Um presente que ela<br/><em>jamais vai esquecer.</em></h1>
+        <p>Crie uma retrospectiva digital personalizada com as melhores fotos e histórias da sua mãe. Uma homenagem emocionante em menos de 2 minutos.</p>
+        <div id="countdown" style="margin-bottom: 24px; font-weight: bold; color: #7c3aed;">
+          Faltam <span id="countdown-timer">--d --h --m --s</span> para o Dia das Mães
+        </div>
+        <button onclick="irParaForm()" class="btn-primary">Criar Presente Agora</button>
       </div>
       <div class="hero-visual">
         <div class="hero-phone">
           <div class="phone-screen">
-            <div class="phone-header">ESPECIAL DIA DAS MÃES</div>
-            <div class="phone-emoji">💖</div>
-            <div class="phone-title">Para a melhor mãe do mundo</div>
-            <div class="phone-subtitle">Uma retrospectiva especial</div>
+            <div class="phone-header">Preview Exclusivo</div>
+            <div class="phone-emoji">💝</div>
+            <div class="phone-title">Para: Minha Rainha</div>
+            <div class="phone-subtitle">Uma história de amor...</div>
           </div>
         </div>
         <div class="hero-stats-badge">
-          <span class="stats-icon">🎁</span>
-          <div><strong>+10.257</strong><br/>Presentes criados!</div>
-        </div>
-        <div class="hero-hearts">
-          <span class="float-heart h1">💜</span>
-          <span class="float-heart h2">💜</span>
-          <span class="float-heart h3">💜</span>
+          <span class="stats-icon">✨</span>
+          <div><strong>+5.000</strong><br/><small>Mães emocionadas</small></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ══ COMO FUNCIONA ══ -->
-  <section class="section-steps" id="como-funciona">
-    <span class="section-badge">💜 COMO FUNCIONA</span>
-    <h2>Crie um presente inesquecível em <em>4 passos simples</em></h2>
-    <p class="section-desc">Nossa plataforma torna fácil criar uma experiênciadigital e personalizada que vai emocionar sua mãe.</p>
+  <!-- ══ STEPS ══ -->
+  <section class="section-steps" id="how-it-works">
+    <span class="section-badge">Como funciona?</span>
+    <h2>Tão simples quanto um abraço</h2>
     <div class="steps-grid">
       <div class="step-card">
-        <span class="step-number">1</span>
+        <div class="step-number">1</div>
         <div class="step-icon">📝</div>
-        <h3>Conte a sua história</h3>
-        <p>Preencha um formulário rápido com os melhores momentos e qualidades da sua mãe.</p>
+        <h3>Preencha os dados</h3>
+        <p>Conte um pouco sobre as histórias e gostos dela.</p>
       </div>
       <div class="step-card">
-        <span class="step-number">2</span>
+        <div class="step-number">2</div>
         <div class="step-icon">📸</div>
-        <h3>Escolha as fotos</h3>
-        <p>Selecione as 5 fotos mais especiais que marcaram a jornada de vocês juntos.</p>
+        <h3>Suba as fotos</h3>
+        <p>Escolha os 5 momentos mais marcantes de vocês.</p>
       </div>
       <div class="step-card">
-        <span class="step-number">3</span>
-        <div class="step-icon">🎶</div>
-        <h3>Trilha sonora</h3>
-        <p>Nossa IA escolhe a música perfeita para acompanhar cada slide da retrospectiva.</p>
-      </div>
-      <div class="step-card">
-        <span class="step-number">4</span>
+        <div class="step-number">3</div>
         <div class="step-icon">🎁</div>
-        <h3>Surpreenda!</h3>
-        <p>Receba um link exclusivo para enviar para ela no WhatsApp e ver a mágica acontecer.</p>
+        <h3>Pronto!</h3>
+        <p>Gere a retrospectiva e surpreenda quem você ama.</p>
       </div>
     </div>
   </section>
 
-  <!-- ══ FORMULÁRIO WIZARD ══ -->
-  <section class="section-form hidden" id="form-section">
+  <!-- ══ FEATURES ══ -->
+  <section class="section-features" id="features">
+    <span class="section-badge">Vantagens</span>
+    <h2>Tudo o que você precisa</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-icon">✨</span>
+        <h3>Design Premium</h3>
+        <p>Layout elegante e moderno que valoriza cada foto sua.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🎵</span>
+        <h3>Trilha Sonora</h3>
+        <p>Músicas selecionadas para tocar o coração.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">📱</span>
+        <h3>Mobile First</h3>
+        <p>Perfeito para ver em qualquer celular.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ TESTIMONIALS ══ -->
+  <section class="section-testimonials" id="testimonials">
+    <span class="section-badge">Depoimentos</span>
+    <h2>O que estão dizendo...</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p>"Minha mãe chorou do início ao fim. Foi o presente mais marcante!"</p>
+        <div class="testimonial-author"><strong>Mariana S.</strong></div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p>"Muito fácil de fazer e o resultado é profissional."</p>
+        <div class="testimonial-author"><strong>Ricardo O.</strong></div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p>"A música combinou perfeitamente com as fotos."</p>
+        <div class="testimonial-author"><strong>Ana B.</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FORMULÁRIO ══ -->
+  <section class="form-section hidden" id="form-section">
     <div class="form-container">
       <div class="form-header">
         <div class="form-progress">
           <div class="form-progress-fill" id="form-progress-fill"></div>
         </div>
-        <div class="form-steps-info">Passo <span id="step-current">1</span> de 6</div>
+        <span class="step-indicator">Etapa <span id="step-current">1</span> de 6</span>
       </div>
 
-      <div class="form-body">
-        <div class="form-icon" id="form-icon">💝</div>
-
+      <div id="form-steps">
         <!-- STEP 1 -->
         <div class="step" id="step-1">
           <h2 class="step-title">Vamos começar<br/>por você.</h2>
-          <p class="step-subtitle">Como sua mãe deve te identificar no presente?</p>
+          <p class="step-subtitle">Qual o seu nome e como você se identifica?</p>
           <div class="field-group">
-            <label class="field-label" for="gifter-name">Seu nome ou apelido</label>
-            <input class="field-input" type="text" id="gifter-name" placeholder="Ex: Léo, Sua filha..." autocomplete="off" />
+            <label class="field-label" for="gifter-name">Seu nome completo</label>
+            <input class="field-input" type="text" id="gifter-name" placeholder="Ex: Leonardo Silva" autocomplete="off" />
           </div>
-          <div class="field-group">
-            <label class="field-label">Como você se identifica?</label>
-            <div class="radio-group">
-              <label class="radio-pill"><input type="radio" name="gender" value="masculino" /> Filho</label>
-              <label class="radio-pill"><input type="radio" name="gender" value="feminino" /> Filha</label>
-            </div>
+          <div class="gender-selection">
+            <label class="gender-opt">
+              <input type="radio" name="gender" value="masculino" />
+              <div class="gender-box">👦 Filho</div>
+            </label>
+            <label class="gender-opt">
+              <input type="radio" name="gender" value="feminino" />
+              <div class="gender-box">👧 Filha</div>
+            </label>
           </div>
         </div>
 
         <!-- STEP 2 -->
         <div class="step hidden" id="step-2">
-          <h2 class="step-title">Agora sobre<br/>sua Rainha.</h2>
-          <p class="step-subtitle">Como ela é chamada carinhosamente?</p>
-          <div class="field-group"><label class="field-label" for="mom-name">Nome dela</label><input class="field-input" type="text" id="mom-name" placeholder="Ex: Maria, Janete…" autocomplete="off" /></div>
-          <div class="field-group"><label class="field-label" for="mom-nickname">Apelido dela</label><input class="field-input" type="text" id="mom-nickname" placeholder="Ex: Mãezinha, Rainha…" autocomplete="off" /></div>
-          <div class="field-group"><label class="field-label" for="years-together">Quantos anos vocês estão juntos?</label><input class="field-input" type="number" id="years-together" placeholder="Ex: 25" /></div>
+          <h2 class="step-title">E ela?<br/>Qual o nome da sua rainha?</h2>
+          <div class="field-group"><label class="field-label" for="mom-name">Nome dela</label><input class="field-input" type="text" id="mom-name" placeholder="Ex: Maria Auxiliadora" autocomplete="off" /></div>
+          <div class="field-group"><label class="field-label" for="mom-nickname">Como você a chama?</label><input class="field-input" type="text" id="mom-nickname" placeholder="Ex: Mãezinha, Coroa, Dona Maria…" autocomplete="off" /></div>
+          <div class="field-group"><label class="field-label" for="years-together">Há quantos anos ela é sua mãe?</label><input class="field-input" type="number" id="years-together" placeholder="Ex: 25" autocomplete="off" /></div>
         </div>
 
         <!-- STEP 3 -->
         <div class="step hidden" id="step-3">
-          <h2 class="step-title">Momentos que<br/>marcaram.</h2>
-          <p class="step-subtitle">Detalhes que só vocês conhecem.</p>
+          <h2 class="step-title">Coisas que<br/>só ela faz.</h2>
           <div class="field-group"><label class="field-label" for="mom-phrase">Uma frase que ela sempre diz</label><input class="field-input" type="text" id="mom-phrase" placeholder="Ex: Juízo hein!, Te amo…" autocomplete="off" /></div>
           <div class="field-group"><label class="field-label" for="best-food">A melhor comida que ela faz</label><input class="field-input" type="text" id="best-food" placeholder="Ex: Lasanha, Bolo de cenoura…" autocomplete="off" /></div>
-          <div class="field-group"><label class="field-label" for="best-memory">Uma memória inesquecível</label><input class="field-input" type="text" id="best-memory" placeholder="Ex: Viagem para a praia, Natal de 2010…" autocomplete="off" /></div>
+          <div class="field-group"><label class="field-label" for="best-memory">Uma memória inesquecível</label><input class="field-input" type="text" id="best-memory" placeholder="Ex: Viagem para a praia…" autocomplete="off" /></div>
         </div>
 
         <!-- STEP 4 -->
         <div class="step hidden" id="step-4">
-          <h2 class="step-title">A personalidade<br/>dela.</h2>
-          <p class="step-subtitle">O que faz ela ser tão especial?</p>
-          <div class="field-group"><label class="field-label" for="hobbies">O que ela ama fazer</label><input class="field-input" type="text" id="hobbies" placeholder="Ex: Cuidar das plantas, Ver séries…" autocomplete="off" /></div>
-          <div class="field-group"><label class="field-label" for="traditions">Tradições familiares</label><input class="field-input" type="text" id="traditions" placeholder="Ex: Domingo em família…" autocomplete="off" /></div>
+          <h2 class="step-title">Personalidade</h2>
+          <div class="field-group"><label class="field-label" for="hobbies">O que ela ama fazer</label><input class="field-input" type="text" id="hobbies" placeholder="Ex: Cuidar das plantas…" autocomplete="off" /></div>
           <div class="field-group"><label class="field-label" for="qualities">Qualidades que admira</label><input class="field-input" type="text" id="qualities" placeholder="Ex: Paciência, amor…" autocomplete="off" /></div>
         </div>
 
         <!-- STEP 5 -->
         <div class="step hidden" id="step-5">
-          <h2 class="step-title">Agora as fotos<br/>que contam a história.</h2>
-          <p class="step-subtitle">Escolha 5 fotos para o álbum da retrospectiva.</p>
+          <h2 class="step-title">Fotos</h2>
           <div class="photo-uploads">
-            <div class="photo-upload-item"><label class="photo-upload-label" for="photo-1"><div class="photo-preview" id="preview-1"><span class="photo-icon">👶</span><span class="photo-text">Infância</span></div><input type="file" id="photo-1" accept="image/*" class="photo-input" data-preview="preview-1" /></label></div>
-            <div class="photo-upload-item"><label class="photo-upload-label" for="photo-2"><div class="photo-preview" id="preview-2"><span class="photo-icon">👨‍👩‍👧</span><span class="photo-text">Família</span></div><input type="file" id="photo-2" accept="image/*" class="photo-input" data-preview="preview-2" /></label></div>
-            <div class="photo-upload-item"><label class="photo-upload-label" for="photo-3"><div class="photo-preview" id="preview-3"><span class="photo-icon">📸</span><span class="photo-text">Recente</span></div><input type="file" id="photo-3" accept="image/*" class="photo-input" data-preview="preview-3" /></label></div>
-            <div class="photo-upload-item"><label class="photo-upload-label" for="photo-4"><div class="photo-preview" id="preview-4"><span class="photo-icon">😂</span><span class="photo-text">Engraçado</span></div><input type="file" id="photo-4" accept="image/*" class="photo-input" data-preview="preview-4" /></label></div>
-            <div class="photo-upload-item"><label class="photo-upload-label" for="photo-5"><div class="photo-preview" id="preview-5"><span class="photo-icon">💝</span><span class="photo-text">Especial</span></div><input type="file" id="photo-5" accept="image/*" class="photo-input" data-preview="preview-5" /></label></div>
+            <div class="photo-upload-item"><label class="photo-upload-label" for="photo-1"><div class="photo-preview" id="preview-1"><span>📸 1</span></div><input type="file" id="photo-1" accept="image/*" class="photo-input" data-preview="preview-1" /></label></div>
+            <div class="photo-upload-item"><label class="photo-upload-label" for="photo-2"><div class="photo-preview" id="preview-2"><span>📸 2</span></div><input type="file" id="photo-2" accept="image/*" class="photo-input" data-preview="preview-2" /></label></div>
+            <div class="photo-upload-item"><label class="photo-upload-label" for="photo-3"><div class="photo-preview" id="preview-3"><span>📸 3</span></div><input type="file" id="photo-3" accept="image/*" class="photo-input" data-preview="preview-3" /></label></div>
+            <div class="photo-upload-item"><label class="photo-upload-label" for="photo-4"><div class="photo-preview" id="preview-4"><span>📸 4</span></div><input type="file" id="photo-4" accept="image/*" class="photo-input" data-preview="preview-4" /></label></div>
+            <div class="photo-upload-item"><label class="photo-upload-label" for="photo-5"><div class="photo-preview" id="preview-5"><span>📸 5</span></div><input type="file" id="photo-5" accept="image/*" class="photo-input" data-preview="preview-5" /></label></div>
           </div>
         </div>
 
         <!-- STEP 6 -->
         <div class="step hidden" id="step-6">
-          <h2 class="step-title">Uma mensagem<br/>do coração.</h2>
-          <p class="step-subtitle">Escreva uma dedicatória especial para ela.</p>
-          <div class="field-group"><label class="field-label" for="dedication">Sua mensagem</label><textarea class="field-input field-textarea" id="dedication" placeholder="Escreva aqui sua mensagem especial..." rows="4"></textarea></div>
+          <h2 class="step-title">Mensagem</h2>
+          <div class="field-group"><textarea class="field-input" id="dedication" placeholder="Dedicatória..." rows="4"></textarea></div>
         </div>
 
         <div class="form-nav">
@@ -180,85 +213,25 @@
     </div>
   </section>
 
-  <!-- ══ RETROSPECTIVA (Oculta por Padrão) ══ -->
+  <!-- ══ RETROSPECTIVA ══ -->
   <section id="retro-section" class="hidden" style="display: none;">
-    <!-- Botão de Compartilhar (Escondido por padrão) -->
-    <div id="share-btn-container" class="hidden" style="position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:9999; width:90%; max-width:400px;">
-      <button id="main-share-btn" onclick="compartilhar()" style="width:100%; padding:18px; background:#25D366; color:#fff; border-radius:50px; border:none; font-weight:bold; font-size:1.1rem; box-shadow:0 10px 25px rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center; gap:10px; cursor:pointer;">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 .004 5.412 0 12.048c0 2.12.554 4.189 1.605 6.04L0 24l6.117-1.605a11.79 11.79 0 005.925 1.585h.005c6.637 0 12.046-5.412 12.05-12.048a11.825 11.825 0 00-3.576-8.514z"/></svg>
-        Enviar para o WhatsApp
-      </button>
-    </div>
-
     <div class="stories-progress" id="stories-progress"></div>
     <div class="stories-container" id="stories-container"></div>
-    <div class="retro-preview-overlay hidden" id="retro-preview-overlay">
-      <div class="preview-overlay-content">
-        <h3>Sua Retrospectiva está Pronta! 🎁</h3>
-        <p>Desbloqueie agora para ver a homenagem completa.</p>
-        <button class="btn-unlock" onclick="abrirModal()">Desbloquear Retrospectiva Completa</button>
-      </div>
-    </div>
     <div class="touch-zone touch-left" id="touch-left"></div>
     <div class="touch-zone touch-right" id="touch-right"></div>
-    <button class="btn-close-retro" id="btn-close-retro" onclick="fecharRetro()" title="Fechar">✕</button>
-    <audio id="bg-audio" loop preload="auto"></audio>
+    <button class="btn-close-retro" onclick="fecharRetro()">✕</button>
+    <audio id="bg-audio" loop></audio>
   </section>
 
-  <!-- ══ MODAL CHECKOUT ══ -->
+  <!-- ══ MODAL ══ -->
   <div class="overlay" id="overlay">
     <div class="modal">
-      <div class="modal-head">
-        <h3 class="modal-title">Desbloquear Retrospectiva</h3>
-        <button class="close-btn" onclick="fecharModal()">×</button>
-      </div>
-      <div class="modal-body">
-        <div class="tier-selection">
-          <div class="tier-card" id="tier-complete" onclick="selecionarTier('complete', 14.90)">
-            <h4>Completa</h4>
-            <p>Retrospectiva inteira com todas as suas fotos.</p>
-            <div class="tier-price">R$ 14,90</div>
-          </div>
-          <div class="tier-card highlight" id="tier-lifetime" onclick="selecionarTier('lifetime', 27.90)">
-            <div class="tier-badge">Mais Escolhido</div>
-            <h4>Vitalícia</h4>
-            <p>Retrospectiva + Download das Fotos + Acesso para Sempre.</p>
-            <div class="tier-price">R$ 27,90</div>
-          </div>
-        </div>
-        <div class="pay-methods">
-          <div class="pay-opt" id="opt-pix" onclick="selecionarPagamento('pix')"><div class="pay-opt-ico">💠</div><div class="pay-opt-lbl">PIX</div></div>
-          <div class="pay-opt" id="opt-cartao" onclick="selecionarPagamento('cartao')"><div class="pay-opt-ico">💳</div><div class="pay-opt-lbl">CARTÃO</div></div>
-        </div>
-
-        <div class="form-group" style="margin-top:20px; border-top: 1px solid #eee; padding-top: 20px;">
-          <label class="form-label" style="font-weight: bold; color: #555;">Seu E-mail para recebimento</label>
-          <input type="email" id="email-checkout" class="form-input" placeholder="seu@email.com" style="background: #fdfdfd; border: 1px solid #ddd;">
-        </div>
-
-        <div id="campos-pix" style="display:none; margin-top:16px">
-          <div id="pix-area-gerar">
-            <button class="btn-pix" id="btn-pix" onclick="gerarPix()">⚡ Gerar Pix</button>
-          </div>
-          <div id="pix-area-pagamento" style="display:none;text-align:center">
-             <img id="pix-qr" src="" style="width:180px;height:180px;margin-bottom:12px;">
-             <input type="text" id="pix-copia-cola" readonly style="width:100%; padding:10px; font-size:0.8rem; margin-bottom:10px;">
-             <button onclick="copiarCopiaECola()" style="width:100%; padding:10px; background:#eee; border:none; border-radius:5px;">Copiar Código Pix</button>
-          </div>
-        </div>
-
-        <div id="campos-cartao" style="display:none; margin-top:16px">
-          <div id="cardPaymentBrick_container"></div>
-        </div>
-      </div>
+      <h3>Quase lá! 💝</h3>
+      <p>Para ver a retrospectiva completa e compartilhar, escolha um plano.</p>
+      <button onclick="fecharModal()">Ver Opções de Pagamento</button>
     </div>
   </div>
 
-  <div class="floating-cta" id="floating-cta" onclick="irParaForm()">
-    Surpreender minha Mãe 💝
-  </div>
-
-  <div class="toast" id="toast"></div>
   <script src="script.js"></script>
 </body>
 </html>
