@@ -1073,7 +1073,7 @@ function fecharSeClicarFora(e) {
 }
 
 function selecionarPagamento(metodo) {
-  metodoPagamento = metodo;
+  state.paymentMethod = metodo;
   document.getElementById('opt-cartao').classList.toggle('sel', metodo === 'cartao');
   document.getElementById('opt-pix').classList.toggle('sel', metodo === 'pix');
   
@@ -1100,7 +1100,7 @@ function selecionarTier(tier, price) {
     brickController.unmount();
     brickController = null;
   }
-  if (metodoPagamento === 'cartao') {
+  if (state.paymentMethod === 'cartao') {
     renderizarBrickCartao();
   }
 }
@@ -1122,7 +1122,7 @@ function aceitarDownsell() {
   
   document.querySelectorAll('.tier-card').forEach(el => el.classList.remove('selected'));
   document.getElementById(`tier-lifetime`).classList.add('selected');
-  // Atualiza o texto do preço no card de forma visual para o usuário ver o desconto
+  // Atualiza o preço visualmente
   const priceDisplay = document.querySelector('#tier-lifetime .tier-price');
   if (priceDisplay) priceDisplay.textContent = 'R$ 19,90';
   
@@ -1131,10 +1131,10 @@ function aceitarDownsell() {
   const pixValDisplay = document.getElementById('pix-val-display');
   if (pixValDisplay) pixValDisplay.textContent = 'R$ 19,90';
 
-  // Se o método for Pix, já gera automaticamente para facilitar
-  if (metodoPagamento === 'pix') {
+  // Se o método for Pix, já gera automaticamente
+  if (state.paymentMethod === 'pix') {
     gerarPix();
-  } else if (metodoPagamento === 'cartao') {
+  } else if (state.paymentMethod === 'cartao') {
     if (brickController) { brickController.unmount(); brickController = null; }
     renderizarBrickCartao();
   }
@@ -1153,7 +1153,7 @@ function recusarDownsell() {
   if (pixValDisplay) pixValDisplay.textContent = 'R$ 14.90';
 
   if (brickController) { brickController.unmount(); brickController = null; }
-  if (metodoPagamento === 'cartao') renderizarBrickCartao();
+  if (state.paymentMethod === 'cartao') renderizarBrickCartao();
 }
 
 async function renderizarBrickCartao() {
@@ -1186,10 +1186,12 @@ async function renderizarBrickCartao() {
           if (loadingMsg) loadingMsg.remove();
         },
         onSubmit: async (cardFormData) => {
-          // DISPARAR DOWNSELL (Cartão): Se estiver no plano de 14.90 e ainda não viu a oferta
+          // DISPARAR DOWNSELL (Cartão)
           const isBasico = state.selectedTier === 'complete' && (state.selectedPrice >= 14.80 && state.selectedPrice <= 15.00);
           if (isBasico && !state.downsellShown) {
             state.downsellShown = true;
+            // Desmonta para evitar bug de "processando" infinito no botão do brick
+            if (brickController) { brickController.unmount(); brickController = null; }
             mostrarDownsell();
             return;
           }
