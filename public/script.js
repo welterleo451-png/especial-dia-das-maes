@@ -1283,29 +1283,113 @@ async function gerarPixMP() {
 }
 
 async function baixarTudo() {
-  mostrarToast('Preparando seu pacote de memórias... 📥');
+  mostrarToast('Gerando seu Arquivo de Recordação... 🎁');
   
-  const { momNickname, dedication, photos } = state;
+  const { momNickname, photos, gifterName } = state;
   
-  // 1. Baixar Dedicatória como TXT
-  const blob = new Blob([`MENSAGEM PARA ${momNickname.toUpperCase()}\n\n${dedication}`], { type: 'text/plain' });
+  // Pegamos o CSS necessário (simplificado para o arquivo de saída)
+  const css = Array.from(document.styleSheets)
+    .filter(sheet => !sheet.href || sheet.href.includes(window.location.origin))
+    .map(sheet => {
+      try {
+        return Array.from(sheet.cssRules).map(rule => rule.cssText).join('\n');
+      } catch (e) { return ''; }
+    }).join('\n');
+
+  // Criamos o HTML do arquivo de recordação
+  const storiesHTML = Array.from(storiesContainer.querySelectorAll('.story')).map(el => {
+    // Clonamos para não afetar o original e limpamos classes de animação ativa
+    const clone = el.cloneNode(true);
+    clone.classList.remove('active');
+    return clone.outerHTML;
+  }).join('\n');
+
+  const standaloneHTML = `
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recordação: Para ${momNickname} 💝</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800;900&family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        ${css}
+        body { background: #000; margin: 0; }
+        #retro-section { display: block !important; position: relative; height: 100vh; width: 100vw; }
+        .btn-close-retro, .retro-preview-overlay, .btn-download-story { display: none !important; }
+        @media(min-width: 1024px) {
+          .stories-container { max-width: 450px; margin: 0 auto; left: 50%; transform: translateX(-50%); }
+        }
+    </style>
+</head>
+<body>
+    <div id="retro-section">
+        <div class="stories-progress" id="stories-progress"></div>
+        <div class="stories-container" id="stories-container">
+            ${storiesHTML}
+        </div>
+        <div class="touch-zone touch-left" id="touch-left"></div>
+        <div class="touch-zone touch-right" id="touch-right"></div>
+    </div>
+
+    <script>
+        // Dados injetados
+        const state = ${JSON.stringify({ ...state, unlocked: true })};
+        
+        // Versão ultra-leve do motor de stories para o arquivo offline
+        let activeStoryIndex = 0;
+        let storyTimer = null;
+        const STORY_DURATION = 5000;
+
+        function showStory(index) {
+            const stories = document.querySelectorAll('.story');
+            if (index < 0 || index >= stories.length) return;
+            
+            clearTimeout(storyTimer);
+            stories.forEach(s => s.classList.remove('active'));
+            stories[index].classList.add('active');
+            
+            activeStoryIndex = index;
+            
+            // Atualiza progresso simples
+            const progress = document.getElementById('stories-progress');
+            progress.innerHTML = '';
+            for(let i=0; i<stories.length; i++) {
+                const seg = document.createElement('div');
+                seg.className = 'progress-segment ' + (i < index ? 'done' : (i === index ? 'active' : ''));
+                const fill = document.createElement('div');
+                fill.className = 'progress-segment-fill';
+                fill.style.width = i < index ? '100%' : (i === index ? '0%' : '0%');
+                seg.appendChild(fill);
+                progress.appendChild(seg);
+                if(i === index) {
+                    setTimeout(() => fill.style.transition = 'width 5s linear', 10);
+                    setTimeout(() => fill.style.width = '100%', 50);
+                }
+            }
+
+            storyTimer = setTimeout(() => {
+                if (activeStoryIndex < stories.length - 1) showStory(activeStoryIndex + 1);
+            }, STORY_DURATION);
+        }
+
+        document.getElementById('touch-right').onclick = () => showStory(activeStoryIndex + 1);
+        document.getElementById('touch-left').onclick = () => showStory(activeStoryIndex - 1);
+        
+        window.onload = () => showStory(0);
+    <\/script>
+</body>
+</html>`;
+
+  // Download do arquivo
+  const blob = new Blob([standaloneHTML], { type: 'text/html' });
   const url = window.URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `Mensagem_Para_${momNickname}.txt`;
+  a.download = `Retrospectiva_${momNickname}_Recordacao.html`;
   a.click();
-  
-  // 2. Baixar as fotos (simulando download de tudo)
-  photos.forEach((photoUrl, index) => {
-    if (photoUrl) {
-      const link = document.createElement('a');
-      link.href = photoUrl;
-      link.download = `Foto_${index + 1}_Momento_Especial.png`;
-      setTimeout(() => link.click(), index * 500); // delay para não travar o browser
-    }
-  });
 
-  mostrarToast('Download concluído! Guarde com carinho. ❤️');
+  mostrarToast('Pronto! Você agora tem a retrospectiva para sempre. ❤️');
 }
 
 function sucessoPagamento() {
