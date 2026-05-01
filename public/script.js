@@ -38,21 +38,28 @@ const topbar           = document.querySelector('.topbar');
  * Transição da Landing Page para o Formulário de criação.
  */
 function showForm() {
-  // Esconde elementos da landing
   landingPage.classList.add('hidden');
   mainHeader.classList.add('hidden');
   topbar.classList.add('hidden');
-  
-  // Mostra o formulário
   formSection.classList.remove('hidden');
-  
-  // Garante que começa no step 1
   currentStep = 1;
-  updateFormUI();
-  
-  // Scroll para o topo
+  goToStep(1, 'next');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+// Conectar botões da Landing Page dinamicamente
+document.addEventListener('DOMContentLoaded', () => {
+  startCountdown();
+  const allCtaButtons = document.querySelectorAll('.btn-primary, .nav-menu a[href="#hero"]');
+  allCtaButtons.forEach(btn => {
+    btn.onclick = (e) => {
+      if (btn.innerText.toLowerCase().includes('criar') || btn.innerText.toLowerCase().includes('surpreenda')) {
+        e.preventDefault();
+        showForm();
+      }
+    };
+  });
+});
 
 /**
  * startCountdown()
@@ -105,7 +112,7 @@ setupPhotoUploads();
 
 btnNext.addEventListener('click', () => {
   if (currentStep < TOTAL_STEPS) {
-    goToStep(currentStep + 1);
+    goToStep(currentStep + 1, 'next');
   } else {
     collectFormData();
     launchRetro();
@@ -113,12 +120,23 @@ btnNext.addEventListener('click', () => {
 });
 
 btnBack.addEventListener('click', () => {
-  if (currentStep > 1) goToStep(currentStep - 1);
+  if (currentStep > 1) goToStep(currentStep - 1, 'prev');
 });
 
-function goToStep(targetStep) {
-  document.getElementById(`step-${currentStep}`).classList.add('hidden');
-  document.getElementById(`step-${targetStep}`).classList.remove('hidden');
+function goToStep(targetStep, direction = 'next') {
+  const currentEl = document.getElementById(`step-${currentStep}`);
+  const targetEl = document.getElementById(`step-${targetStep}`);
+  
+  if (currentEl) {
+    currentEl.classList.add('hidden');
+    currentEl.classList.remove('slide-in-right', 'slide-in-left');
+  }
+  
+  if (targetEl) {
+    targetEl.classList.remove('hidden');
+    targetEl.classList.add(direction === 'next' ? 'slide-in-right' : 'slide-in-left');
+  }
+  
   currentStep = targetStep;
   updateFormUI();
 }
@@ -149,17 +167,12 @@ function setupPhotoUploads() {
 }
 
 function collectFormData() {
-  state.gifterName = document.getElementById('gifter-name').value;
-  state.gender = document.querySelector('input[name="gender"]:checked')?.value || '';
+  state.gifterName = document.getElementById('user-name').value;
+  state.gender = document.querySelector('input[name="user-gender"]:checked')?.value || '';
   state.momName = document.getElementById('mom-name').value;
-  state.momNickname = document.getElementById('mom-nickname').value || state.momName;
   state.yearsTogether = document.getElementById('years-together').value;
   state.momPhrase = document.getElementById('mom-phrase').value;
-  state.bestFood = document.getElementById('best-food').value;
-  state.bestMemory = document.getElementById('best-memory').value;
-  state.hobbies = document.getElementById('hobbies').value;
-  state.traditions = document.getElementById('traditions').value;
-  state.qualities = document.getElementById('qualities').value;
+  state.genderAudio = document.querySelector('input[name="audio-gender"]:checked')?.value || 'mulher';
   state.dedication = document.getElementById('dedication').value;
 }
 
