@@ -1449,26 +1449,21 @@ function sucessoPagamento() {
 /**
  * compartilhar()
  * ──────────────
- * Usa a Web Share API se disponível, senão copia para o clipboard.
+ * Abre o WhatsApp diretamente com uma mensagem personalizada.
  */
-async function compartilhar() {
-  const { momNickname, gifterName } = state;
-  const shareData = {
-    title: `Presente Especial para ${momNickname} 💝`,
-    text: `Oi ${momNickname}! O ${gifterName} preparou uma surpresa inesquecível para você. Veja agora:`,
-    url: window.location.origin // Idealmente seria um link único salvo no banco
-  };
+function compartilhar() {
+  const { momNickname, gifterName, momName } = state;
+  const siteUrl = window.location.origin;
+  
+  const mensagem = `💝 *Presente Especial de Dia das Mães* 💝\n\n` +
+    `Oi${momNickname ? ', ' + momNickname : ''}! 🌸\n\n` +
+    `O *${gifterName || 'seu filho(a)'}* preparou uma surpresa inesquecível para você!\n\n` +
+    `É uma retrospectiva cheia de amor, com fotos e momentos especiais que vocês viveram juntos. 📸✨\n\n` +
+    `Acesse agora e se emocione:\n${siteUrl}\n\n` +
+    `Feliz Dia das Mães! 💖🥰`;
 
-  try {
-    if (navigator.share) {
-      await navigator.share(shareData);
-    } else {
-      await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
-      mostrarToast('Link copiado para o WhatsApp! ✅');
-    }
-  } catch (err) {
-    console.error('Erro ao compartilhar:', err);
-  }
+  const urlWhatsApp = `https://wa.me/?text=${encodeURIComponent(mensagem)}`;
+  window.open(urlWhatsApp, '_blank');
 }
 
 function mostrarToast(msg) {
