@@ -1,14 +1,20 @@
 /**
  * ══════════════════════════════════════════════════════════
  *  PRESENTE DIGITAL PARA MAMÃE — script.js
- *  VERSÃO FINAL: RÉPLICA EXATA DO VÍDEO
+ *  RESTAURAÇÃO TOTAL DO MOTOR ORIGINAL
  * ══════════════════════════════════════════════════════════
  */
 
 'use strict';
 
 const state = {
+  gifterName: '', gender: '',
+  momName: '', momNickname: '', yearsTogether: 0,
+  momPhrase: '', bestFood: '', bestMemory: '',
+  hobbies: '', traditions: '', qualities: '',
   photos: [null, null, null, null, null],
+  dedication: '',
+  unlocked: false, selectedTier: 'complete', selectedPrice: 14.90,
   retroId: null,
 };
 
@@ -23,7 +29,7 @@ const btnNext = document.getElementById('btn-next');
 const storiesContainer = document.getElementById('stories-container');
 const storiesProgressEl = document.getElementById('stories-progress');
 
-/* ── 1. CONTAGEM ── */
+/* ── 1. CONTAGEM REGRESSIVA ── */
 function initCountdown() {
   const target = new Date('2026-05-11T00:00:00').getTime();
   const el = document.getElementById('countdown-timer');
@@ -39,12 +45,15 @@ function initCountdown() {
   }, 1000);
 }
 
-/* ── 2. FORMULÁRIO ── */
+/* ── 2. LÓGICA DO FORMULÁRIO ── */
 function updateFormUI() {
   const pct = (currentStep / TOTAL_STEPS) * 100;
   if (progressFill) progressFill.style.width = pct + '%';
   if (stepCurrentEl) stepCurrentEl.textContent = currentStep;
   if (btnBack) btnBack.style.visibility = currentStep === 1 ? 'hidden' : 'visible';
+  if (btnNext) {
+    btnNext.textContent = currentStep === TOTAL_STEPS ? '🎁 Gerar Retrospectiva' : 'Continuar →';
+  }
 }
 
 function goToStep(targetStep) {
@@ -79,13 +88,18 @@ function setupPhotoUploads() {
       const reader = new FileReader();
       reader.onload = (event) => {
         state.photos[index] = event.target.result;
+        const preview = document.getElementById(input.dataset.preview);
+        if (preview) {
+          preview.style.backgroundImage = `url(${event.target.result})`;
+          preview.innerHTML = '';
+        }
       };
       reader.readAsDataURL(file);
     });
   });
 }
 
-/* ── 3. RETRO (IGUAL AO VÍDEO) ── */
+/* ── 3. MOTOR ORIGINAL DE STORIES ── */
 let activeStoryIndex = 0;
 let storyTimer = null;
 const STORY_DURATION = 5000;
@@ -93,12 +107,13 @@ const STORY_DURATION = 5000;
 function renderStories() {
   storiesContainer.innerHTML = '';
   storiesProgressEl.innerHTML = '';
+  
   const data = [
-    { title: `Para: ${document.getElementById('mom-name').value}`, subtitle: 'Sua história...', image: state.photos[0] },
-    { title: 'Frase', subtitle: document.getElementById('mom-phrase').value, image: state.photos[1] },
+    { title: `Para: ${document.getElementById('mom-name').value}`, subtitle: 'Homenagem Especial', image: state.photos[0] },
+    { title: 'Momentos', subtitle: document.getElementById('mom-phrase').value, image: state.photos[1] },
     { title: 'Sabor', subtitle: document.getElementById('best-food').value, image: state.photos[2] },
     { title: 'Memória', subtitle: document.getElementById('best-memory').value, image: state.photos[3] },
-    { title: 'Personalidade', subtitle: document.getElementById('qualities').value, image: state.photos[4] },
+    { title: 'Qualidades', subtitle: document.getElementById('qualities').value, image: state.photos[4] },
     { title: 'Te amo!', subtitle: document.getElementById('dedication').value }
   ];
 
@@ -113,7 +128,10 @@ function renderStories() {
     story.innerHTML = `
       <div class="story-bg" style="background-image: url('${item.image || ''}')"></div>
       <div class="story-overlay"></div>
-      <div class="story-content"><h2>${item.title}</h2><p>${item.subtitle}</p></div>
+      <div class="story-content">
+        <h2>${item.title}</h2>
+        <p>${item.subtitle}</p>
+      </div>
     `;
     storiesContainer.appendChild(story);
   });
@@ -126,15 +144,18 @@ function showStory(index) {
   stories.forEach(s => s.classList.remove('active'));
   stories[index].classList.add('active');
   activeStoryIndex = index;
+  
   const fills = document.querySelectorAll('.progress-segment-fill');
   fills.forEach((f, i) => {
     f.style.transition = 'none';
     f.style.width = i < index ? '100%' : '0%';
   });
+  
   setTimeout(() => {
     fills[index].style.transition = `width ${STORY_DURATION}ms linear`;
     fills[index].style.width = '100%';
   }, 50);
+
   storyTimer = setTimeout(() => {
     if (activeStoryIndex < stories.length - 1) showStory(activeStoryIndex + 1);
     else abrirModal();
@@ -142,23 +163,12 @@ function showStory(index) {
 }
 
 function gerarRecordacao() {
-  // 1. Esconde o conteúdo do site e mostra a retro em tela cheia (SEM FUNDO PRETO FORÇADO)
-  document.getElementById('site-content').style.display = 'none';
-  document.getElementById('main-nav').style.display = 'none';
-  document.querySelector('.topbar').style.display = 'none';
-  
+  renderStories();
   const retro = document.getElementById('retro-section');
   retro.style.display = 'block';
   retro.classList.remove('hidden');
+  retro.scrollIntoView({ behavior: 'smooth' });
   
-  // Estilo Mobile Stories (IGUAL AO VÍDEO)
-  retro.style.position = 'fixed';
-  retro.style.top = '0'; retro.style.left = '0';
-  retro.style.width = '100vw'; retro.style.height = '100vh';
-  retro.style.zIndex = '999999';
-  retro.style.background = '#fff'; // Fundo branco/claro conforme o vídeo
-  
-  renderStories();
   activeStoryIndex = 0;
   showStory(0);
   
@@ -175,12 +185,13 @@ function gerarRecordacao() {
 function irParaForm() {
   const form = document.getElementById('form-section');
   form.classList.remove('hidden');
+  document.getElementById('hero').style.display = 'none';
   window.scrollTo({ top: form.offsetTop - 100, behavior: 'smooth' });
 }
 
 function abrirModal() { document.getElementById('overlay').classList.add('open'); }
 function fecharModal() { document.getElementById('overlay').classList.remove('open'); }
-function fecharRetro() { window.location.reload(); } // Recarrega para voltar ao site original
+function fecharRetro() { document.getElementById('retro-section').style.display = 'none'; }
 
 document.addEventListener('DOMContentLoaded', () => {
   initCountdown();
@@ -193,3 +204,4 @@ window.abrirModal = abrirModal;
 window.fecharModal = fecharModal;
 window.fecharRetro = fecharRetro;
 window.gerarRecordacao = gerarRecordacao;
+window.compartilhar = () => { window.open(`https://wa.me/?text=${encodeURIComponent('💝 Presente Digital!')}`); };
