@@ -49,7 +49,17 @@ const state = {
   selectedTier: null,
   selectedPrice: null,
   unlockedTier: '',
+  retroId: null,
 };
+
+// Se vier do link da mãe (injetado pelo servidor no HTML)
+if (window.RETRO_DATA) {
+  Object.assign(state, window.RETRO_DATA);
+  // Se estiver desbloqueado, garantimos que a flag 'unlocked' esteja true
+  if (window.RETRO_DATA.unlocked) state.unlocked = true;
+  if (window.RETRO_DATA.tier) state.unlockedTier = window.RETRO_DATA.tier;
+  console.log('Retro Data carregada do banco:', state.retroId);
+}
 
 // Expõe a escolha de gênero globalmente (para integração de áudio — ver index.html)
 window.genderChoice = '';
@@ -1046,9 +1056,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
-function abrirModal() {
+async function abrirModal() {
   document.getElementById('overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
+  
+  // Salva no banco e pega o ID para o link
+  await salvarRetrospectiva();
   
   document.getElementById('pix-area-gerar').style.display = 'block';
   document.getElementById('pix-area-pagamento').style.display = 'none';
@@ -1205,6 +1218,7 @@ async function renderizarBrickCartao() {
                 installments: cardFormData.installments,
                 issuerId: cardFormData.issuer_id,
                 paymentMethodId: cardFormData.payment_method_id,
+                retroId: state.retroId // Link para desbloquear no banco
               }),
             });
             const result = await resp.json();
@@ -1238,7 +1252,11 @@ function copiarCopiaECola() {
 
 async function gerarPix() {
   const email = document.getElementById('email-checkout').value;
-  if (!email || !email.includes('@')) { mostrarToast('Preencha um e-mail válido.'); return; }
+  if (!email || !email.includes('@')) { 
+    mostrarToast('Por favor, informe um e-mail válido para receber o presente.'); 
+    document.getElementById('email-checkout').focus();
+    return; 
+  }
   
   const btn = document.getElementById('btn-pix');
   if (btn) {
@@ -1250,7 +1268,11 @@ async function gerarPix() {
     const resp = await fetch('/api/gerar-pix', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ packId: state.selectedTier || 'complete', email }),
+      body: JSON.stringify({ 
+        packId: state.selectedTier || 'complete', 
+        email,
+        retroId: state.retroId // Link para desbloquear no banco
+      }),
     });
     const data = await resp.json();
 
@@ -1438,6 +1460,10 @@ function sucessoPagamento() {
   `;
   document.body.appendChild(shareBtnContainer);
 
+  // Se já temos o retroId, não precisamos salvar de novo agora
+  // Mas garantimos que o link de compartilhar seja atualizado
+  atualizarLinkCompartilhar();
+
   // Forçar a reconstrução dos stories para garantir que apareçam
   const storiesData = buildStoriesData();
   renderStories(storiesData);
@@ -1452,18 +1478,65 @@ function sucessoPagamento() {
  * Abre o WhatsApp diretamente com uma mensagem personalizada.
  */
 function compartilhar() {
-  const { momNickname, gifterName, momName } = state;
+  const { momNickname, gifterName, retroId } = state;
   const siteUrl = window.location.origin;
+  
+  // O link agora é a URL única da retrospectiva no banco
+  const linkRetro = retroId ? `${siteUrl}/retro/${retroId}` : siteUrl;
   
   const mensagem = `💝 *Presente Especial de Dia das Mães* 💝\n\n` +
     `Oi${momNickname ? ', ' + momNickname : ''}! 🌸\n\n` +
     `O *${gifterName || 'seu filho(a)'}* preparou uma surpresa inesquecível para você!\n\n` +
     `É uma retrospectiva cheia de amor, com fotos e momentos especiais que vocês viveram juntos. 📸✨\n\n` +
-    `Acesse agora e se emocione:\n${siteUrl}\n\n` +
+    `Acesse agora e se emocione:\n${linkRetro}\n\n` +
     `Feliz Dia das Mães! 💖🥰`;
 
   const urlWhatsApp = `https://wa.me/?text=${encodeURIComponent(mensagem)}`;
   window.open(urlWhatsApp, '_blank');
+}
+
+function atualizarLinkCompartilhar() {
+  // Se estivermos em modo de visualização (mãe acessando), não mostramos botão de compartilhar
+  if (window.RETRO_DATA) {
+     const btn = document.querySelector('.floating-share-btn');
+     if (btn) btn.style.display = 'none';
+  }
+}
+
+async function salvarRetrospectiva() {
+  // Só salva se ainda não temos ID (ou se quisermos atualizar, mas vamos focar no insert inicial)
+  if (state.retroId) return state.retroId;
+
+  try {
+    const resp = await fetch('/api/salvar-retro', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        gifter_name:   state.gifterName,
+        gender:         state.gender,
+        mom_name:      state.momName,
+        mom_nickname:  state.momNickname,
+        years_together: state.yearsTogether,
+        mom_phrase:    state.momPhrase,
+        best_food:     state.bestFood,
+        best_memory:   state.bestMemory,
+        hobbies:       state.hobbies,
+        traditions:    state.traditions,
+        qualities:     state.qualities,
+        photos:        state.photos,
+        dedication:    state.dedication
+      })
+    });
+    const result = await resp.json();
+    if (result.success) {
+      state.retroId = result.id;
+      console.log('Retro salva no banco com ID:', state.retroId);
+      return result.id;
+    }
+  } catch (err) {
+    console.error('Falha ao salvar retro:', err);
+  }
+  return null;
 }
 
 function mostrarToast(msg) {
@@ -1504,6 +1577,14 @@ function initCountdown() {
 document.addEventListener('DOMContentLoaded', () => {
   initCountdown();
 
+  // Modo de visualização da mãe
+  if (window.RETRO_DATA && state.unlocked) {
+    console.log('Iniciando presente para a mãe...');
+    const storiesData = buildStoriesData();
+    renderStories(storiesData);
+    return; // Não executa o resto se for modo de visualização
+  }
+
   // Verifica se veio de um redirecionamento de sucesso de pagamento
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.get('pagamento') === 'sucesso') {
@@ -1538,6 +1619,15 @@ async function aceitarDownsell() {
   state.selectedTier = 'lifetime_downsell';
   state.selectedPrice = 19.90;
   
+  // Atualiza visualmente o card selecionado
+  document.querySelectorAll('.tier-card').forEach(el => el.classList.remove('selected'));
+  const lifetimeCard = document.getElementById('tier-lifetime');
+  if (lifetimeCard) lifetimeCard.classList.add('selected');
+
+  // Atualiza o valor visual no Pix
+  const pixValDisplay = document.getElementById('pix-val-display');
+  if (pixValDisplay) pixValDisplay.textContent = 'R$ 19,90';
+  
   // Se for cartão, precisamos remontar o brick com o novo valor
   if (state.paymentMethod === 'card') {
     if (brickController) {
@@ -1547,7 +1637,12 @@ async function aceitarDownsell() {
     renderizarBrickCartao();
     mostrarToast('Valor atualizado para R$ 19,90 no cartão!');
   } else {
-    // Se for Pix, já gera o novo código direto
-    gerarPix();
+    // Se for Pix, já gera o novo código direto SE o email já estiver preenchido
+    const email = document.getElementById('email-checkout').value;
+    if (email && email.includes('@')) {
+       gerarPix();
+    } else {
+       mostrarToast('Escolha o método de pagamento e informe seu e-mail.');
+    }
   }
 }

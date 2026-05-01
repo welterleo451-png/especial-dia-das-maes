@@ -4,6 +4,7 @@ const cors    = require('cors');
 const crypto  = require('crypto');
 const fetch   = require('node-fetch');
 const { MercadoPagoConfig, Preference, Payment } = require('mercadopago');
+const { createClient } = require('@supabase/supabase-js');
 const PACKS   = require('./packs');
 
 const app  = express();
@@ -13,6 +14,11 @@ const client = new MercadoPagoConfig({
   accessToken: process.env.MP_ACCESS_TOKEN,
   options: { timeout: 5000 },
 });
+
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ANON_KEY
+);
 
 app.use(cors());
 app.use(express.json());
@@ -162,7 +168,21 @@ app.post('/webhook/mercadopago', async (req, res) => {
     const p = await payment.get({ id: data.id });
     if (p.status === 'approved') {
       const packId = p.metadata?.pack_id;
-      if (packId) { pagamentosConfirmados.set(String(p.id), packId); console.log(`Pago: ${p.id} Pack: ${packId}`); }
+      const retroId = p.metadata?.retro_id; // ID da retro que salvamos antes do pagamento
+
+      if (packId) { 
+        pagamentosConfirmados.set(String(p.id), packId); 
+        console.log(`Pago: ${p.id} Pack: ${packId}`); 
+      }
+
+      if (retroId) {
+        const isLifetime = packId === 'lifetime' || packId === 'lifetime_downsell';
+        await supabase
+          .from('retrospectivas')
+          .update({ unlocked: true, is_vitalicio: isLifetime, tier: packId })
+          .eq('id', retroId);
+        console.log(`Retro Desbloqueada: ${retroId}`);
+      }
     }
   } catch (err) { console.error(err); }
 });
@@ -195,9 +215,59 @@ app.post('/api/acesso', (req, res) => {
   });
 });
 
-// Rota para gerar Pix no Mercado Pago
+// Rota para salvar dados da retrospectiva antes do pagamento
+app.post('/api/salvar-retro', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('retrospectivas')
+      .insert([req.body])
+      .select('id')
+      .single();
+
+    if (error) throw error;
+    res.json({ success: true, id: data.id });
+  } catch (err) {
+    console.error('Erro salvar retro:', err);
+    res.status(500).json({ success: false, erro: err.message });
+  }
+});
+
+// Rota para visualizar a retrospectiva via link da mãe
+app.get('/retro/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const { data: retro, error } = await supabase
+      .from('retrospectivas')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error || !retro) return res.status(404).send('Retrospectiva não encontrada.');
+
+    // Verificar expiração se não for vitalício (1 ano)
+    if (!retro.is_vitalicio && retro.unlocked) {
+      const umAnoMs = 365 * 24 * 60 * 60 * 1000;
+      const dataCriacao = new Date(retro.created_at).getTime();
+      if (Date.now() - dataCriacao > umAnoMs) {
+        return res.status(403).send('Este presente expirou (duração de 1 ano). Para acesso permanente, adquira o plano Vitalício.');
+      }
+    }
+
+    // Serve o index.html mas com uma flag para carregar os dados do banco
+    // Injetamos um script pequeno para o frontend saber que é um modo de visualização
+    let html = require('fs').readFileSync(__dirname + '/public/index.html', 'utf8');
+    const injection = `<script>window.RETRO_DATA = ${JSON.stringify(retro)};</script>`;
+    html = html.replace('</head>', `${injection}</head>`);
+    res.send(html);
+
+  } catch (err) {
+    res.status(500).send('Erro ao carregar presente.');
+  }
+});
+
+// Rota para gerar Pix no Mercado Pago (atualizada com metadata de retro_id)
 app.post('/api/gerar-pix', async (req, res) => {
-  const { packId, email } = req.body;
+  const { packId, email, retroId } = req.body;
   const pack = PACKS[packId];
   if (!pack) return res.status(400).json({ erro: 'Pack invalido' });
   
@@ -209,28 +279,17 @@ app.post('/api/gerar-pix', async (req, res) => {
       transaction_amount: pack.preco / 100,
       description: pack.nome,
       payment_method_id: 'pix',
-      payer: { 
-        email: email || 'cliente@site.com',
-      }
+      payer: { email: email || 'cliente@site.com' },
+      metadata: { pack_id: packId, retro_id: retroId },
+      notification_url: `${baseUrl}/webhook/mercadopago`,
     }});
     
-    console.log('MP Resposta:', JSON.stringify(r));
+    const qrCodeText = r.point_of_interaction?.transaction_data?.qr_code;
+    if (!qrCodeText) throw new Error('QR Code não gerado.');
     
-    // Fallback para diferentes estruturas de resposta
-    const transactionData = r.point_of_interaction?.transaction_data;
-    const qrCodeBase64 = transactionData?.qr_code_base64;
-    const qrCodeText = transactionData?.qr_code;
-    
-    if (!qrCodeText) {
-      throw new Error('QR Code não gerado pela API do Mercado Pago. Verifique se o PIX está ativo na sua conta.');
-    }
-
-    
-    res.json({ paymentId: r.id, qrCodeBase64, qrCodeText });
+    res.json({ paymentId: r.id, qrCodeText });
   } catch (err) {
-    console.error('Erro MP PIX:', err.message);
-    const detail = err.cause ? JSON.stringify(err.cause) : err.message;
-    res.status(500).json({ erro: 'Erro ao gerar Pix no Mercado Pago', detail });
+    res.status(500).json({ erro: err.message });
   }
 });
 

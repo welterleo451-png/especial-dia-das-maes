@@ -10,6 +10,32 @@
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <script src="https://sdk.mercadopago.com/js/v2"></script>
+  <script>
+    // Inicialização rápida para evitar o "flash" da landing page se for o link da mãe
+    window.addEventListener('DOMContentLoaded', () => {
+      if (window.RETRO_DATA) {
+        // Esconde tudo o que não é a retrospectiva
+        document.body.classList.add('retro-view-mode');
+        document.querySelectorAll('section, nav, .topbar').forEach(el => {
+          if (!el.id || (el.id !== 'story-overlay' && el.id !== 'toast')) {
+             el.style.display = 'none';
+          }
+        });
+        
+        // Se estiver bloqueado, mostra aviso
+        if (!window.RETRO_DATA.unlocked) {
+           document.body.innerHTML = `
+             <div style="height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#111; color:#fff; text-align:center; padding:20px; font-family:sans-serif">
+                <div style="font-size:50px">💝</div>
+                <h1 style="margin-top:20px">Presente em Processamento</h1>
+                <p style="opacity:0.8; max-width:400px; line-height:1.6">Sua surpresa está sendo preparada! Em breve o link estará liberado para você se emocionar. ✨</p>
+                <div style="margin-top:30px; font-size:0.8rem; opacity:0.5">Aguardando confirmação do pagamento...</div>
+             </div>
+           `;
+        }
+      }
+    });
+  </script>
 </head>
 <body>
 
@@ -305,10 +331,11 @@
           <div class="pay-opt" id="opt-pix" onclick="selecionarPagamento('pix')"><div class="pay-opt-ico">💠</div><div class="pay-opt-lbl">PIX</div></div>
           <div class="pay-opt" id="opt-cartao" onclick="selecionarPagamento('cartao')"><div class="pay-opt-ico">💳</div><div class="pay-opt-lbl">CARTÃO</div></div>
         </div>
-        <!-- E-mail Unificado -->
-        <div class="form-group" style="margin-top:14px">
-          <label class="form-label">Seu E-mail para recebimento</label>
-          <input type="email" id="email-checkout" class="form-input" placeholder="seu@email.com">
+
+        <div class="form-group" style="margin-top:20px; border-top: 1px solid #eee; padding-top: 20px;">
+          <label class="form-label" style="font-weight: bold; color: #555;">Seu E-mail para recebimento</label>
+          <input type="email" id="email-checkout" class="form-input" placeholder="seu@email.com" style="background: #fdfdfd; border: 1px solid #ddd;">
+          <p style="font-size: 0.7rem; color: #888; margin-top: 5px;">Link da retrospectiva será enviado aqui.</p>
         </div>
 
         <div id="campos-pix" style="display:none; margin-top:16px">
