@@ -375,6 +375,21 @@ const btnCloseRetro     = document.getElementById('btn-close-retro');
  * Cria um overlay animado de "carregando" para dar expectativa.
  */
 function launchRetro() {
+  // ── INICIALIZA ÁUDIO IMEDIATAMENTE (Evita bloqueio de autoplay) ──
+  let audio = document.getElementById('bg-audio');
+  if (!audio) {
+    audio = document.createElement('audio');
+    audio.id = 'bg-audio';
+    audio.loop = true;
+    document.body.appendChild(audio);
+  }
+  audio.src = (state.gender === 'feminino') ? 'audio/mulher.mp3' : 'audio/homem.mp3';
+  audio.load();
+  audio.play().catch(e => {
+    console.log("Autoplay bloqueado, tentaremos novamente após o loading.");
+  });
+  // ─────────────────────────────────────────────────────────────────
+
   // Cria overlay de loading
   const overlay = document.createElement('div');
   overlay.id = 'loading-overlay';
@@ -390,6 +405,9 @@ function launchRetro() {
     overlay.remove();
     initRetro();
     retroSection.classList.remove('hidden');
+    
+    // Tenta tocar novamente caso tenha sido bloqueado antes
+    if (audio.paused) audio.play().catch(() => {});
   }, 2000);
 }
 
@@ -401,20 +419,6 @@ function launchRetro() {
  * de navegação e inicia o timer do primeiro story.
  */
 function initRetro() {
-
-  // ── ÁUDIO ──────────────────────────────────────────────────────────
-  let audio = document.getElementById('bg-audio');
-  if (!audio) {
-    audio = document.createElement('audio');
-    audio.id = 'bg-audio';
-    audio.loop = true;
-    document.body.appendChild(audio);
-  }
-  audio.src = (state.gender === 'masculino') ? 'audio/homem.mp3' : 'audio/mulher.mp3';
-  audio.play().catch(e => console.log("Erro ao iniciar áudio:", e));
-  // ─────────────────────────────────────────────────────────────────────
-
-
   // Gera os dados dos stories
   const stories = buildStoriesData();
 
@@ -1112,22 +1116,28 @@ function fecharDownsell() {
 
 function aceitarDownsell() {
   fecharDownsell();
-  // Altera para o plano vitalício com preço promocional
-  state.selectedTier = 'lifetime';
+  // Altera para o plano vitalício com o NOVO ID do pack de desconto
+  state.selectedTier = 'lifetime_downsell';
   state.selectedPrice = 19.90;
   
   document.querySelectorAll('.tier-card').forEach(el => el.classList.remove('selected'));
   document.getElementById(`tier-lifetime`).classList.add('selected');
   // Atualiza o texto do preço no card de forma visual para o usuário ver o desconto
-  document.querySelector('#tier-lifetime .tier-price').textContent = 'R$ 19,90';
+  const priceDisplay = document.querySelector('#tier-lifetime .tier-price');
+  if (priceDisplay) priceDisplay.textContent = 'R$ 19,90';
   
   mostrarToast('🔥 Oferta ativada! Vitalício por R$ 19,90');
   
   const pixValDisplay = document.getElementById('pix-val-display');
   if (pixValDisplay) pixValDisplay.textContent = 'R$ 19,90';
 
-  if (brickController) { brickController.unmount(); brickController = null; }
-  if (metodoPagamento === 'cartao') renderizarBrickCartao();
+  // Se o método for Pix, já gera automaticamente para facilitar
+  if (metodoPagamento === 'pix') {
+    gerarPix();
+  } else if (metodoPagamento === 'cartao') {
+    if (brickController) { brickController.unmount(); brickController = null; }
+    renderizarBrickCartao();
+  }
 }
 
 function recusarDownsell() {
@@ -1401,20 +1411,33 @@ async function baixarTudo() {
 }
 
 function sucessoPagamento() {
+  console.log('Sucesso no pagamento! Desbloqueando conteúdo...');
   fecharModal();
+  
   state.unlocked = true;
   state.unlockedTier = state.selectedTier;
-  document.getElementById('retro-preview-overlay').classList.add('hidden');
   
+  // Esconde o overlay de preview e garante que a seção de retro está visível
+  const previewOverlay = document.getElementById('retro-preview-overlay');
+  if (previewOverlay) previewOverlay.classList.add('hidden');
+  
+  const retroSection = document.getElementById('retro-section');
+  if (retroSection) retroSection.style.display = 'block';
+
+  // Tenta tocar o áudio com volume alto
   const audio = document.getElementById('bg-audio');
-  if (audio) audio.play();
+  if (audio) {
+    audio.volume = 1.0;
+    audio.play().catch(e => console.log('Erro ao tocar áudio:', e));
+  }
   
-  // Recriar os stories para atualizar os botões finais
-  const stories = buildStoriesData();
-  renderStories(stories);
-  
-  // Injetar botão de compartilhar flutuante para garantir que apareça
+  // Remove o botão de compartilhar flutuante antigo se existir
+  const oldBtn = document.querySelector('.floating-share-btn');
+  if (oldBtn) oldBtn.remove();
+
+  // Injetar botão de compartilhar flutuante
   const shareBtnContainer = document.createElement('div');
+  shareBtnContainer.className = 'floating-share-btn';
   shareBtnContainer.style.cssText = 'position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:9999; width:90%; max-width:400px;';
   shareBtnContainer.innerHTML = `
     <button onclick="compartilhar()" style="width:100%; padding:18px; background:#25D366; color:#fff; border-radius:50px; border:none; font-weight:bold; font-size:1.1rem; box-shadow:0 10px 25px rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center; gap:10px;">
@@ -1423,8 +1446,12 @@ function sucessoPagamento() {
     </button>
   `;
   document.body.appendChild(shareBtnContainer);
+
+  // Forçar a reconstrução dos stories para garantir que apareçam
+  const storiesData = buildStoriesData();
+  renderStories(storiesData);
   
-  // Volta para onde parou para continuar assistindo
+  // Reinicia do ponto onde estava ou do início se preferir
   showStory(activeStoryIndex);
 }
 
@@ -1490,6 +1517,12 @@ function initCountdown() {
 // Inicializa tudo ao carregar
 document.addEventListener('DOMContentLoaded', () => {
   initCountdown();
+
+  // Verifica se veio de um redirecionamento de sucesso de pagamento
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('pagamento') === 'sucesso') {
+    sucessoPagamento();
+  }
 });
 
 function irParaForm() { abrirForm(); document.getElementById('form-section').scrollIntoView({ behavior: 'smooth' }); }

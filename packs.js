@@ -358,6 +358,15 @@ Pra sempre.`,
     precoLabel: 'R$ 27,90',
     faixas: [],
   },
+  lifetime_downsell: {
+    id: 'lifetime_downsell',
+    ico: '🏷️',
+    nome: 'Acesso Vitalício (Oferta Especial)',
+    tagline: 'Completa + Download + Acesso Vitalício',
+    preco: 1990,
+    precoLabel: 'R$ 19,90',
+    faixas: [],
+  },
 };
 
 module.exports = PACKS;

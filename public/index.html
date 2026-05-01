@@ -328,7 +328,7 @@
         .story-title {
             font-family: 'Syne', sans-serif;
             font-weight: 900;
-            font-size: 3.5rem;
+            font-size: clamp(2rem, 10vw, 3.5rem);
             line-height: 0.9;
             margin-bottom: 20px;
             text-transform: uppercase;
@@ -337,6 +337,8 @@
             overflow-wrap: break-word;
             word-break: break-word;
             max-width: 100%;
+            padding: 0 10px;
+            box-sizing: border-box;
         }
 
         .story-label {
