@@ -638,7 +638,18 @@ function buildStoriesData() {
           <p style="margin-top:16px;font-size:1.5rem;font-weight:700;">
             Feliz Dia das Mães! 💖
           </p>
-          <button class="btn-generate-gift" id="btn-generate-gift" style="margin-top: 20px; padding: 15px 30px; background: #fff; color: #ff3cac; border-radius: 30px; font-weight: bold; border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">🎁 Compartilhar</button>
+          
+          <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
+            <button class="btn-unlock" onclick="compartilhar()" style="background: #fff; color: #ff3cac; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+              🔗 Compartilhar Presente
+            </button>
+            
+            ${state.unlockedTier === 'lifetime' ? `
+              <button class="btn-download-story" onclick="baixarTudo()">
+                📥 Baixar Fotos e Mensagem
+              </button>
+            ` : ''}
+          </div>
         </div>
       </div>
     `,
@@ -1077,6 +1088,12 @@ function selecionarPagamento(metodo) {
 }
 
 function selecionarTier(tier, price) {
+  // Se optar pelo de 14.90, disparar o Downsell antes de confirmar a seleção
+  if (tier === 'complete' && price === 14.90) {
+    mostrarDownsell();
+    return;
+  }
+
   state.selectedTier = tier;
   state.selectedPrice = price;
   
@@ -1093,6 +1110,51 @@ function selecionarTier(tier, price) {
   if (metodoPagamento === 'cartao') {
     renderizarBrickCartao();
   }
+}
+
+// ── LÓGICA DE DOWNSELL ──
+function mostrarDownsell() {
+  document.getElementById('downsell-overlay').style.display = 'flex';
+}
+
+function fecharDownsell() {
+  document.getElementById('downsell-overlay').style.display = 'none';
+}
+
+function aceitarDownsell() {
+  fecharDownsell();
+  // Altera para o plano vitalício com preço promocional
+  state.selectedTier = 'lifetime';
+  state.selectedPrice = 19.90;
+  
+  document.querySelectorAll('.tier-card').forEach(el => el.classList.remove('selected'));
+  document.getElementById(`tier-lifetime`).classList.add('selected');
+  // Atualiza o texto do preço no card de forma visual para o usuário ver o desconto
+  document.querySelector('#tier-lifetime .tier-price').textContent = 'R$ 19,90';
+  
+  mostrarToast('🔥 Oferta ativada! Vitalício por R$ 19,90');
+  
+  const pixValDisplay = document.getElementById('pix-val-display');
+  if (pixValDisplay) pixValDisplay.textContent = 'R$ 19,90';
+
+  if (brickController) { brickController.unmount(); brickController = null; }
+  if (metodoPagamento === 'cartao') renderizarBrickCartao();
+}
+
+function recusarDownsell() {
+  fecharDownsell();
+  // Mantém o plano de 14.90
+  state.selectedTier = 'complete';
+  state.selectedPrice = 14.90;
+  
+  document.querySelectorAll('.tier-card').forEach(el => el.classList.remove('selected'));
+  document.getElementById(`tier-complete`).classList.add('selected');
+  
+  const pixValDisplay = document.getElementById('pix-val-display');
+  if (pixValDisplay) pixValDisplay.textContent = 'R$ 14,90';
+
+  if (brickController) { brickController.unmount(); brickController = null; }
+  if (metodoPagamento === 'cartao') renderizarBrickCartao();
 }
 
 async function renderizarBrickCartao() {
@@ -1220,47 +1282,72 @@ async function gerarPixMP() {
   }
 }
 
-function baixarRetrospectiva() {
-  mostrarToast('Iniciando o download do vídeo de alta qualidade...');
-  // Aqui você integraria o script de exportação do canvas ou chamada de back-end
+async function baixarTudo() {
+  mostrarToast('Preparando seu pacote de memórias... 📥');
+  
+  const { momNickname, dedication, photos } = state;
+  
+  // 1. Baixar Dedicatória como TXT
+  const blob = new Blob([`MENSAGEM PARA ${momNickname.toUpperCase()}\n\n${dedication}`], { type: 'text/plain' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `Mensagem_Para_${momNickname}.txt`;
+  a.click();
+  
+  // 2. Baixar as fotos (simulando download de tudo)
+  photos.forEach((photoUrl, index) => {
+    if (photoUrl) {
+      const link = document.createElement('a');
+      link.href = photoUrl;
+      link.download = `Foto_${index + 1}_Momento_Especial.png`;
+      setTimeout(() => link.click(), index * 500); // delay para não travar o browser
+    }
+  });
+
+  mostrarToast('Download concluído! Guarde com carinho. ❤️');
 }
 
 function sucessoPagamento() {
   fecharModal();
   state.unlocked = true;
-  state.unlockedTier = state.selectedTier || 'complete';
+  state.unlockedTier = state.selectedTier;
   document.getElementById('retro-preview-overlay').classList.add('hidden');
   
   const audio = document.getElementById('bg-audio');
   if (audio) audio.play();
   
-  // Customiza botões dependendo do plano
-  if (state.unlockedTier === 'basic') {
-    // Na básica, a restrospectiva termina no slide 2. Vamos botar o Compartilhar nele.
-    const story2 = document.getElementById('story-2');
-    if (story2 && !story2.querySelector('.btn-generate-gift')) {
-      story2.querySelector('.story-content').innerHTML += `
-        <button class="btn-generate-gift" style="margin-top: 25px; padding: 15px 30px; background: #fff; color: #ff3cac; border-radius: 30px; font-weight: bold; border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); width: 100%; position: relative; bottom: 0; transform: none; left: 0;" onclick="generateGift()">🎁 Compartilhar</button>
-      `;
-    }
-    // Esconder o resto da barra de progresso
-    const total = document.querySelectorAll('.story').length;
-    for (let i = 3; i < total; i++) {
-      const seg = document.getElementById('seg-' + i);
-      if (seg) seg.style.display = 'none';
-    }
-  } else if (state.unlockedTier === 'lifetime') {
-    // Na vitalícia, ganha o botão de download no final
-    const total = document.querySelectorAll('.story').length;
-    const storyFinal = document.getElementById('story-' + (total - 1));
-    if (storyFinal && !storyFinal.querySelector('.btn-download')) {
-      storyFinal.querySelector('.story-card-final').innerHTML += `
-        <button class="btn-download" onclick="baixarRetrospectiva()" style="margin-top: 10px; padding: 15px 30px; background: #784BA0; color: #fff; border-radius: 30px; font-weight: bold; border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); width: 100%;">⬇️ Baixar Vídeo e Arquivos</button>
-      `;
-    }
-  }
+  // Recriar os stories para atualizar os botões finais
+  const stories = buildStoriesData();
+  renderStories(stories);
   
-  showStory(2);
+  // Volta para onde parou para continuar assistindo
+  showStory(activeStoryIndex);
+}
+
+/**
+ * compartilhar()
+ * ──────────────
+ * Usa a Web Share API se disponível, senão copia para o clipboard.
+ */
+async function compartilhar() {
+  const { momNickname, gifterName } = state;
+  const shareData = {
+    title: `Presente Especial para ${momNickname} 💝`,
+    text: `Oi ${momNickname}! O ${gifterName} preparou uma surpresa inesquecível para você. Veja agora:`,
+    url: window.location.origin // Idealmente seria um link único salvo no banco
+  };
+
+  try {
+    if (navigator.share) {
+      await navigator.share(shareData);
+    } else {
+      await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
+      mostrarToast('Link copiado para o WhatsApp! ✅');
+    }
+  } catch (err) {
+    console.error('Erro ao compartilhar:', err);
+  }
 }
 
 function mostrarToast(msg) {

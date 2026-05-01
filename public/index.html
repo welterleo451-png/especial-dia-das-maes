@@ -289,9 +289,17 @@
       </div>
       <div class="modal-body">
         <div class="tier-selection">
-          <div class="tier-card" id="tier-basic" onclick="selecionarTier('basic', 14.90)"><h4>Básica</h4><p>Somente as 3 primeiras telas.</p><div class="tier-price">R$ 14,90</div></div>
-          <div class="tier-card selected" id="tier-complete" onclick="selecionarTier('complete', 19.90)"><h4>Completa</h4><p>Retrospectiva inteira em vídeo.</p><div class="tier-price">R$ 19,90</div></div>
-          <div class="tier-card highlight" id="tier-lifetime" onclick="selecionarTier('lifetime', 27.90)"><div class="tier-badge">Recomendado</div><h4>Vitalícia</h4><p>Retrospectiva + Download + Acesso Vitalício.</p><div class="tier-price">R$ 27,90</div></div>
+          <div class="tier-card selected" id="tier-complete" onclick="selecionarTier('complete', 14.90)">
+            <h4>Completa</h4>
+            <p>Retrospectiva inteira com todas as suas fotos.</p>
+            <div class="tier-price">R$ 14,90</div>
+          </div>
+          <div class="tier-card highlight" id="tier-lifetime" onclick="selecionarTier('lifetime', 27.90)">
+            <div class="tier-badge">Mais Escolhido</div>
+            <h4>Vitalícia</h4>
+            <p>Retrospectiva + Download das Fotos + Acesso para Sempre.</p>
+            <div class="tier-price">R$ 27,90</div>
+          </div>
         </div>
         <div class="pay-methods">
           <div class="pay-opt" id="opt-pix" onclick="selecionarPagamento('pix')"><div class="pay-opt-ico">💠</div><div class="pay-opt-lbl">PIX</div></div>
@@ -329,6 +337,29 @@
             <img src="https://img.icons8.com/color/48/000000/pix.png" width="20" alt="Pix">
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ MODAL DOWNSELL ══ -->
+  <div class="overlay" id="downsell-overlay" style="display:none; z-index: 10001;">
+    <div class="modal downsell-modal">
+      <div class="modal-head">
+        <h3 class="modal-title">🎁 Oferta Especial Só Agora!</h3>
+        <button class="close-btn" onclick="fecharDownsell()">×</button>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+        <div class="downsell-icon">⭐</div>
+        <h4>Não perca suas memórias!</h4>
+        <p>Por apenas mais <strong>R$ 5,00</strong>, você leva o <strong>Acesso Vitalício + Download</strong> das fotos para guardar para sempre.</p>
+        
+        <div class="downsell-price-box">
+          <span class="price-old">De R$ 27,90</span>
+          <span class="price-new">Por R$ 19,90</span>
+        </div>
+
+        <button class="btn-unlock" onclick="aceitarDownsell()" style="width:100%; margin-bottom: 10px; background: linear-gradient(135deg, #ff3cac 0%, #784ba0 100%);">Sim! Quero o Vitalício por R$ 19,90 ↗</button>
+        <button class="btn-back" onclick="recusarDownsell()" style="width:100%; border: none; background: transparent; color: #888; text-decoration: underline;">Não, quero continuar com o plano comum</button>
       </div>
     </div>
   </div>

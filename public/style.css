@@ -328,3 +328,64 @@ input[type="number"]::-webkit-inner-spin-button{opacity:.5}
     @media (max-width: 768px) {
       .floating-cta { display: block; }
     }
+
+    /* DOWNSELL MODAL STYLES */
+    .downsell-modal {
+      border: 2px solid #7c3aed;
+      animation: modalSlideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes modalSlideUp {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .downsell-icon {
+      font-size: 4rem;
+      margin-bottom: 10px;
+      animation: starPop 0.6s infinite alternate ease-in-out;
+    }
+    @keyframes starPop {
+      from { transform: scale(1) rotate(-5deg); }
+      to { transform: scale(1.2) rotate(5deg); }
+    }
+    .downsell-price-box {
+      margin: 20px 0;
+      padding: 15px;
+      background: #fdf2f8;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .price-old {
+      font-size: 0.9rem;
+      color: #999;
+      text-decoration: line-through;
+    }
+    .price-new {
+      font-size: 1.8rem;
+      color: #be185d;
+      font-weight: 800;
+      font-family: 'Syne', sans-serif;
+    }
+
+    /* DOWNLOAD BUTTON IN STORY */
+    .btn-download-story {
+      margin-top: 10px;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: #fff;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-download-story:hover {
+      background: #fff;
+      color: #ff3cac;
+    }
