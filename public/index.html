@@ -568,12 +568,16 @@
             // UTILIZA AS IMAGENS REAIS SALVAS NA BASE DE DADOS (BASE64)
             const imagesToUse = (retro.images && retro.images.length > 0) ? retro.images : defaultImages;
 
-            const momRef = retro.momNickname || retro.momName || "Mãe";
-            const texts = [
-                `Para a melhor mãe do mundo, ${momRef}...`,
-                retro.momMemory ? `"${retro.momMemory}"` : `Obrigado por tudo que faz por mim.`,
-                `Feito com amor por ${retro.name || 'seu filho(a)'}.`
-            ];
+           const momRef = retro.momNickname || retro.momName || "Mãe";
+
+// >>> AQUI ESTÁ A MÁGICA DAS FRASES COMPLETAS <<<
+const texts = [
+    `Para a melhor mãe do mundo, ${momRef}...`,
+    retro.momFood ? `Aquele(a) ${retro.momFood} que você faz tem gosto de amor.` : '',
+    retro.momHabit ? `Eu amo até mesmo a sua mania de ${retro.momHabit} rsrs!` : '',
+    retro.momMemory ? `"${retro.momMemory}"` : `Obrigado por tudo que faz por mim.`,
+    `Feito com muito amor por ${retro.name || 'seu filho(a)'}.`
+].filter(texto => texto !== ''); // Remove os vazios
 
             let carouselIdx = 0;
             function updateFrame() {
