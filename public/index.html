@@ -13,6 +13,9 @@
     <!-- Tailwind CSS (CDN) -->
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- Mercado Pago SDK -->
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    
     <!-- Tailwind Config & Custom CSS -->
     <script>
         tailwind.config = {
@@ -429,7 +432,6 @@
                         <hr class="my-6 border-gray-200">
                         <h4 class="font-bold text-gray-800 mb-4">Dados de Pagamento</h4>
                         
-                        <!-- ID user-email adicionado -->
                         <div class="mb-4">
                             <label class="block text-sm font-medium text-gray-700 mb-1">Seu E-mail (Para receber o link)</label>
                             <input type="email" id="user-email" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="voce@email.com">
@@ -454,7 +456,7 @@
                             </button>
 
                             <!-- Imagem QR Code (Oculta inicialmente) -->
-                            <img id="qr-code-img" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=00020126580014br.gov.bcb.pix.exemplo.123" class="w-32 h-32 mx-auto rounded-lg mb-4 shadow-sm border border-green-200 hidden" alt="QR Code PIX">
+                            <img id="qr-code-img" src="" class="w-32 h-32 mx-auto rounded-lg mb-4 shadow-sm border border-green-200 hidden" alt="QR Code PIX">
                             
                             <!-- Botão Copiar (Oculto inicialmente) -->
                             <button onclick="copyPix()" id="btn-copy-pix" class="w-full bg-green-600 hover:bg-green-700 text-white rounded-xl py-3.5 font-bold items-center justify-center gap-2 transition hidden">
@@ -464,7 +466,7 @@
 
                         <!-- Conteúdo Cartão (Mercado Pago Bricks Container) -->
                         <div id="content-cartao" class="hidden">
-                            <p class="text-sm text-gray-500 text-center mb-4">Carregando ambiente seguro de pagamento...</p>
+                            <p id="brick-loading-text" class="text-sm text-gray-500 text-center mb-4">Carregando ambiente seguro de pagamento...</p>
                             <div id="payment-brick-container"></div>
                         </div>
                     </div>
@@ -497,6 +499,11 @@
 
     <!-- JavaScript Vanilla Lógica -->
     <script>
+        // SDK Mercado Pago Inicialização Global
+        const mp = new MercadoPago('APP_USR-1cf27e77-da58-48d7-b2ba-150bd96d2c3d', { locale: 'pt-BR' });
+        let cardPaymentBrickController;
+        let pixCodeToCopy = '';
+
         // ESTADO GLOBAL
         let currentStep = 1;
         const totalSteps = 6;
@@ -513,7 +520,7 @@
         let uploadedImages = [];
         let generoSelecionado = '';
         let musicaPreview = new Audio();
-        let selectedPrice = 0; // Variável Global Atualizada
+        let selectedPrice = 0;
         let previewInterval;
 
         // FUNÇÕES MODAL
@@ -680,6 +687,61 @@
                 el.innerText = `R$ ${priceStr}`;
             });
             switchTab('pix');
+            
+            // Inicia o Brick de Cartão com o valor numérico convertido
+            renderCardBrick(parseFloat(priceStr.replace(',', '.')));
+        }
+
+        // RENDERIZAÇÃO DO PAYMENT BRICK (CARTÃO DE CRÉDITO)
+        async function renderCardBrick(price) {
+            const bricksBuilder = mp.bricks();
+            
+            if (cardPaymentBrickController) {
+                cardPaymentBrickController.unmount();
+            }
+
+            const settings = {
+                initialization: {
+                    amount: price,
+                },
+                customization: {
+                    paymentMethods: {
+                        creditCard: "all"
+                    }
+                },
+                callbacks: {
+                    onReady: () => {
+                        // Esconde o texto de carregamento quando o form estiver pronto
+                        const loadingText = document.getElementById('brick-loading-text');
+                        if (loadingText) loadingText.classList.add('hidden');
+                    },
+                    onSubmit: ({ selectedPaymentMethod, formData }) => {
+                        return new Promise((resolve, reject) => {
+                            fetch('https://especial-dia-das-maes-production.up.railway.app/process_payment', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(formData)
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                resolve();
+                                alert("Pagamento aprovado!");
+                                // Aqui você pode adicionar lógica de redirecionamento ou mostrar tela de sucesso
+                            })
+                            .catch(error => {
+                                reject();
+                                alert("Erro ao processar pagamento. Verifique seus dados e tente novamente.");
+                                console.error("Erro no pagamento via cartão:", error);
+                            });
+                        });
+                    },
+                    onError: (error) => {
+                        console.error("Erro no Brick de Pagamento:", error);
+                    }
+                }
+            };
+            
+            cardPaymentBrickController = await bricksBuilder.create('payment', 'payment-brick-container', settings);
         }
 
         // ABAS DE PAGAMENTO (PILL)
@@ -714,11 +776,10 @@
             }
         }
 
-        // SIMULAÇÃO FETCH API E GERAÇÃO DE PIX
+        // GERAÇÃO REAL DE PIX VIA API DO BACKEND
         async function gerarPixReal() {
             const emailInput = document.getElementById('user-email').value;
             
-            // Verificação do E-mail
             if (!emailInput || !emailInput.includes('@')) {
                 alert('Por favor, preencha seu e-mail corretamente antes de gerar o PIX.');
                 return;
@@ -727,17 +788,12 @@
             const btnGenerate = document.getElementById('btn-generate-pix');
             const originalText = btnGenerate.innerHTML;
             
-            // Visual de Loading no botão
             btnGenerate.innerHTML = '⏳ Gerando PIX...';
             btnGenerate.classList.add('opacity-75', 'cursor-not-allowed');
             btnGenerate.disabled = true;
 
-            // SIMULAÇÃO DA CHAMADA AO BACKEND:
-            /*
-            O código real que conectaria à sua API no Railway seria:
-            
             try {
-                const response = await fetch('URL_DO_SEU_BACKEND_RAILWAY/criar-pix', {
+                const response = await fetch('https://especial-dia-das-maes-production.up.railway.app/criar-pix', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
@@ -746,34 +802,53 @@
                         dadosRetrospectiva: userData
                     })
                 });
+                
+                if (!response.ok) {
+                    throw new Error('Falha ao comunicar com o servidor.');
+                }
+                
                 const data = await response.json();
                 
-                // Setar a imagem e o código real recebido da API
-                // document.getElementById('qr-code-img').src = data.qrCodeBase64;
-                // document.getElementById('btn-copy-pix').dataset.code = data.pixCode;
+                // Mapeamento baseado nas respostas comuns da API do MP
+                const qrCodeBase64 = data.qrCodeBase64 || data.qr_code_base64;
+                pixCodeToCopy = data.pixCode || data.qr_code;
+
+                const qrCodeImg = document.getElementById('qr-code-img');
+                
+                // Injeta a base64 na tag <img> garantindo o formato correto
+                if (qrCodeBase64.startsWith('data:image')) {
+                    qrCodeImg.src = qrCodeBase64;
+                } else {
+                    qrCodeImg.src = `data:image/jpeg;base64,${qrCodeBase64}`;
+                }
+                
+                // Atualiza a Interface
+                btnGenerate.classList.add('hidden');
+                qrCodeImg.classList.remove('hidden');
+                
+                const btnCopy = document.getElementById('btn-copy-pix');
+                btnCopy.classList.remove('hidden');
+                btnCopy.classList.add('flex');
+                
             } catch(error) {
                 console.error("Erro ao gerar PIX", error);
+                alert("Ocorreu um erro ao gerar seu PIX. Por favor, tente novamente.");
+                
+                // Reverte botão em caso de erro
+                btnGenerate.innerHTML = originalText;
+                btnGenerate.classList.remove('opacity-75', 'cursor-not-allowed');
+                btnGenerate.disabled = false;
             }
-            */
-
-            // Mock de 2 segundos para simular a resposta da API
-            setTimeout(() => {
-                // Oculta o botão de Gerar
-                btnGenerate.classList.add('hidden');
-                
-                // Mostra o QR Code e o botão de Copiar
-                document.getElementById('qr-code-img').classList.remove('hidden');
-                document.getElementById('btn-copy-pix').classList.remove('hidden');
-                document.getElementById('btn-copy-pix').classList.add('flex'); // Garante o display flex
-                
-            }, 2000);
         }
 
-        // FUNÇÃO COPIAR PIX OTIMIZADA
+        // FUNÇÃO COPIAR PIX UTILIZANDO A VARIÁVEL REAL
         function copyPix() {
-            // Em um cenário real, você pegaria o código do dataset ou variável
-            const pixCode = '00020126580014br.gov.bcb.pix.exemplo.123';
-            navigator.clipboard.writeText(pixCode).then(() => {
+            if (!pixCodeToCopy) {
+                alert("Nenhum código PIX gerado ainda.");
+                return;
+            }
+            
+            navigator.clipboard.writeText(pixCodeToCopy).then(() => {
                 const btn = document.getElementById('btn-copy-pix');
                 const originalText = btn.innerHTML;
                 
@@ -788,7 +863,7 @@
                 }, 3000);
             }).catch(err => {
                 console.error('Falha ao copiar:', err);
-                alert("Copie este código manualmente: " + pixCode);
+                alert("Falha ao copiar automaticamente. Copie este código manualmente: " + pixCodeToCopy);
             });
         }
     </script>
