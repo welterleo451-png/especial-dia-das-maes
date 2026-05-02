@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Especial Dia das Mães - Retrospectiva</title>
     
-    <!-- Google Fonts: Poppins (Incluindo peso 900 para Black) -->
+    <!-- Google Fonts: Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS (CDN) -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Config & Custom CSS -->
     <script>
         tailwind.config = {
             theme: {
@@ -19,843 +21,740 @@
                     fontFamily: {
                         poppins: ['Poppins', 'sans-serif'],
                     },
-                    colors: {
-                        brand: {
-                            light: '#8b5cf6',
-                            DEFAULT: '#6d28d9',
-                            dark: '#5b21b6',
-                        }
+                    animation: {
+                        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     }
                 }
             }
         }
     </script>
-
-    <!-- Custom CSS for Animations and Specific Visuals -->
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f9fafb; /* gray-50 */
-            color: #111827; /* gray-900 */
-        }
-
-        /* Pulsing Heart Animation */
-        .heart-loader {
-            position: relative;
-            width: 100px;
-            height: 100px;
-            transform: rotate(45deg);
-            background-color: #6d28d9;
-            animation: pulse 1.2s infinite;
-        }
-        .heart-loader::before, .heart-loader::after {
-            content: '';
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            background-color: #6d28d9;
-            border-radius: 50%;
-        }
-        .heart-loader::before { top: -50px; left: 0; }
-        .heart-loader::after { top: 0; left: -50px; }
-
-        @keyframes pulse {
-            0% { transform: rotate(45deg) scale(0.8); }
-            50% { transform: rotate(45deg) scale(1.1); }
-            100% { transform: rotate(45deg) scale(0.8); }
-        }
-
-        /* Hide Scrollbar but keep functionality */
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-        /* Story Progress Bar */
-        .story-progress {
-            height: 4px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 2px;
-            flex-grow: 1;
+        body { font-family: 'Poppins', sans-serif; }
+        .hidden-step { display: none; }
+        /* Phone Mockup Style */
+        .phone-mockup {
+            width: 280px;
+            height: 500px;
+            border: 12px solid #1f2937;
+            border-radius: 36px;
             overflow: hidden;
+            position: relative;
+            background-color: #000;
+            margin: 0 auto;
         }
-        .story-progress-fill {
+        .phone-screen {
+            width: 100%;
             height: 100%;
-            background: #fff;
-            width: 0%;
-        }
-        .story-progress-fill.active {
-            transition: width 3s linear;
-            width: 100%;
-        }
-        .story-progress-fill.completed {
-            width: 100%;
-        }
-
-        /* Image Upload Box preview bg */
-        .bg-cover-center {
             background-size: cover;
             background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            transition: background-image 0.5s ease-in-out;
+        }
+        .phone-text-overlay {
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            min-height: 120px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
         }
     </style>
 </head>
-<body class="antialiased overflow-x-hidden relative">
+<body class="bg-gray-50 antialiased pt-[88px]">
 
-    <!-- ==========================================
-         TOP BAR DE URGÊNCIA
-         ========================================== -->
-    <div class="bg-purple-900 text-white text-xs md:text-sm text-center py-2 px-4 font-semibold tracking-wide shadow-md relative z-20">
+    <!-- Top Bar -->
+    <div class="fixed top-0 left-0 w-full bg-purple-900 text-white text-center py-1.5 text-xs sm:text-sm font-medium z-50">
         +10.000 mães já choraram de emoção - faltam poucos dias para o Dia das Mães! 🤍
     </div>
 
-    <!-- ==========================================
-         1. LANDING PAGE
-         ========================================== -->
-    <header class="bg-white shadow-sm sticky top-0 z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            <div class="font-black tracking-tight text-xl md:text-2xl text-brand flex items-center gap-2">
-                💝 Especial Dia das Mães
+    <!-- Header -->
+    <header class="fixed top-[32px] sm:top-[32px] left-0 w-full bg-white shadow-md z-40">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="font-bold text-lg sm:text-xl text-purple-700 flex items-center gap-2">
+                💝 <span class="hidden sm:inline">Especial Dia das Mães</span><span class="sm:hidden">Dia das Mães</span>
             </div>
-            <nav class="hidden md:flex gap-6 font-semibold text-gray-600">
-                <a href="#recursos" class="hover:text-brand transition">Recursos</a>
-                <a href="#depoimentos" class="hover:text-brand transition">Depoimentos</a>
-                <a href="#como-funciona" class="hover:text-brand transition">Como Funciona</a>
+            <nav class="hidden md:flex gap-6 text-gray-600 font-medium text-sm">
+                <a href="#recursos" class="hover:text-purple-700 transition">Recursos</a>
+                <a href="#depoimentos" class="hover:text-purple-700 transition">Depoimentos</a>
+                <a href="#passos" class="hover:text-purple-700 transition">Como Funciona</a>
             </nav>
-            <button onclick="openGenerator()" class="bg-brand hover:bg-brand-dark text-white px-6 py-2 rounded-full font-bold transition shadow-lg shadow-brand/30">
+            <button onclick="openGeneratorModal()" class="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2 rounded-full font-semibold text-sm transition transform hover:scale-105 shadow-lg">
                 Criar Presente
             </button>
         </div>
     </header>
 
-    <main>
-        <!-- Hero Section (Novo Gradiente Premium) -->
-        <section class="bg-gradient-to-br from-purple-700 via-purple-600 to-fuchsia-500 py-24 text-center px-4 relative overflow-hidden">
-            <div class="max-w-3xl mx-auto relative z-10">
-                <h1 class="text-5xl md:text-7xl font-black text-white mb-6 drop-shadow-md tracking-tight leading-tight">
-                    Demo Interativa
-                </h1>
-                <p class="text-white/90 text-lg md:text-2xl font-semibold mb-10 drop-shadow-sm">
-                    Crie uma homenagem emocionante em vídeo para sua mãe em minutos.
-                </p>
-                <button onclick="openGenerator()" class="bg-white text-brand hover:bg-gray-100 px-8 py-4 rounded-full font-black text-xl md:text-2xl transition flex items-center justify-center gap-3 mx-auto shadow-2xl transform hover:scale-105 duration-300">
-                    <span>▶</span> Criar Meu Presente
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-purple-700 via-purple-600 to-fuchsia-500 text-white py-20 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-5xl sm:text-6xl font-black mb-6 leading-tight tracking-tight">
+                Demo Interativa <br> <span class="text-fuchsia-200">Emocione sua Mãe</span>
+            </h1>
+            <p class="text-lg sm:text-xl mb-10 text-purple-100 max-w-2xl mx-auto font-light">
+                Crie um vídeo emocionante e personalizado em menos de 3 minutos com fotos, mensagens e músicas marcantes.
+            </p>
+            <button onclick="openGeneratorModal()" class="bg-white text-purple-700 px-8 py-4 rounded-full font-bold text-lg sm:text-xl transition transform hover:scale-105 shadow-2xl hover:shadow-purple-900/50 flex items-center gap-2 mx-auto">
+                ▶ Criar Meu Presente
+            </button>
+            <p class="mt-4 text-sm text-purple-200 font-medium">Não é necessário cadastro.</p>
+        </div>
+    </section>
+
+    <!-- 1º Seção de Recursos -->
+    <section id="recursos" class="py-16 px-4 bg-white">
+        <div class="max-w-6xl mx-auto text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-10">Por que ela vai amar?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="p-6 rounded-2xl bg-purple-50">
+                    <div class="text-4xl mb-4">☁️</div>
+                    <h3 class="font-bold text-xl mb-2 text-purple-900">Para Sempre no Ar</h3>
+                    <p class="text-gray-600 text-sm">O link do presente fica salvo na nuvem, ela poderá assistir hoje, amanhã e sempre.</p>
+                </div>
+                <div class="p-6 rounded-2xl bg-fuchsia-50">
+                    <div class="text-4xl mb-4">🎵</div>
+                    <h3 class="font-bold text-xl mb-2 text-fuchsia-900">Trilha Sonora Perfeita</h3>
+                    <p class="text-gray-600 text-sm">Áudios cinematográficos que ativam memórias afetivas instantaneamente.</p>
+                </div>
+                <div class="p-6 rounded-2xl bg-pink-50">
+                    <div class="text-4xl mb-4">🔒</div>
+                    <h3 class="font-bold text-xl mb-2 text-pink-900">100% Seguro e Privado</h3>
+                    <p class="text-gray-600 text-sm">Apenas você e as pessoas com quem você compartilhar o link terão acesso.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2º Seção de Depoimentos -->
+    <section id="depoimentos" class="py-16 px-4 bg-gray-100">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-10">Quem fez, aprova ⭐</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex text-yellow-400 mb-3 text-sm">★★★★★</div>
+                    <p class="text-gray-700 italic text-sm mb-4">"Minha mãe chorou logo nos primeiros 10 segundos. Foi o melhor presente de R$14 que já dei na vida!"</p>
+                    <p class="font-bold text-gray-900 text-sm">- Carlos E.</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex text-yellow-400 mb-3 text-sm">★★★★★</div>
+                    <p class="text-gray-700 italic text-sm mb-4">"Muito fácil de fazer. Eu não entendo nada de edição e ficou parecendo filme de cinema."</p>
+                    <p class="font-bold text-gray-900 text-sm">- Mariana S.</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex text-yellow-400 mb-3 text-sm">★★★★★</div>
+                    <p class="text-gray-700 italic text-sm mb-4">"Peguei o vitalício porque quero fazer de novo ano que vem. Sensacional a qualidade do áudio."</p>
+                    <p class="font-bold text-gray-900 text-sm">- Roberto F.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3º Seção de 4 Passos -->
+    <section id="passos" class="py-16 px-4 bg-white">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Como Funciona (4 Passos)</h2>
+            <div class="space-y-6">
+                <div class="flex items-start gap-4">
+                    <div class="flex-shrink-0 w-10 h-10 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg">1</div>
+                    <div>
+                        <h4 class="text-xl font-bold text-gray-800">Preencha os dados</h4>
+                        <p class="text-gray-600 text-sm">Responda a perguntas simples sobre sua mãe para personalizar o roteiro.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4">
+                    <div class="flex-shrink-0 w-10 h-10 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg">2</div>
+                    <div>
+                        <h4 class="text-xl font-bold text-gray-800">Envie as Fotos</h4>
+                        <p class="text-gray-600 text-sm">Selecione 5 fotos marcantes da galeria do seu celular.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4">
+                    <div class="flex-shrink-0 w-10 h-10 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg">3</div>
+                    <div>
+                        <h4 class="text-xl font-bold text-gray-800">Veja a Prévia Grátis</h4>
+                        <p class="text-gray-600 text-sm">O sistema gera uma demonstração do resultado para você aprovar.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4">
+                    <div class="flex-shrink-0 w-10 h-10 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg">4</div>
+                    <div>
+                        <h4 class="text-xl font-bold text-gray-800">Desbloqueie e Emocione</h4>
+                        <p class="text-gray-600 text-sm">Escolha seu plano e receba o link oficial para mandar no WhatsApp dela.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-12">
+                <button onclick="openGeneratorModal()" class="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-full font-bold text-lg transition shadow-lg">
+                    Começar Agora
                 </button>
-                <p class="text-white/80 mt-6 text-sm font-semibold tracking-wide uppercase">Não é necessário cadastro.</p>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- SEÇÃO 1: Recursos (Faixa Branca Abaixo do Hero) -->
-        <section id="recursos" class="bg-white py-16 border-b border-gray-100 shadow-sm relative z-10">
-            <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
-                <div class="p-4">
-                    <div class="text-5xl mb-4 transform hover:scale-110 transition duration-300">☁️</div>
-                    <h3 class="font-black text-2xl text-gray-900 mb-2 tracking-tight">Para sempre no ar</h3>
-                    <p class="text-gray-500 font-medium text-lg">Seu presente fica salvo na nuvem com um link exclusivo.</p>
-                </div>
-                <div class="p-4">
-                    <div class="text-5xl mb-4 transform hover:scale-110 transition duration-300">🎨</div>
-                    <h3 class="font-black text-2xl text-gray-900 mb-2 tracking-tight">100% personalizável</h3>
-                    <p class="text-gray-500 font-medium text-lg">Textos, fotos e áudio adaptados à sua história real.</p>
-                </div>
-                <div class="p-4">
-                    <div class="text-5xl mb-4 transform hover:scale-110 transition duration-300">🎬</div>
-                    <h3 class="font-black text-2xl text-gray-900 mb-2 tracking-tight">Retrospectiva única</h3>
-                    <p class="text-gray-500 font-medium text-lg">Design estilo "Stories" que prende a atenção e emociona.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- SEÇÃO 2: Depoimentos -->
-        <section id="depoimentos" class="py-20 bg-gray-50">
-            <div class="max-w-7xl mx-auto px-4">
-                <h2 class="text-4xl md:text-5xl font-black tracking-tight text-center text-gray-900 mb-14">O que nossos clientes dizem</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="bg-white p-8 rounded-3xl shadow-md border border-gray-100 hover:shadow-lg transition">
-                        <div class="flex text-yellow-400 mb-4 text-2xl">★★★★★</div>
-                        <p class="text-gray-700 italic mb-6 text-lg">"Minha mãe chorou horrores (de alegria, claro!). Foi o presente mais especial que já dei. Muito fácil de fazer!"</p>
-                        <p class="font-black text-brand text-lg">- João e Mari</p>
-                    </div>
-                    <div class="bg-white p-8 rounded-3xl shadow-md border border-gray-100 hover:shadow-lg transition">
-                        <div class="flex text-yellow-400 mb-4 text-2xl">★★★★★</div>
-                        <p class="text-gray-700 italic mb-6 text-lg">"Eu não tinha muito tempo, mas o resultado parece que levei semanas editando. Ficou perfeito, super recomendo."</p>
-                        <p class="font-black text-brand text-lg">- Ana Clara</p>
-                    </div>
-                    <div class="bg-white p-8 rounded-3xl shadow-md border border-gray-100 hover:shadow-lg transition">
-                        <div class="flex text-yellow-400 mb-4 text-2xl">★★★★★</div>
-                        <p class="text-gray-700 italic mb-6 text-lg">"A qualidade das transições e o áudio no fundo deram um toque de cinema. Vale cada centavo!"</p>
-                        <p class="font-black text-brand text-lg">- Lucas e Carol</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SEÇÃO 3: Passos -->
-        <section id="como-funciona" class="py-20 bg-white border-t border-gray-100">
-            <div class="max-w-7xl mx-auto px-4">
-                <h2 class="text-4xl md:text-5xl font-black tracking-tight text-center text-gray-900 mb-16">Crie um presente inesquecível em 4 passos simples</h2>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                    <div class="bg-gray-50 p-8 rounded-3xl shadow-sm text-center border border-gray-100">
-                        <div class="w-14 h-14 bg-brand text-white rounded-full flex items-center justify-center text-2xl font-black mx-auto mb-6 shadow-md shadow-brand/30">1</div>
-                        <h3 class="font-black text-xl mb-3 text-gray-900 tracking-tight">Fale de você</h3>
-                        <p class="text-gray-600 font-medium">Seus dados básicos para personalizarmos a experiência.</p>
-                    </div>
-                    <div class="bg-gray-50 p-8 rounded-3xl shadow-sm text-center border border-gray-100">
-                        <div class="w-14 h-14 bg-brand text-white rounded-full flex items-center justify-center text-2xl font-black mx-auto mb-6 shadow-md shadow-brand/30">2</div>
-                        <h3 class="font-black text-xl mb-3 text-gray-900 tracking-tight">Sobre ela</h3>
-                        <p class="text-gray-600 font-medium">Responda perguntas rápidas sobre a história de vocês.</p>
-                    </div>
-                    <div class="bg-gray-50 p-8 rounded-3xl shadow-sm text-center border border-gray-100">
-                        <div class="w-14 h-14 bg-brand text-white rounded-full flex items-center justify-center text-2xl font-black mx-auto mb-6 shadow-md shadow-brand/30">3</div>
-                        <h3 class="font-black text-xl mb-3 text-gray-900 tracking-tight">Envie as Fotos</h3>
-                        <p class="text-gray-600 font-medium">Escolha 5 momentos especiais que marcaram a vida de vocês.</p>
-                    </div>
-                    <div class="bg-gray-50 p-8 rounded-3xl shadow-sm text-center border border-gray-100">
-                        <div class="w-14 h-14 bg-brand text-white rounded-full flex items-center justify-center text-2xl font-black mx-auto mb-6 shadow-md shadow-brand/30">4</div>
-                        <h3 class="font-black text-xl mb-3 text-gray-900 tracking-tight">Pronto!</h3>
-                        <p class="text-gray-600 font-medium">Nossa IA cria o vídeo emocionante instantaneamente.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SEÇÃO 4: CTA Footer -->
-        <section class="bg-purple-900 py-20 text-center px-4 relative overflow-hidden border-t-8 border-brand">
-            <div class="max-w-3xl mx-auto relative z-10">
-                <h2 class="text-4xl md:text-5xl font-black tracking-tight text-white mb-8 drop-shadow-md">Declare seu amor para sempre</h2>
-                <button onclick="openGenerator()" class="bg-white text-purple-900 hover:bg-gray-100 px-10 py-5 rounded-full font-black text-xl md:text-2xl transition shadow-2xl mx-auto transform hover:scale-105 duration-300">
-                    Criar Meu Presente Agora
-                </button>
-            </div>
-        </section>
-    </main>
-
-    <!-- ==========================================
-         2. MODAL GERADOR (6 PASSOS)
-         ========================================== -->
-    <div id="modal-generator" class="fixed inset-0 z-50 bg-gray-900/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl relative flex flex-col max-h-[90vh]">
+    <!-- MODAL PRINCIPAL DO GERADOR -->
+    <div id="modal-container" class="fixed inset-0 bg-black/80 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        
+        <!-- Wrapper do Modal com altura máxima e scroll -->
+        <div class="bg-white rounded-3xl w-full max-w-md max-h-[90vh] overflow-y-auto relative shadow-2xl">
             
-            <!-- Header Progress -->
-            <div class="p-6 pb-2 border-b border-gray-100 flex justify-between items-center">
-                <button onclick="closeModal('modal-generator')" class="text-gray-400 hover:text-gray-800 text-2xl font-bold">&times;</button>
-                <div class="text-brand font-black text-sm bg-brand/10 px-4 py-1 rounded-full tracking-wide">Passo <span id="step-counter">1</span>/6</div>
-            </div>
+            <!-- Botão Fechar -->
+            <button onclick="closeModals()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl font-bold z-10">&times;</button>
             
-            <!-- Progress Bar Line -->
-            <div class="w-full bg-gray-100 h-1.5">
-                <div id="step-progress-bar" class="bg-brand h-1.5 transition-all duration-300 w-1/6"></div>
-            </div>
+            <div class="p-6">
+                <!-- Barra de Progresso (Passos Form) -->
+                <div id="progress-bar-container" class="w-full bg-gray-200 rounded-full h-2.5 mb-6">
+                    <div id="progress-bar" class="bg-purple-600 h-2.5 rounded-full transition-all duration-300" style="width: 16.6%"></div>
+                </div>
 
-            <!-- Scrollable Content Area -->
-            <div class="p-6 overflow-y-auto no-scrollbar flex-grow">
-                
-                <!-- Passo 1 -->
+                <!-- PASSO 1: Dados do Usuário -->
                 <div id="step-1" class="step-content">
-                    <h3 class="text-2xl font-black tracking-tight text-gray-900 mb-6">Olá! Vamos começar com quem você é.</h3>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Quem está presenteando?</h3>
+                    <p class="text-sm text-gray-500 mb-6">Precisamos saber quem você é para o roteiro.</p>
+                    
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-extrabold text-gray-700 mb-1 tracking-wide">SEU NOME</label>
-                            <input type="text" id="u-name" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold text-gray-800" placeholder="Ex: Lucas">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Seu Nome</label>
+                            <input type="text" id="user-name" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Ex: Lucas">
                         </div>
+                        
                         <div>
-                            <label class="block text-sm font-extrabold text-gray-700 mb-1 tracking-wide">SEU GÊNERO (Para o áudio)</label>
-                            <div class="flex gap-4">
-                                <button onclick="setGender('masculino')" id="btn-gender-m" class="flex-1 py-3 border-2 border-gray-200 rounded-2xl font-bold text-gray-600 hover:border-brand transition">👨 Masculino</button>
-                                <button onclick="setGender('feminino')" id="btn-gender-f" class="flex-1 py-3 border-2 border-gray-200 rounded-2xl font-bold text-gray-600 hover:border-brand transition">👩 Feminino</button>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Seu Gênero (Importante para o áudio)</label>
+                            <div class="grid grid-cols-2 gap-3">
+                                <label class="border border-gray-300 rounded-xl p-3 flex items-center gap-2 cursor-pointer hover:bg-purple-50 has-[:checked]:bg-purple-100 has-[:checked]:border-purple-600 transition">
+                                    <input type="radio" name="gender" value="Masculino" class="w-4 h-4 text-purple-600">
+                                    <span class="font-medium text-gray-700">👨 Masculino</span>
+                                </label>
+                                <label class="border border-gray-300 rounded-xl p-3 flex items-center gap-2 cursor-pointer hover:bg-purple-50 has-[:checked]:bg-purple-100 has-[:checked]:border-purple-600 transition">
+                                    <input type="radio" name="gender" value="Feminino" class="w-4 h-4 text-purple-600">
+                                    <span class="font-medium text-gray-700">👩 Feminino</span>
+                                </label>
                             </div>
                         </div>
+
                         <div>
-                            <label class="block text-sm font-extrabold text-gray-700 mb-1 tracking-wide">SEU WHATSAPP</label>
-                            <input type="tel" id="u-phone" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold text-gray-800" placeholder="(11) 99999-9999">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Seu WhatsApp</label>
+                            <input type="tel" id="user-phone" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="(00) 00000-0000">
                         </div>
                     </div>
+                    
+                    <button onclick="nextStep(1)" class="w-full bg-purple-600 text-white rounded-xl py-3.5 font-bold mt-8 hover:bg-purple-700 transition">Próximo Passo ➔</button>
                 </div>
 
-                <!-- Passo 2 -->
-                <div id="step-2" class="step-content hidden">
-                    <h3 class="text-2xl font-black tracking-tight text-gray-900 mb-6">Agora fala de quem mais importa.</h3>
+                <!-- PASSO 2: Dados da Mãe -->
+                <div id="step-2" class="step-content hidden-step">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Sobre ela...</h3>
+                    <p class="text-sm text-gray-500 mb-6">Como ela se chama?</p>
+                    
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-extrabold text-gray-700 mb-1 tracking-wide">NOME DA SUA MÃE</label>
-                            <input type="text" id="m-name" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold" placeholder="Ex: Maria">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Nome da sua mãe</label>
+                            <input type="text" id="mom-name" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Ex: Maria">
                         </div>
                         <div>
-                            <label class="block text-sm font-extrabold text-gray-700 mb-1 tracking-wide">APELIDO CARINHOSO</label>
-                            <input type="text" id="m-nickname" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold" placeholder="Ex: Rainha">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Apelido carinhoso (opcional)</label>
+                            <input type="text" id="mom-nickname" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Ex: Rainha, Mamis">
                         </div>
-                        <div>
-                            <label class="block text-sm font-extrabold text-gray-700 mb-1 tracking-wide">ANOS DE HISTÓRIA JUNTOS</label>
-                            <input type="number" id="m-years" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold" placeholder="Sua idade">
-                        </div>
+                    </div>
+                    
+                    <div class="flex gap-3 mt-8">
+                        <button onclick="prevStep(2)" class="w-1/3 bg-gray-200 text-gray-700 rounded-xl py-3.5 font-bold hover:bg-gray-300 transition">Voltar</button>
+                        <button onclick="nextStep(2)" class="w-2/3 bg-purple-600 text-white rounded-xl py-3.5 font-bold hover:bg-purple-700 transition">Próximo ➔</button>
                     </div>
                 </div>
 
-                <!-- Passo 3 -->
-                <div id="step-3" class="step-content hidden">
-                    <h3 class="text-2xl font-black tracking-tight text-gray-900 mb-6">Os detalhes que fazem você sorrir.</h3>
+                <!-- PASSO 3: Detalhes -->
+                <div id="step-3" class="step-content hidden-step">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Pequenos detalhes</h3>
+                    <p class="text-sm text-gray-500 mb-6">Para deixar bem pessoal.</p>
+                    
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-extrabold text-gray-700 mb-1 tracking-wide">FRASE QUE ELA SEMPRE DIZ</label>
-                            <input type="text" id="m-phrase" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold" placeholder="Ex: Leva o casaco!">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Comida favorita que ela faz</label>
+                            <input type="text" id="mom-food" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Ex: Lasanha de domingo">
                         </div>
                         <div>
-                            <label class="block text-sm font-extrabold text-gray-700 mb-1 tracking-wide">MELHOR COMIDA QUE ELA FAZ</label>
-                            <input type="text" id="m-food" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold" placeholder="Ex: Lasanha de domingo">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Uma mania engraçada dela</label>
+                            <input type="text" id="mom-habit" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Ex: Guardar pote de sorvete com feijão">
                         </div>
-                        <div>
-                            <label class="block text-sm font-extrabold text-gray-700 mb-1 tracking-wide">MELHOR MOMENTO COM ELA</label>
-                            <input type="text" id="m-moment" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold" placeholder="Ex: Nossa viagem para a praia">
-                        </div>
+                    </div>
+                    
+                    <div class="flex gap-3 mt-8">
+                        <button onclick="prevStep(3)" class="w-1/3 bg-gray-200 text-gray-700 rounded-xl py-3.5 font-bold hover:bg-gray-300 transition">Voltar</button>
+                        <button onclick="nextStep(3)" class="w-2/3 bg-purple-600 text-white rounded-xl py-3.5 font-bold hover:bg-purple-700 transition">Próximo ➔</button>
                     </div>
                 </div>
 
-                <!-- Passo 4 -->
-                <div id="step-4" class="step-content hidden">
-                    <h3 class="text-2xl font-black tracking-tight text-gray-900 mb-6">Os traços que a fazem especial.</h3>
+                <!-- PASSO 4: Memória -->
+                <div id="step-4" class="step-content hidden-step">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Memória Inesquecível</h3>
+                    <p class="text-sm text-gray-500 mb-6">Isso fará toda a diferença.</p>
+                    
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-extrabold text-gray-700 mb-1 tracking-wide">HOBBIES QUE ELA AMA</label>
-                            <input type="text" id="m-hobby" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold" placeholder="Ex: Cuidar das plantas">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Escreva uma frase de agradecimento</label>
+                            <textarea id="mom-memory" rows="3" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none" placeholder="Ex: Obrigado por ter me apoiado quando eu mais precisei."></textarea>
                         </div>
-                        <div>
-                            <label class="block text-sm font-extrabold text-gray-700 mb-1 tracking-wide">TRADIÇÕES FAMILIARES</label>
-                            <input type="text" id="m-tradition" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold" placeholder="Ex: Almoço em família">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-extrabold text-gray-700 mb-1 tracking-wide">QUALIDADES QUE ADMIRA</label>
-                            <input type="text" id="m-quality" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold" placeholder="Ex: Guerreira e carinhosa">
-                        </div>
+                    </div>
+                    
+                    <div class="flex gap-3 mt-8">
+                        <button onclick="prevStep(4)" class="w-1/3 bg-gray-200 text-gray-700 rounded-xl py-3.5 font-bold hover:bg-gray-300 transition">Voltar</button>
+                        <button onclick="nextStep(4)" class="w-2/3 bg-purple-600 text-white rounded-xl py-3.5 font-bold hover:bg-purple-700 transition">Próximo ➔</button>
                     </div>
                 </div>
 
-                <!-- Passo 5 (Uploads) -->
-                <div id="step-5" class="step-content hidden">
-                    <h3 class="text-2xl font-black tracking-tight text-gray-900 mb-6">Agora as fotos que contam a história.</h3>
-                    <div class="grid grid-cols-2 gap-4">
+                <!-- PASSO 5: FOTOS -->
+                <div id="step-5" class="step-content hidden-step">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">As Melhores Fotos</h3>
+                    <p class="text-sm text-gray-500 mb-6">Selecione 5 fotos marcantes (vocês juntos, infância, família).</p>
+                    
+                    <div class="grid grid-cols-5 gap-2 mb-6">
+                        <!-- Inputs gerados via JS ou HTML direto -->
+                        <div class="relative w-full aspect-square bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300 overflow-hidden group">
+                            <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10" onchange="handleFileUpload(this, 0)">
+                            <span class="text-2xl text-gray-400 group-hover:scale-110 transition">+</span>
+                            <img id="preview-img-0" class="absolute inset-0 w-full h-full object-cover hidden">
+                        </div>
+                        <div class="relative w-full aspect-square bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300 overflow-hidden group">
+                            <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10" onchange="handleFileUpload(this, 1)">
+                            <span class="text-2xl text-gray-400 group-hover:scale-110 transition">+</span>
+                            <img id="preview-img-1" class="absolute inset-0 w-full h-full object-cover hidden">
+                        </div>
+                        <div class="relative w-full aspect-square bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300 overflow-hidden group">
+                            <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10" onchange="handleFileUpload(this, 2)">
+                            <span class="text-2xl text-gray-400 group-hover:scale-110 transition">+</span>
+                            <img id="preview-img-2" class="absolute inset-0 w-full h-full object-cover hidden">
+                        </div>
+                        <div class="relative w-full aspect-square bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300 overflow-hidden group">
+                            <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10" onchange="handleFileUpload(this, 3)">
+                            <span class="text-2xl text-gray-400 group-hover:scale-110 transition">+</span>
+                            <img id="preview-img-3" class="absolute inset-0 w-full h-full object-cover hidden">
+                        </div>
+                        <div class="relative w-full aspect-square bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300 overflow-hidden group">
+                            <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10" onchange="handleFileUpload(this, 4)">
+                            <span class="text-2xl text-gray-400 group-hover:scale-110 transition">+</span>
+                            <img id="preview-img-4" class="absolute inset-0 w-full h-full object-cover hidden">
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-3 mt-8">
+                        <button onclick="prevStep(5)" class="w-1/3 bg-gray-200 text-gray-700 rounded-xl py-3.5 font-bold hover:bg-gray-300 transition">Voltar</button>
+                        <button onclick="nextStep(5)" class="w-2/3 bg-purple-600 text-white rounded-xl py-3.5 font-bold hover:bg-purple-700 transition">Próximo ➔</button>
+                    </div>
+                </div>
+
+                <!-- PASSO 6: FINALIZAR -->
+                <div id="step-6" class="step-content hidden-step text-center py-6">
+                    <div class="text-6xl mb-4">✨</div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Tudo Pronto!</h3>
+                    <p class="text-gray-600 mb-8">O roteiro foi criado, as fotos processadas e a trilha sonora escolhida baseada no seu perfil.</p>
+                    
+                    <div class="flex gap-3">
+                        <button onclick="prevStep(6)" class="w-1/3 bg-gray-200 text-gray-700 rounded-xl py-3.5 font-bold hover:bg-gray-300 transition">Voltar</button>
+                        <button onclick="generateRetrospective()" class="w-2/3 bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white rounded-xl py-3.5 font-bold text-lg shadow-lg hover:opacity-90 transition animate-pulse-fast">🎁 Gerar Retrospectiva</button>
+                    </div>
+                </div>
+
+                <!-- LOADING SCREEN -->
+                <div id="loading-screen" class="hidden-step text-center py-12">
+                    <div class="text-6xl text-red-500 animate-pulse mb-6">❤️</div>
+                    <h3 class="text-2xl font-bold text-purple-900 mb-2">Preparando algo especial...</h3>
+                    <p class="text-gray-500 text-sm">Sincronizando áudio, ajustando fotos e gerando a magia.</p>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mt-6 overflow-hidden">
+                        <div class="bg-purple-600 h-2 rounded-full w-full animate-[progress_3s_ease-in-out]"></div>
+                    </div>
+                    <style>@keyframes progress { 0% { width: 0%; } 100% { width: 100%; } }</style>
+                </div>
+
+                <!-- PRÉVIA DINÂMICA -->
+                <div id="preview-screen" class="hidden-step">
+                    <h3 class="text-xl font-bold text-center text-gray-800 mb-4">Sua Prévia (Demonstração)</h3>
+                    
+                    <!-- Celular Mockup -->
+                    <div class="phone-mockup shadow-2xl">
+                        <div id="dynamic-preview-screen" class="phone-screen bg-gray-900" style="background-image: url('https://images.unsplash.com/photo-1511895426328-dc8714191300?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80')">
+                            <div class="phone-text-overlay" id="dynamic-preview-text">
+                                Carregando memórias...
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 text-center">
+                        <p class="text-xs text-gray-500 mb-4">A versão final será em alta resolução, sem marca d'água e baixável.</p>
+                        <button onclick="goToCheckout()" class="w-full bg-green-500 hover:bg-green-600 text-white rounded-xl py-4 font-bold text-lg shadow-lg shadow-green-500/30 transition transform hover:scale-105 flex items-center justify-center gap-2">
+                            🔓 Desbloquear Retrospectiva Completa
+                        </button>
+                    </div>
+                </div>
+
+                <!-- CHECKOUT OTIMIZADO -->
+                <div id="checkout-screen" class="hidden-step">
+                    <h3 class="text-2xl font-bold text-center text-gray-800 mb-1">Finalizar Pedido</h3>
+                    <p class="text-sm text-center text-gray-500 mb-6">Escolha o seu plano de acesso.</p>
+
+                    <!-- Planos -->
+                    <div class="space-y-3 mb-6">
+                        <label class="block border-2 border-gray-200 rounded-xl p-4 cursor-pointer hover:border-purple-500 has-[:checked]:border-purple-600 has-[:checked]:bg-purple-50 transition relative">
+                            <input type="radio" name="plan" value="14.90" class="absolute opacity-0" onchange="handlePlanSelection(this)">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-bold text-gray-800">Plano Completo</h4>
+                                    <p class="text-xs text-gray-500">Acesso por 30 dias. Alta resolução.</p>
+                                </div>
+                                <div class="font-black text-lg text-purple-700">R$ 14,90</div>
+                            </div>
+                        </label>
                         
-                        <!-- Box 1 -->
-                        <div class="relative w-full aspect-square border-2 border-dashed border-gray-300 rounded-2xl overflow-hidden bg-gray-50 flex flex-col items-center justify-center hover:bg-gray-100 transition cursor-pointer" onclick="document.getElementById('img-infancia').click()">
-                            <div id="preview-infancia" class="absolute inset-0 bg-cover-center opacity-0 transition-opacity"></div>
-                            <span class="text-3xl relative z-10">👶</span>
-                            <span class="text-xs font-extrabold text-gray-600 mt-2 relative z-10 uppercase tracking-wide">Infância</span>
-                            <input type="file" id="img-infancia" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'infancia')">
+                        <label class="block border-2 border-gray-200 rounded-xl p-4 cursor-pointer hover:border-purple-500 has-[:checked]:border-purple-600 has-[:checked]:bg-purple-50 transition relative overflow-hidden">
+                            <div class="absolute top-0 right-0 bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-0.5 rounded-bl-lg">MAIS VENDIDO</div>
+                            <input type="radio" name="plan" value="27.90" class="absolute opacity-0" onchange="handlePlanSelection(this)">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-bold text-gray-800">Plano Vitalício</h4>
+                                    <p class="text-xs text-gray-500">Acesso para sempre. Download imediato.</p>
+                                </div>
+                                <div class="font-black text-lg text-purple-700">R$ 27,90</div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Formulário de Pagamento (Oculto até escolha) -->
+                    <div id="payment-form-container" class="hidden">
+                        <hr class="my-6 border-gray-200">
+                        <h4 class="font-bold text-gray-800 mb-4">Dados de Pagamento</h4>
+                        
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Seu E-mail (Para receber o link)</label>
+                            <input type="email" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="voce@email.com">
                         </div>
 
-                        <!-- Box 2 -->
-                        <div class="relative w-full aspect-square border-2 border-dashed border-gray-300 rounded-2xl overflow-hidden bg-gray-50 flex flex-col items-center justify-center hover:bg-gray-100 transition cursor-pointer" onclick="document.getElementById('img-familia').click()">
-                            <div id="preview-familia" class="absolute inset-0 bg-cover-center opacity-0 transition-opacity"></div>
-                            <span class="text-3xl relative z-10">👨‍👩‍👦</span>
-                            <span class="text-xs font-extrabold text-gray-600 mt-2 relative z-10 uppercase tracking-wide">Família</span>
-                            <input type="file" id="img-familia" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'familia')">
+                        <!-- Abas Pill -->
+                        <div class="flex bg-gray-100 p-1 rounded-xl mb-6">
+                            <button onclick="switchTab('pix')" id="tab-pix" class="w-1/2 py-2 rounded-lg font-bold text-sm bg-white shadow-sm text-gray-800 transition">PIX</button>
+                            <button onclick="switchTab('cartao')" id="tab-cartao" class="w-1/2 py-2 rounded-lg font-bold text-sm text-gray-500 transition hover:text-gray-800">CARTÃO</button>
                         </div>
 
-                        <!-- Box 3 -->
-                        <div class="relative w-full aspect-square border-2 border-dashed border-gray-300 rounded-2xl overflow-hidden bg-gray-50 flex flex-col items-center justify-center hover:bg-gray-100 transition cursor-pointer" onclick="document.getElementById('img-recente').click()">
-                            <div id="preview-recente" class="absolute inset-0 bg-cover-center opacity-0 transition-opacity"></div>
-                            <span class="text-3xl relative z-10">📸</span>
-                            <span class="text-xs font-extrabold text-gray-600 mt-2 relative z-10 uppercase tracking-wide">Recente</span>
-                            <input type="file" id="img-recente" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'recente')">
+                        <!-- Conteúdo PIX EXATO -->
+                        <div id="content-pix" class="bg-green-50 border border-green-200 rounded-xl p-6 text-center">
+                            <h4 class="font-bold text-green-900 mb-2">Pague via PIX</h4>
+                            <p class="text-xs text-green-800 mb-4">Aprovação imediata. Escaneie o QR Code ou copie o código.</p>
+                            
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=00020126580014br.gov.bcb.pix.exemplo.123" class="w-32 h-32 mx-auto rounded-lg mb-4 shadow-sm border border-green-200" alt="QR Code PIX">
+                            
+                            <div class="font-black text-2xl text-green-900 mb-4 price-display">R$ --,--</div>
+
+                            <button onclick="copyPix()" id="btn-copy-pix" class="w-full bg-green-600 hover:bg-green-700 text-white rounded-xl py-3.5 font-bold flex items-center justify-center gap-2 transition">
+                                📋 Copiar Código PIX
+                            </button>
                         </div>
 
-                        <!-- Box 4 -->
-                        <div class="relative w-full aspect-square border-2 border-dashed border-gray-300 rounded-2xl overflow-hidden bg-gray-50 flex flex-col items-center justify-center hover:bg-gray-100 transition cursor-pointer" onclick="document.getElementById('img-engracada').click()">
-                            <div id="preview-engracada" class="absolute inset-0 bg-cover-center opacity-0 transition-opacity"></div>
-                            <span class="text-3xl relative z-10">😂</span>
-                            <span class="text-xs font-extrabold text-gray-600 mt-2 relative z-10 uppercase tracking-wide">Engraçada</span>
-                            <input type="file" id="img-engracada" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'engracada')">
-                        </div>
-
-                        <!-- Box 5 -->
-                        <div class="relative w-full col-span-2 h-28 border-2 border-dashed border-gray-300 rounded-2xl overflow-hidden bg-gray-50 flex flex-col items-center justify-center hover:bg-gray-100 transition cursor-pointer" onclick="document.getElementById('img-especial').click()">
-                            <div id="preview-especial" class="absolute inset-0 bg-cover-center opacity-0 transition-opacity"></div>
-                            <span class="text-3xl relative z-10">✨</span>
-                            <span class="text-xs font-extrabold text-gray-600 mt-1 relative z-10 uppercase tracking-wide">Especial</span>
-                            <input type="file" id="img-especial" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'especial')">
+                        <!-- Conteúdo Cartão (Fictício) -->
+                        <div id="content-cartao" class="hidden">
+                            <div class="space-y-3">
+                                <input type="text" placeholder="Número do Cartão" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none">
+                                <div class="flex gap-3">
+                                    <input type="text" placeholder="Validade (MM/AA)" class="w-1/2 border border-gray-300 rounded-xl px-4 py-3 focus:outline-none">
+                                    <input type="text" placeholder="CVV" class="w-1/2 border border-gray-300 rounded-xl px-4 py-3 focus:outline-none">
+                                </div>
+                                <input type="text" placeholder="Nome Impresso no Cartão" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none">
+                                <button class="w-full bg-purple-600 hover:bg-purple-700 text-white rounded-xl py-3.5 font-bold transition mt-2 flex items-center justify-center gap-2">
+                                    💳 Pagar <span class="price-display">R$ --,--</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Passo 6 -->
-                <div id="step-6" class="step-content hidden">
-                    <h3 class="text-2xl font-black tracking-tight text-gray-900 mb-6">Uma mensagem do coração.</h3>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-extrabold text-gray-700 mb-1 tracking-wide">MENSAGEM FINAL (Opcional)</label>
-                            <textarea id="m-message" rows="5" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold text-gray-800" placeholder="Escreva algo lindo para ela..."></textarea>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Footer Buttons -->
-            <div class="p-6 border-t border-gray-100 flex justify-between gap-4">
-                <button id="btn-prev" onclick="prevStep()" class="hidden px-6 py-4 rounded-2xl font-extrabold text-gray-500 hover:bg-gray-100 transition">Voltar</button>
-                <button id="btn-next" onclick="nextStep()" class="flex-1 bg-brand text-white px-6 py-4 rounded-2xl font-black text-lg shadow-lg hover:bg-brand-dark transition">Continuar &rarr;</button>
-                <button id="btn-finish" onclick="generateStory()" class="hidden flex-1 bg-brand text-white px-6 py-4 rounded-2xl font-black text-lg shadow-lg hover:bg-brand-dark transition">🎁 Gerar Retrospectiva</button>
             </div>
         </div>
     </div>
 
-    <!-- ==========================================
-         3. LOADING SCREEN
-         ========================================== -->
-    <div id="screen-loading" class="fixed inset-0 z-[60] bg-gray-900 flex flex-col items-center justify-center hidden">
-        <div class="heart-loader mb-12"></div>
-        <h2 class="text-white text-3xl font-black tracking-tight mt-8 animate-pulse text-center px-4">Preparando algo especial...</h2>
-    </div>
-
-    <!-- ==========================================
-         4. STORY PREVIEW (MOBILE FRAME)
-         ========================================== -->
-    <div id="screen-story" class="fixed inset-0 z-[70] bg-gray-900 flex flex-col items-center justify-center hidden">
-        <!-- Áudio Oculto -->
-        <audio id="story-audio" loop></audio>
-
-        <div class="w-full max-w-sm h-full max-h-[850px] bg-black relative md:rounded-[2rem] overflow-hidden shadow-2xl flex flex-col">
+    <!-- MODAL DE DOWNSELL -->
+    <div id="downsell-modal" class="fixed inset-0 bg-black/90 z-[110] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-gradient-to-b from-yellow-50 to-white rounded-3xl w-full max-w-sm p-6 text-center shadow-2xl border-4 border-yellow-400">
+            <div class="text-5xl mb-2">⭐</div>
+            <h3 class="text-2xl font-black text-gray-900 mb-2 leading-tight">ESPERE! Oferta Única</h3>
+            <p class="text-gray-700 mb-6 font-medium text-sm">
+                Não saia ainda. Que tal levar o <strong class="text-purple-700">Acesso Vitalício</strong> (que custa R$27,90) por apenas:
+            </p>
+            <div class="text-5xl font-black text-red-600 mb-6">R$ 19,90</div>
             
-            <!-- Story Progress Bars -->
-            <div class="absolute top-0 left-0 w-full p-4 flex gap-1 z-20" id="story-indicators">
-                <!-- Injected via JS -->
-            </div>
-
-            <!-- Story Content -->
-            <div class="flex-1 relative z-10 bg-cover bg-center transition-all duration-500" id="story-image-bg">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/50"></div>
-                
-                <div class="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
-                    <h2 id="story-text" class="text-white text-3xl font-black tracking-tight drop-shadow-lg leading-tight transition-opacity duration-300"></h2>
-                </div>
-            </div>
-
-            <!-- CTA Flutuante -->
-            <div class="absolute bottom-8 left-0 w-full px-6 z-30">
-                <button onclick="openCheckout()" class="w-full bg-brand text-white py-4 rounded-full font-black text-lg shadow-[0_0_20px_rgba(109,40,217,0.6)] animate-bounce">
-                    Desbloquear Retrospectiva Completa
+            <div class="space-y-3">
+                <button onclick="acceptDownsell()" class="w-full bg-green-500 hover:bg-green-600 text-white rounded-xl py-4 font-bold text-lg shadow-lg transition transform hover:scale-105">
+                    SIM! Quero o Vitalício por 19,90
+                </button>
+                <button onclick="declineDownsell()" class="w-full bg-transparent text-gray-500 hover:text-gray-800 py-2 font-medium text-sm transition">
+                    Não, vou manter o de R$ 14,90
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- ==========================================
-         5. CHECKOUT MODAL (Design Atualizado)
-         ========================================== -->
-    <div id="modal-checkout" class="fixed inset-0 z-[80] bg-gray-900/90 backdrop-blur-md hidden flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-xl rounded-3xl shadow-2xl p-6 relative max-h-[95vh] overflow-y-auto no-scrollbar">
-            
-            <button onclick="closeModal('modal-checkout')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 text-3xl font-bold">&times;</button>
-            
-            <div class="text-center mb-8 mt-2">
-                <h2 class="text-3xl font-black tracking-tight text-gray-900 mb-2">Quase lá!</h2>
-                <p class="text-gray-500 font-semibold">Escolha o plano para baixar e compartilhar o vídeo em alta qualidade.</p>
-            </div>
-
-            <!-- Planos (Regra: Nenhum selecionado por padrão) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <!-- Plano Comum (Interceptado pelo Downsell) -->
-                <div id="plan-14" onclick="selectPlan14()" class="border-2 border-gray-200 rounded-3xl p-6 cursor-pointer hover:border-brand transition bg-gray-50 relative group">
-                    <h3 class="font-extrabold text-gray-800 text-lg mb-1 tracking-tight">Completo</h3>
-                    <p class="text-sm text-gray-500 mb-4 font-medium">Acesso por 30 dias</p>
-                    <div class="text-3xl font-black text-gray-900 tracking-tight">R$ 14,90</div>
-                </div>
-
-                <!-- Plano Vitalício -->
-                <div id="plan-27" onclick="selectPlan27()" class="border-2 border-gray-200 rounded-3xl p-6 cursor-pointer hover:border-brand transition bg-gray-50 relative">
-                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest whitespace-nowrap shadow-md">Mais Escolhido</div>
-                    <h3 class="font-extrabold text-gray-800 text-lg mb-1 tracking-tight">Vitalício</h3>
-                    <p class="text-sm text-gray-500 mb-4 font-medium">Acesso para sempre + Download</p>
-                    <div class="text-3xl font-black text-gray-900 tracking-tight">R$ 27,90</div>
-                </div>
-            </div>
-
-            <!-- Área de Pagamento (Escondida até selecionar plano) -->
-            <div id="payment-area" class="hidden border-t border-gray-100 pt-6">
-                
-                <div class="mb-6">
-                    <label class="block text-xs md:text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">E-MAIL PARA RECEBER O VÍDEO</label>
-                    <input type="email" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold text-gray-800" placeholder="seu@email.com">
-                </div>
-
-                <!-- Tabs de Pagamento -->
-                <div class="flex gap-2 mb-6 bg-gray-100 p-1 rounded-xl">
-                    <button onclick="setPaymentTab('pix')" id="tab-pix" class="flex-1 py-3 bg-white shadow-sm rounded-lg font-black text-slate-900 text-sm tracking-wide transition-all">PIX</button>
-                    <button onclick="setPaymentTab('card')" id="tab-card" class="flex-1 py-3 rounded-lg font-black text-slate-500 text-sm tracking-wide hover:text-slate-700 transition-all">CARTÃO</button>
-                </div>
-
-                <!-- PIX Box -->
-                <div id="box-pix" class="bg-green-50 border border-green-200 rounded-2xl p-6 md:p-8 flex flex-col items-center justify-center text-center">
-                    <h4 class="font-black text-green-900 text-lg mb-1">Pague via PIX Copia e Cola</h4>
-                    <p class="text-sm text-green-700 mb-4 font-semibold">Liberação imediata!</p>
-                    
-                    <div class="w-32 h-32 bg-white border border-gray-100 rounded-2xl flex items-center justify-center p-3 shadow-sm">
-                        <!-- Ícone SVG simulando um QR Code Genérico -->
-                        <svg class="w-full h-full text-green-800" fill="currentColor" viewBox="0 0 33 33" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 4h7v7H4V4zm2 2v3h3V6H6zm16-2h7v7h-7V4zm2 2v3h3V6h-3zM4 22h7v7H4v-7zm2 2v3h3v-3H6zm8-18h2v2h-2V4zm4 0h2v2h-2V4zm-4 4h2v2h-2V8zm4 0h2v2h-2V8zm-4 4h5v2h-5v-2zm8 2h7v2h-7v-2zM4 14h7v2H4v-2zm10 2h2v5h-2v-5zm4 0h2v2h-2v-2zm4 2h2v2h-2v-2zm4 0h3v5h-3v-5zm-8 2h2v2h-2v-2zm-4 4h2v2h-2v-2zm4 0h2v5h-2v-5zm4 0h2v2h-2v-2zm4 2h3v3h-3v-3zm-4 2h2v3h-2v-3z"/>
-                        </svg>
-                    </div>
-                    
-                    <div class="font-black text-3xl text-green-900 my-4 tracking-tight" id="pix-price-display">R$ 0,00</div>
-                    
-                    <button id="btn-copy-pix" onclick="copyPixCode()" class="w-full bg-green-600 hover:bg-green-700 text-white font-black py-4 rounded-xl transition shadow-md shadow-green-600/20">Copiar Código PIX</button>
-                </div>
-
-                <!-- Card Box -->
-                <div id="box-card" class="hidden space-y-4">
-                    <div>
-                        <input type="text" placeholder="Número do Cartão" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold text-gray-800">
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <input type="text" placeholder="Validade (MM/AA)" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold text-gray-800">
-                        <input type="text" placeholder="CVV" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold text-gray-800">
-                    </div>
-                    <div>
-                        <input type="text" placeholder="Nome do Titular" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold text-gray-800">
-                    </div>
-                    <div>
-                        <input type="text" placeholder="CPF do Titular" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand focus:outline-none font-semibold text-gray-800">
-                    </div>
-                    <button class="w-full bg-brand hover:bg-brand-dark text-white font-black py-4 rounded-xl mt-2 text-lg shadow-lg transition">Pagar <span id="card-price-display">R$ 0,00</span></button>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <!-- ==========================================
-         6. UPSELL / DOWNSELL MODAL (Interceptador)
-         ========================================== -->
-    <div id="modal-downsell" class="fixed inset-0 z-[90] bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl p-8 text-center relative border-4 border-brand">
-            <div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-yellow-400 text-yellow-900 font-black px-6 py-2 rounded-full text-sm shadow-md tracking-wide whitespace-nowrap">
-                ⭐ OFERTA ESPECIAL SÓ AGORA
-            </div>
-            
-            <h3 class="text-3xl font-black tracking-tight text-gray-900 mt-4 mb-4 leading-tight">Não perca suas memórias!</h3>
-            <p class="text-gray-600 font-semibold mb-8 text-lg">Por apenas mais <strong class="text-brand text-2xl font-black">R$ 5,00</strong>, você leva o <span class="font-bold underline">Acesso Vitalício + Download</span> por R$ 19,90.</p>
-            
-            <div class="space-y-4 flex flex-col">
-                <button onclick="acceptDownsell()" class="w-full bg-brand hover:bg-brand-dark text-white font-black py-4 rounded-2xl text-lg shadow-lg transition transform hover:scale-105 duration-300">
-                    Sim! Quero o Vitalício por R$ 19,90
-                </button>
-                <button onclick="rejectDownsell()" class="w-full text-gray-400 hover:text-gray-600 font-bold py-2 underline text-sm transition">
-                    Não, quero continuar com o plano comum
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ==========================================
-         JAVASCRIPT LOGIC
-         ========================================== -->
+    <!-- JavaScript Vanilla Lógica -->
     <script>
-        // Data State
-        const appData = {
-            step: 1,
-            gender: null, // 'masculino' | 'feminino'
-            images: {
-                infancia: null,
-                familia: null,
-                recente: null,
-                engracada: null,
-                especial: null
-            },
-            storySlides: [],
-            checkoutPrice: 0 // 14.90, 19.90, 27.90
+        // ESTADO GLOBAL
+        let currentStep = 1;
+        const totalSteps = 6;
+        let userData = {
+            name: '',
+            gender: '',
+            phone: '',
+            momName: '',
+            momNickname: '',
+            momFood: '',
+            momHabit: '',
+            momMemory: ''
         };
+        let uploadedImages = [];
+        let generoSelecionado = '';
+        let musicaPreview = new Audio();
+        let selectedPrice = 0;
+        let previewInterval;
 
-        // Utility: Modals
-        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-
-        // Multi-step Logic
-        function openGenerator() {
-            appData.step = 1;
-            updateStepView();
-            openModal('modal-generator');
+        // FUNÇÕES MODAL
+        function openGeneratorModal() {
+            document.getElementById('modal-container').classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Evita scroll fundo
+            showStep(1);
+            document.getElementById('progress-bar-container').classList.remove('hidden');
         }
 
-        function setGender(gender) {
-            appData.gender = gender;
-            document.getElementById('btn-gender-m').classList.remove('border-brand', 'text-brand', 'bg-brand/5');
-            document.getElementById('btn-gender-f').classList.remove('border-brand', 'text-brand', 'bg-brand/5');
-            
-            const activeBtn = gender === 'masculino' ? 'btn-gender-m' : 'btn-gender-f';
-            const btn = document.getElementById(activeBtn);
-            btn.classList.add('border-brand', 'text-brand', 'bg-brand/5');
+        function closeModals() {
+            document.getElementById('modal-container').classList.add('hidden');
+            document.getElementById('downsell-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            musicaPreview.pause();
+            musicaPreview.currentTime = 0;
+            clearInterval(previewInterval);
         }
 
-        function nextStep() {
-            if (appData.step < 6) {
-                appData.step++;
-                updateStepView();
+        // NAVEGAÇÃO DE PASSOS
+        function showStep(step) {
+            // Esconde todos
+            document.querySelectorAll('.step-content, #loading-screen, #preview-screen, #checkout-screen').forEach(el => {
+                el.classList.add('hidden-step');
+            });
+            // Mostra o atual
+            if(document.getElementById(`step-${step}`)) {
+                document.getElementById(`step-${step}`).classList.remove('hidden-step');
             }
+            // Atualiza Barra
+            const progress = (step / totalSteps) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
         }
 
-        function prevStep() {
-            if (appData.step > 1) {
-                appData.step--;
-                updateStepView();
+        function nextStep(current) {
+            // Salvar dados do step atual (Validação simples pode ser adicionada aqui)
+            if (current === 1) {
+                const genderRadio = document.querySelector('input[name="gender"]:checked');
+                if (!genderRadio) { alert("Por favor, selecione seu gênero."); return; }
+                generoSelecionado = genderRadio.value;
+                userData.name = document.getElementById('user-name').value;
             }
-        }
-
-        function updateStepView() {
-            // Hide all steps
-            document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden'));
-            // Show current step
-            document.getElementById(`step-${appData.step}`).classList.remove('hidden');
-            
-            // Update counter and progress bar
-            document.getElementById('step-counter').innerText = appData.step;
-            document.getElementById('step-progress-bar').style.width = `${(appData.step / 6) * 100}%`;
-
-            // Buttons visibility
-            const btnPrev = document.getElementById('btn-prev');
-            const btnNext = document.getElementById('btn-next');
-            const btnFinish = document.getElementById('btn-finish');
-
-            if (appData.step === 1) {
-                btnPrev.classList.add('hidden');
-            } else {
-                btnPrev.classList.remove('hidden');
+            if (current === 2) {
+                userData.momName = document.getElementById('mom-name').value;
+                userData.momNickname = document.getElementById('mom-nickname').value;
+            }
+            if (current === 4) {
+                userData.momMemory = document.getElementById('mom-memory').value;
             }
 
-            if (appData.step === 6) {
-                btnNext.classList.add('hidden');
-                btnFinish.classList.remove('hidden');
-            } else {
-                btnNext.classList.remove('hidden');
-                btnFinish.classList.add('hidden');
-            }
+            currentStep = current + 1;
+            showStep(currentStep);
         }
 
-        // Image Upload Logic (URL.createObjectURL)
-        function handleImageUpload(event, category) {
-            const file = event.target.files[0];
+        function prevStep(current) {
+            currentStep = current - 1;
+            showStep(currentStep);
+        }
+
+        // UPLOAD DE ARQUIVOS COM PREVIEW Otimizado
+        function handleFileUpload(input, index) {
+            const file = input.files[0];
             if (file) {
-                const imageUrl = URL.createObjectURL(file);
-                appData.images[category] = imageUrl;
+                const url = URL.createObjectURL(file);
+                uploadedImages[index] = url;
                 
-                const previewDiv = document.getElementById(`preview-${category}`);
-                previewDiv.style.backgroundImage = `url(${imageUrl})`;
-                previewDiv.style.opacity = '1';
-                // Add a dark overlay so emoji remains slightly visible or style it
-                previewDiv.classList.add('bg-black/30', 'bg-blend-overlay'); 
+                const imgEl = document.getElementById(`preview-img-${index}`);
+                imgEl.src = url;
+                imgEl.classList.remove('hidden');
+                input.nextElementSibling.classList.add('hidden'); // esconde o '+'
             }
         }
 
-        // Generate Final Story Transition
-        function generateStory() {
-            // Collect Inputs for Story
-            const mName = document.getElementById('m-name').value || "Mãe";
-            const mPhrase = document.getElementById('m-phrase').value || "eu te amo";
-            const mQuality = document.getElementById('m-quality').value || "incrível";
+        // GERAÇÃO E LOADING
+        function generateRetrospective() {
+            document.getElementById('progress-bar-container').classList.add('hidden');
+            document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden-step'));
+            
+            // Mostra loading
+            document.getElementById('loading-screen').classList.remove('hidden-step');
+            
+            // Delay 3s
+            setTimeout(() => {
+                startPreview();
+            }, 3000);
+        }
 
-            // Prepare slides
-            appData.storySlides = [
-                { img: appData.images.infancia, text: `Para a melhor mãe, ${mName}...` },
-                { img: appData.images.familia, text: `Você sempre dizia: "${mPhrase}"` },
-                { img: appData.images.recente, text: `Sua presença faz tudo valer a pena.` },
-                { img: appData.images.engracada, text: `Seus sorrisos iluminam meus dias.` },
-                { img: appData.images.especial, text: `Obrigado por ser tão ${mQuality}. Feliz Dia das Mães!` }
+        // PRÉVIA E LÓGICA DE ÁUDIO EXATA
+        function startPreview() {
+            document.getElementById('loading-screen').classList.add('hidden-step');
+            document.getElementById('preview-screen').classList.remove('hidden-step');
+
+            // Lógica de Áudio Obrigatória
+            if (generoSelecionado === 'Feminino') { 
+                musicaPreview.src = 'audio/mulher.mp3'; 
+            } else { 
+                musicaPreview.src = 'audio/homem.mp3'; 
+            }
+            musicaPreview.loop = true;
+            
+            // Tentativa de play (pode ser bloqueada por policy de navegador se não houver interação recente, 
+            // mas como veio de um clique no botão gerar, geralmente funciona)
+            let playPromise = musicaPreview.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log("Autoplay de áudio prevenido pelo navegador:", error);
+                });
+            }
+
+            // Iniciar Carrossel da Prévia
+            const bgScreen = document.getElementById('dynamic-preview-screen');
+            const textScreen = document.getElementById('dynamic-preview-text');
+            
+            // Fallback imagens se não fez upload
+            const defaultImages = [
+                'https://images.unsplash.com/photo-1511895426328-dc8714191300?w=600&q=80',
+                'https://images.unsplash.com/photo-1542037104857-ffbb0b9155fb?w=600&q=80',
+                'https://images.unsplash.com/photo-1504439904031-93ded9f93e4e?w=600&q=80'
+            ];
+            const imagesToUse = uploadedImages.length > 0 ? uploadedImages.filter(i=>i) : defaultImages;
+            if(imagesToUse.length === 0) imagesToUse.push(defaultImages[0]);
+
+            const momRef = userData.momNickname || userData.momName || "Mãe";
+            const texts = [
+                `Para a melhor mãe do mundo, ${momRef}...`,
+                userData.momMemory ? `"${userData.momMemory}"` : `Obrigado por tudo que faz por mim.`,
+                `Feito com amor por ${userData.name || 'seu filho(a)'}.`
             ];
 
-            // 1. Hide Multi-step
-            closeModal('modal-generator');
+            let carouselIdx = 0;
             
-            // 2. Show Loading
-            openModal('screen-loading');
-
-            // 3. Wait 3 seconds, then show Story
-            setTimeout(() => {
-                closeModal('screen-loading');
-                startStoryPreview();
-            }, 3000);
-        }
-
-        // Story Preview Logic
-        let storyInterval;
-        let currentSlide = 0;
-
-        function startStoryPreview() {
-            openModal('screen-story');
-            
-            // Audio logic based on gender
-            const audio = document.getElementById('story-audio');
-            // Mocking generic src for actual functional demo, but distinct names based on logic
-            if (appData.gender === 'feminino') {
-                audio.src = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"; // audio-mulher.mp3
-            } else {
-                audio.src = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"; // audio-homem.mp3
+            // Função para atualizar frame
+            function updateFrame() {
+                bgScreen.style.backgroundImage = `url('${imagesToUse[carouselIdx % imagesToUse.length]}')`;
+                textScreen.innerText = texts[carouselIdx % texts.length];
+                carouselIdx++;
             }
-            audio.volume = 0.5;
-            audio.play().catch(e => console.log("Audio autoplay blocked by browser."));
-
-            // Setup indicators
-            const indicatorsContainer = document.getElementById('story-indicators');
-            indicatorsContainer.innerHTML = '';
-            appData.storySlides.forEach((_, index) => {
-                indicatorsContainer.innerHTML += `
-                    <div class="story-progress">
-                        <div class="story-progress-fill" id="indicator-${index}"></div>
-                    </div>
-                `;
-            });
-
-            currentSlide = 0;
-            renderSlide();
-
-            // Loop slides every 3 seconds
-            storyInterval = setInterval(() => {
-                currentSlide++;
-                if (currentSlide >= appData.storySlides.length) {
-                    currentSlide = 0; // Loop back or stop. Let's loop.
-                    // Reset all indicators
-                    document.querySelectorAll('.story-progress-fill').forEach(el => {
-                        el.classList.remove('active', 'completed');
-                        el.style.width = '0%';
-                    });
-                }
-                renderSlide();
-            }, 3000);
-        }
-
-        function renderSlide() {
-            const slide = appData.storySlides[currentSlide];
-            const bgElement = document.getElementById('story-image-bg');
-            const textElement = document.getElementById('story-text');
-
-            // Set Image or Fallback Color
-            if (slide.img) {
-                bgElement.style.backgroundImage = `url(${slide.img})`;
-            } else {
-                bgElement.style.backgroundImage = 'none';
-                bgElement.style.backgroundColor = '#6d28d9'; // fallback brand color
-            }
-
-            // Set text with simple fade out/in effect
-            textElement.style.opacity = 0;
-            setTimeout(() => {
-                textElement.innerText = slide.text;
-                textElement.style.opacity = 1;
-            }, 150);
-
-            // Update Indicators
-            // Complete previous ones
-            for(let i = 0; i < currentSlide; i++) {
-                const ind = document.getElementById(`indicator-${i}`);
-                ind.classList.remove('active');
-                ind.classList.add('completed');
-            }
-            // Animate current
-            const currentInd = document.getElementById(`indicator-${currentSlide}`);
-            currentInd.style.width = '0%';
-            // Force reflow
-            void currentInd.offsetWidth;
-            currentInd.classList.add('active');
-        }
-
-        // Checkout & Payment Logic
-        function openCheckout() {
-            // Stop audio and hide story
-            document.getElementById('story-audio').pause();
-            clearInterval(storyInterval);
-            closeModal('screen-story');
             
-            // Reset checkout state
-            document.getElementById('plan-14').classList.remove('border-brand', 'bg-brand/5');
-            document.getElementById('plan-27').classList.remove('border-brand', 'bg-brand/5');
-            document.getElementById('payment-area').classList.add('hidden');
+            updateFrame(); // frame inicial
+            previewInterval = setInterval(updateFrame, 3500); // troca a cada 3.5s
+        }
+
+        // DESBLOQUEAR -> CHECKOUT
+        function goToCheckout() {
+            // OBRIGATÓRIO: Pausar música ao ir pro checkout
+            musicaPreview.pause();
+            clearInterval(previewInterval);
+
+            document.getElementById('preview-screen').classList.add('hidden-step');
+            document.getElementById('checkout-screen').classList.remove('hidden-step');
+        }
+
+        // LÓGICA DE CHECKOUT E DOWNSELL
+        function handlePlanSelection(radio) {
+            const value = radio.value;
             
-            openModal('modal-checkout');
-        }
-
-        function selectPlan14() {
-            // Regra: Interceptar para o Downsell!
-            openModal('modal-downsell');
-        }
-
-        function selectPlan27() {
-            setPlanActive('plan-27', 27.90);
+            if (value === "14.90") {
+                // Intercepta e mostra Downsell
+                document.getElementById('downsell-modal').classList.remove('hidden');
+            } else if (value === "27.90") {
+                // Vai direto pro form com 27.90
+                setupPaymentForm("27,90");
+            }
         }
 
         function acceptDownsell() {
-            closeModal('modal-downsell');
-            // User accepts $19.90 -> visually highlight plan 1, but set price to 19.90
-            setPlanActive('plan-14', 19.90);
-            // Optional: change text of the card visually to indicate the upgrade
-            document.getElementById('plan-14').querySelector('h3').innerText = "Vitalício (Promo)";
+            document.getElementById('downsell-modal').classList.add('hidden');
+            // Remove check anterior para não confundir visualmente, opcional
+            setupPaymentForm("19,90");
         }
 
-        function rejectDownsell() {
-            closeModal('modal-downsell');
-            // User rejects -> normal $14.90
-            setPlanActive('plan-14', 14.90);
-            document.getElementById('plan-14').querySelector('h3').innerText = "Completo";
+        function declineDownsell() {
+            document.getElementById('downsell-modal').classList.add('hidden');
+            setupPaymentForm("14,90");
         }
 
-        function setPlanActive(planId, price) {
-            appData.checkoutPrice = price;
-            
-            // Reset visuals
-            document.getElementById('plan-14').classList.remove('border-brand', 'bg-brand/5', 'border-4');
-            document.getElementById('plan-27').classList.remove('border-brand', 'bg-brand/5', 'border-4');
-            
-            // Set Active visual
-            document.getElementById(planId).classList.add('border-brand', 'bg-brand/5', 'border-4');
-            
-            // Show payment area
-            document.getElementById('payment-area').classList.remove('hidden');
-            
-            // Update Prices in UI
-            const formattedPrice = `R$ ${price.toFixed(2).replace('.', ',')}`;
-            document.getElementById('pix-price-display').innerText = formattedPrice;
-            document.getElementById('card-price-display').innerText = formattedPrice;
+        function setupPaymentForm(priceStr) {
+            document.getElementById('payment-form-container').classList.remove('hidden');
+            // Atualiza todos os lugares que mostram o preço
+            document.querySelectorAll('.price-display').forEach(el => {
+                el.innerText = `R$ ${priceStr}`;
+            });
+            // Reseta tabs pro PIX por padrão ao abrir form
+            switchTab('pix');
         }
 
-        function setPaymentTab(type) {
-            const tabPix = document.getElementById('tab-pix');
-            const tabCard = document.getElementById('tab-card');
-            const boxPix = document.getElementById('box-pix');
-            const boxCard = document.getElementById('box-card');
+        // ABAS DE PAGAMENTO (PILL)
+        function switchTab(tabId) {
+            const btnPix = document.getElementById('tab-pix');
+            const btnCartao = document.getElementById('tab-cartao');
+            const contentPix = document.getElementById('content-pix');
+            const contentCartao = document.getElementById('content-cartao');
 
-            // Reset tab baseline classes
-            tabPix.className = "flex-1 py-3 rounded-lg font-black text-sm tracking-wide transition-all";
-            tabCard.className = "flex-1 py-3 rounded-lg font-black text-sm tracking-wide transition-all";
-
-            if (type === 'pix') {
-                tabPix.classList.add('bg-white', 'shadow-sm', 'text-slate-900');
-                tabCard.classList.add('text-slate-500', 'hover:text-slate-700');
+            if (tabId === 'pix') {
+                btnPix.classList.replace('text-gray-500', 'text-gray-800');
+                btnPix.classList.replace('bg-transparent', 'bg-white');
+                btnPix.classList.add('shadow-sm');
                 
-                boxPix.classList.remove('hidden');
-                boxPix.classList.add('flex'); // Apply flex as requested in design
-                boxCard.classList.add('hidden');
+                btnCartao.classList.replace('text-gray-800', 'text-gray-500');
+                btnCartao.classList.replace('bg-white', 'bg-transparent');
+                btnCartao.classList.remove('shadow-sm');
+
+                contentPix.classList.remove('hidden');
+                contentCartao.classList.add('hidden');
             } else {
-                tabCard.classList.add('bg-white', 'shadow-sm', 'text-slate-900');
-                tabPix.classList.add('text-slate-500', 'hover:text-slate-700');
+                btnCartao.classList.replace('text-gray-500', 'text-gray-800');
+                btnCartao.classList.replace('bg-transparent', 'bg-white');
+                btnCartao.classList.add('shadow-sm');
                 
-                boxCard.classList.remove('hidden');
-                boxPix.classList.add('hidden');
-                boxPix.classList.remove('flex'); // Remove flex so hidden works securely
+                btnPix.classList.replace('text-gray-800', 'text-gray-500');
+                btnPix.classList.replace('bg-white', 'bg-transparent');
+                btnPix.classList.remove('shadow-sm');
+
+                contentCartao.classList.remove('hidden');
+                contentPix.classList.add('hidden');
             }
         }
 
-        function copyPixCode() {
-            const btn = document.getElementById('btn-copy-pix');
-            const pixCode = '00020126580014br.gov.bcb.pix.exemplo.1234567890';
-            
+        // LÓGICA DO PIX EXATA
+        function copyPix() {
+            const pixCode = '00020126580014br.gov.bcb.pix.exemplo.123';
             navigator.clipboard.writeText(pixCode).then(() => {
-                // Estado de Sucesso
-                btn.innerText = "Código Copiado! ✅";
-                btn.classList.remove('bg-green-600', 'hover:bg-green-700');
-                btn.classList.add('bg-green-800', 'hover:bg-green-800'); // Fica verde escuro
+                const btn = document.getElementById('btn-copy-pix');
+                const originalText = btn.innerHTML;
                 
+                // Muda visual
+                btn.innerHTML = "Código Copiado! ✅";
+                btn.classList.remove('bg-green-600', 'hover:bg-green-700');
+                btn.classList.add('bg-green-800');
+
                 // Reverte após 3 segundos
                 setTimeout(() => {
-                    btn.innerText = "Copiar Código PIX";
-                    btn.classList.remove('bg-green-800', 'hover:bg-green-800');
+                    btn.innerHTML = originalText;
                     btn.classList.add('bg-green-600', 'hover:bg-green-700');
+                    btn.classList.remove('bg-green-800');
                 }, 3000);
             }).catch(err => {
-                console.error('Falha ao copiar o código PIX: ', err);
-                alert("Não foi possível copiar o código automaticamente. Por favor, tente novamente.");
+                console.error('Falha ao copiar:', err);
+                alert("Copie este código manualmente: " + pixCode);
             });
         }
     </script>
