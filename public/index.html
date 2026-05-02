@@ -647,7 +647,7 @@ const texts = [
             document.getElementById('progress-bar').style.width = `${progress}%`;
         }
 
-        function nextStep(current) {
+      function nextStep(current) {
             if (current === 1) {
                 const genderRadio = document.querySelector('input[name="gender"]:checked');
                 if (!genderRadio) { alert("Por favor, selecione seu gênero."); return; }
@@ -658,6 +658,11 @@ const texts = [
             if (current === 2) {
                 userData.momName = document.getElementById('mom-name').value;
                 userData.momNickname = document.getElementById('mom-nickname').value;
+            }
+            // >>> AQUI ESTAVA O PROBLEMA! FALTAVA O PASSO 3 <<<
+            if (current === 3) {
+                userData.momFood = document.getElementById('mom-food').value;
+                userData.momHabit = document.getElementById('mom-habit').value;
             }
             if (current === 4) {
                 userData.momMemory = document.getElementById('mom-memory').value;
