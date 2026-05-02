@@ -316,7 +316,6 @@
                     <p class="text-sm text-gray-500 mb-6">Selecione 5 fotos marcantes (vocês juntos, infância, família).</p>
                     
                     <div class="grid grid-cols-5 gap-2 mb-6">
-                        <!-- Inputs gerados via JS ou HTML direto -->
                         <div class="relative w-full aspect-square bg-gray-100 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300 overflow-hidden group">
                             <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10" onchange="handleFileUpload(this, 0)">
                             <span class="text-2xl text-gray-400 group-hover:scale-110 transition">+</span>
@@ -430,9 +429,10 @@
                         <hr class="my-6 border-gray-200">
                         <h4 class="font-bold text-gray-800 mb-4">Dados de Pagamento</h4>
                         
+                        <!-- ID user-email adicionado -->
                         <div class="mb-4">
                             <label class="block text-sm font-medium text-gray-700 mb-1">Seu E-mail (Para receber o link)</label>
-                            <input type="email" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="voce@email.com">
+                            <input type="email" id="user-email" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="voce@email.com">
                         </div>
 
                         <!-- Abas Pill -->
@@ -441,33 +441,31 @@
                             <button onclick="switchTab('cartao')" id="tab-cartao" class="w-1/2 py-2 rounded-lg font-bold text-sm text-gray-500 transition hover:text-gray-800">CARTÃO</button>
                         </div>
 
-                        <!-- Conteúdo PIX EXATO -->
+                        <!-- Conteúdo PIX OTIMIZADO -->
                         <div id="content-pix" class="bg-green-50 border border-green-200 rounded-xl p-6 text-center">
                             <h4 class="font-bold text-green-900 mb-2">Pague via PIX</h4>
-                            <p class="text-xs text-green-800 mb-4">Aprovação imediata. Escaneie o QR Code ou copie o código.</p>
-                            
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=00020126580014br.gov.bcb.pix.exemplo.123" class="w-32 h-32 mx-auto rounded-lg mb-4 shadow-sm border border-green-200" alt="QR Code PIX">
+                            <p class="text-xs text-green-800 mb-4">Aprovação imediata. Clique para gerar seu código.</p>
                             
                             <div class="font-black text-2xl text-green-900 mb-4 price-display">R$ --,--</div>
 
-                            <button onclick="copyPix()" id="btn-copy-pix" class="w-full bg-green-600 hover:bg-green-700 text-white rounded-xl py-3.5 font-bold flex items-center justify-center gap-2 transition">
+                            <!-- Botão Gerar PIX -->
+                            <button onclick="gerarPixReal()" id="btn-generate-pix" class="w-full bg-green-600 hover:bg-green-700 text-white rounded-xl py-3.5 font-bold flex items-center justify-center gap-2 transition shadow-lg">
+                                Gerar PIX
+                            </button>
+
+                            <!-- Imagem QR Code (Oculta inicialmente) -->
+                            <img id="qr-code-img" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=00020126580014br.gov.bcb.pix.exemplo.123" class="w-32 h-32 mx-auto rounded-lg mb-4 shadow-sm border border-green-200 hidden" alt="QR Code PIX">
+                            
+                            <!-- Botão Copiar (Oculto inicialmente) -->
+                            <button onclick="copyPix()" id="btn-copy-pix" class="w-full bg-green-600 hover:bg-green-700 text-white rounded-xl py-3.5 font-bold items-center justify-center gap-2 transition hidden">
                                 📋 Copiar Código PIX
                             </button>
                         </div>
 
-                        <!-- Conteúdo Cartão (Fictício) -->
+                        <!-- Conteúdo Cartão (Mercado Pago Bricks Container) -->
                         <div id="content-cartao" class="hidden">
-                            <div class="space-y-3">
-                                <input type="text" placeholder="Número do Cartão" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none">
-                                <div class="flex gap-3">
-                                    <input type="text" placeholder="Validade (MM/AA)" class="w-1/2 border border-gray-300 rounded-xl px-4 py-3 focus:outline-none">
-                                    <input type="text" placeholder="CVV" class="w-1/2 border border-gray-300 rounded-xl px-4 py-3 focus:outline-none">
-                                </div>
-                                <input type="text" placeholder="Nome Impresso no Cartão" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none">
-                                <button class="w-full bg-purple-600 hover:bg-purple-700 text-white rounded-xl py-3.5 font-bold transition mt-2 flex items-center justify-center gap-2">
-                                    💳 Pagar <span class="price-display">R$ --,--</span>
-                                </button>
-                            </div>
+                            <p class="text-sm text-gray-500 text-center mb-4">Carregando ambiente seguro de pagamento...</p>
+                            <div id="payment-brick-container"></div>
                         </div>
                     </div>
                 </div>
@@ -515,13 +513,13 @@
         let uploadedImages = [];
         let generoSelecionado = '';
         let musicaPreview = new Audio();
-        let selectedPrice = 0;
+        let selectedPrice = 0; // Variável Global Atualizada
         let previewInterval;
 
         // FUNÇÕES MODAL
         function openGeneratorModal() {
             document.getElementById('modal-container').classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; // Evita scroll fundo
+            document.body.style.overflow = 'hidden'; 
             showStep(1);
             document.getElementById('progress-bar-container').classList.remove('hidden');
         }
@@ -537,21 +535,17 @@
 
         // NAVEGAÇÃO DE PASSOS
         function showStep(step) {
-            // Esconde todos
             document.querySelectorAll('.step-content, #loading-screen, #preview-screen, #checkout-screen').forEach(el => {
                 el.classList.add('hidden-step');
             });
-            // Mostra o atual
             if(document.getElementById(`step-${step}`)) {
                 document.getElementById(`step-${step}`).classList.remove('hidden-step');
             }
-            // Atualiza Barra
             const progress = (step / totalSteps) * 100;
             document.getElementById('progress-bar').style.width = `${progress}%`;
         }
 
         function nextStep(current) {
-            // Salvar dados do step atual (Validação simples pode ser adicionada aqui)
             if (current === 1) {
                 const genderRadio = document.querySelector('input[name="gender"]:checked');
                 if (!genderRadio) { alert("Por favor, selecione seu gênero."); return; }
@@ -565,7 +559,6 @@
             if (current === 4) {
                 userData.momMemory = document.getElementById('mom-memory').value;
             }
-
             currentStep = current + 1;
             showStep(currentStep);
         }
@@ -575,7 +568,7 @@
             showStep(currentStep);
         }
 
-        // UPLOAD DE ARQUIVOS COM PREVIEW Otimizado
+        // UPLOAD DE ARQUIVOS COM PREVIEW
         function handleFileUpload(input, index) {
             const file = input.files[0];
             if (file) {
@@ -585,7 +578,7 @@
                 const imgEl = document.getElementById(`preview-img-${index}`);
                 imgEl.src = url;
                 imgEl.classList.remove('hidden');
-                input.nextElementSibling.classList.add('hidden'); // esconde o '+'
+                input.nextElementSibling.classList.add('hidden');
             }
         }
 
@@ -593,11 +586,8 @@
         function generateRetrospective() {
             document.getElementById('progress-bar-container').classList.add('hidden');
             document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden-step'));
-            
-            // Mostra loading
             document.getElementById('loading-screen').classList.remove('hidden-step');
             
-            // Delay 3s
             setTimeout(() => {
                 startPreview();
             }, 3000);
@@ -608,7 +598,6 @@
             document.getElementById('loading-screen').classList.add('hidden-step');
             document.getElementById('preview-screen').classList.remove('hidden-step');
 
-            // Lógica de Áudio Obrigatória
             if (generoSelecionado === 'Feminino') { 
                 musicaPreview.src = 'audio/mulher.mp3'; 
             } else { 
@@ -616,8 +605,6 @@
             }
             musicaPreview.loop = true;
             
-            // Tentativa de play (pode ser bloqueada por policy de navegador se não houver interação recente, 
-            // mas como veio de um clique no botão gerar, geralmente funciona)
             let playPromise = musicaPreview.play();
             if (playPromise !== undefined) {
                 playPromise.catch(error => {
@@ -625,11 +612,9 @@
                 });
             }
 
-            // Iniciar Carrossel da Prévia
             const bgScreen = document.getElementById('dynamic-preview-screen');
             const textScreen = document.getElementById('dynamic-preview-text');
             
-            // Fallback imagens se não fez upload
             const defaultImages = [
                 'https://images.unsplash.com/photo-1511895426328-dc8714191300?w=600&q=80',
                 'https://images.unsplash.com/photo-1542037104857-ffbb0b9155fb?w=600&q=80',
@@ -647,20 +632,18 @@
 
             let carouselIdx = 0;
             
-            // Função para atualizar frame
             function updateFrame() {
                 bgScreen.style.backgroundImage = `url('${imagesToUse[carouselIdx % imagesToUse.length]}')`;
                 textScreen.innerText = texts[carouselIdx % texts.length];
                 carouselIdx++;
             }
             
-            updateFrame(); // frame inicial
-            previewInterval = setInterval(updateFrame, 3500); // troca a cada 3.5s
+            updateFrame(); 
+            previewInterval = setInterval(updateFrame, 3500); 
         }
 
         // DESBLOQUEAR -> CHECKOUT
         function goToCheckout() {
-            // OBRIGATÓRIO: Pausar música ao ir pro checkout
             musicaPreview.pause();
             clearInterval(previewInterval);
 
@@ -671,34 +654,31 @@
         // LÓGICA DE CHECKOUT E DOWNSELL
         function handlePlanSelection(radio) {
             const value = radio.value;
-            
             if (value === "14.90") {
-                // Intercepta e mostra Downsell
                 document.getElementById('downsell-modal').classList.remove('hidden');
             } else if (value === "27.90") {
-                // Vai direto pro form com 27.90
+                selectedPrice = 27.90;
                 setupPaymentForm("27,90");
             }
         }
 
         function acceptDownsell() {
             document.getElementById('downsell-modal').classList.add('hidden');
-            // Remove check anterior para não confundir visualmente, opcional
+            selectedPrice = 19.90;
             setupPaymentForm("19,90");
         }
 
         function declineDownsell() {
             document.getElementById('downsell-modal').classList.add('hidden');
+            selectedPrice = 14.90;
             setupPaymentForm("14,90");
         }
 
         function setupPaymentForm(priceStr) {
             document.getElementById('payment-form-container').classList.remove('hidden');
-            // Atualiza todos os lugares que mostram o preço
             document.querySelectorAll('.price-display').forEach(el => {
                 el.innerText = `R$ ${priceStr}`;
             });
-            // Reseta tabs pro PIX por padrão ao abrir form
             switchTab('pix');
         }
 
@@ -734,19 +714,73 @@
             }
         }
 
-        // LÓGICA DO PIX EXATA
+        // SIMULAÇÃO FETCH API E GERAÇÃO DE PIX
+        async function gerarPixReal() {
+            const emailInput = document.getElementById('user-email').value;
+            
+            // Verificação do E-mail
+            if (!emailInput || !emailInput.includes('@')) {
+                alert('Por favor, preencha seu e-mail corretamente antes de gerar o PIX.');
+                return;
+            }
+
+            const btnGenerate = document.getElementById('btn-generate-pix');
+            const originalText = btnGenerate.innerHTML;
+            
+            // Visual de Loading no botão
+            btnGenerate.innerHTML = '⏳ Gerando PIX...';
+            btnGenerate.classList.add('opacity-75', 'cursor-not-allowed');
+            btnGenerate.disabled = true;
+
+            // SIMULAÇÃO DA CHAMADA AO BACKEND:
+            /*
+            O código real que conectaria à sua API no Railway seria:
+            
+            try {
+                const response = await fetch('URL_DO_SEU_BACKEND_RAILWAY/criar-pix', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        email: emailInput,
+                        plano: selectedPrice,
+                        dadosRetrospectiva: userData
+                    })
+                });
+                const data = await response.json();
+                
+                // Setar a imagem e o código real recebido da API
+                // document.getElementById('qr-code-img').src = data.qrCodeBase64;
+                // document.getElementById('btn-copy-pix').dataset.code = data.pixCode;
+            } catch(error) {
+                console.error("Erro ao gerar PIX", error);
+            }
+            */
+
+            // Mock de 2 segundos para simular a resposta da API
+            setTimeout(() => {
+                // Oculta o botão de Gerar
+                btnGenerate.classList.add('hidden');
+                
+                // Mostra o QR Code e o botão de Copiar
+                document.getElementById('qr-code-img').classList.remove('hidden');
+                document.getElementById('btn-copy-pix').classList.remove('hidden');
+                document.getElementById('btn-copy-pix').classList.add('flex'); // Garante o display flex
+                
+            }, 2000);
+        }
+
+        // FUNÇÃO COPIAR PIX OTIMIZADA
         function copyPix() {
+            // Em um cenário real, você pegaria o código do dataset ou variável
             const pixCode = '00020126580014br.gov.bcb.pix.exemplo.123';
             navigator.clipboard.writeText(pixCode).then(() => {
                 const btn = document.getElementById('btn-copy-pix');
                 const originalText = btn.innerHTML;
                 
-                // Muda visual
                 btn.innerHTML = "Código Copiado! ✅";
                 btn.classList.remove('bg-green-600', 'hover:bg-green-700');
                 btn.classList.add('bg-green-800');
 
-                // Reverte após 3 segundos
                 setTimeout(() => {
                     btn.innerHTML = originalText;
                     btn.classList.add('bg-green-600', 'hover:bg-green-700');
