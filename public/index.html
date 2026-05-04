@@ -1034,8 +1034,7 @@ const texts = [
                 btn.disabled = false;
             }
         }
-
-        // ==========================================
+// ==========================================
         // 5. LÓGICA DE CHECKOUT E MERCADO PAGO
         // ==========================================
         function handlePlanSelection(radio) {
@@ -1044,22 +1043,24 @@ const texts = [
                 document.getElementById('downsell-modal').classList.remove('hidden');
             } else if (value === "27.90") {
                 selectedPrice = 27.90;
-                setupPaymentForm("27,90");
+                // Deixamos vazio propositalmente!
+                // Agora ele precisa clicar no botão "Desbloquear e Pagar" para salvar primeiro.
             }
         }
 
         function acceptDownsell() {
             document.getElementById('downsell-modal').classList.add('hidden');
             selectedPrice = 19.90;
-            setupPaymentForm("19,90");
+            // O cliente aceitou o pop-up, então já disparamos o salvamento automático:
+            goToCheckout();
         }
 
         function declineDownsell() {
             document.getElementById('downsell-modal').classList.add('hidden');
             selectedPrice = 14.90;
-            setupPaymentForm("14,90");
+            // O cliente recusou o pop-up, disparamos o salvamento do plano básico:
+            goToCheckout();
         }
-
         function setupPaymentForm(priceStr) {
             document.getElementById('payment-form-container').classList.remove('hidden');
             document.querySelectorAll('.price-display').forEach(el => {
