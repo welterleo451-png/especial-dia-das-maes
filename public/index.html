@@ -116,41 +116,67 @@
     <!-- LANDING PAGE PRINCIPAL                         -->
     <!-- ============================================== -->
     <div id="main-landing">
-        <!-- Top Bar -->
-        <div class="fixed top-0 left-0 w-full bg-purple-900 text-white text-center py-1.5 text-xs sm:text-sm font-medium z-50">
-            +10.000 mães já choraram de emoção - faltam poucos dias para o Dia das Mães! 🤍
-        </div>
-
-        <!-- Header -->
-        <header class="fixed top-[32px] sm:top-[32px] left-0 w-full bg-white shadow-md z-40">
+        <!-- Navbar Premium -->
+        <header class="fixed top-0 left-0 w-full bg-white/90 backdrop-blur-md border-b border-gray-100 z-50">
+            <div class="bg-brand-900 text-white text-xs md:text-sm text-center py-2 font-medium tracking-wide">
+                Últimas horas para garantir o presente de Dia das Mães! 💝
+            </div>
             <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-                <div class="font-bold text-lg sm:text-xl text-purple-700 flex items-center gap-2">
-                    💝 <span class="hidden sm:inline">Especial Dia das Mães</span><span class="sm:hidden">Dia das Mães</span>
+                <div class="font-playfair font-bold text-xl text-brand-900 flex items-center gap-2">
+                    <svg class="w-6 h-6 text-brand-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    Especial Mães
                 </div>
-                <nav class="hidden md:flex gap-6 text-gray-600 font-medium text-sm">
-                    <a href="#recursos" class="hover:text-purple-700 transition">Recursos</a>
-                    <a href="#depoimentos" class="hover:text-purple-700 transition">Depoimentos</a>
-                    <a href="#passos" class="hover:text-purple-700 transition">Como Funciona</a>
+                <nav class="hidden md:flex gap-8 text-sm font-medium text-gray-600">
+                    <a href="#recursos" class="hover:text-brand-600 transition">Detalhes</a>
+                    <a href="#depoimentos" class="hover:text-brand-600 transition">Depoimentos</a>
+                    <a href="#passos" class="hover:text-brand-600 transition">Como Funciona</a>
                 </nav>
-                <button onclick="openGeneratorModal()" class="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2 rounded-full font-semibold text-sm transition transform hover:scale-105 shadow-lg">
+                <button onclick="openGeneratorModal()" class="bg-brand-600 hover:bg-brand-700 text-white px-5 py-2 rounded-full text-sm font-semibold transition shadow-md">
                     Criar Presente
                 </button>
             </div>
         </header>
 
-        <!-- Hero Section -->
-        <section class="bg-gradient-to-br from-purple-700 via-purple-600 to-fuchsia-500 text-white py-20 px-4">
-            <div class="max-w-4xl mx-auto text-center">
-                <h1 class="text-5xl sm:text-6xl font-black mb-6 leading-tight tracking-tight">
-                    Demo Interativa <br> <span class="text-fuchsia-200">Emocione sua Mãe</span>
+        <!-- Hero Section Premium -->
+        <section class="relative pt-32 pb-20 lg:pt-40 lg:pb-32 overflow-hidden bg-stone-900">
+            <!-- Background Imagem de Fundo com Efeito Vidro -->
+            <div class="absolute inset-0 z-0 opacity-40">
+                <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=2000&auto=format&fit=crop" alt="Mãe e filho" class="w-full h-full object-cover" />
+                <div class="absolute inset-0 bg-gradient-to-b from-stone-900 via-stone-900/80 to-stone-50"></div>
+            </div>
+
+            <div class="relative z-10 max-w-5xl mx-auto px-4 text-center mt-4">
+                <!-- Etiqueta de Confiança -->
+                <div class="inline-block px-5 py-2 rounded-full bg-white/10 border border-white/10 backdrop-blur-md mb-8 shadow-lg">
+                    <span class="text-brand-100 font-semibold text-sm tracking-wider uppercase flex items-center gap-2">
+                        <span class="text-lg">✨</span> O Presente Mais Emocionante
+                    </span>
+                </div>
+                
+                <!-- Título de Alto Impacto -->
+                <h1 class="font-playfair text-5xl sm:text-6xl md:text-7xl font-bold mb-6 text-white leading-tight drop-shadow-2xl">
+                    Faça sua mãe chorar...<br>
+                    <span class="italic text-brand-400 font-light">De alegria.</span>
                 </h1>
-                <p class="text-lg sm:text-xl mb-10 text-purple-100 max-w-2xl mx-auto font-light">
-                    Crie um vídeo emocionante e personalizado em menos de 3 minutos com fotos, mensagens e músicas marcantes.
+                
+                <p class="text-lg sm:text-xl md:text-2xl mb-12 text-stone-300 max-w-3xl mx-auto font-light drop-shadow-lg">
+                    Transforme 5 fotos da galeria do seu celular em uma superprodução cinematográfica com roteiro personalizado. <strong>Pronto em 3 minutos.</strong>
                 </p>
-                <button onclick="openGeneratorModal()" class="bg-white text-purple-700 px-8 py-4 rounded-full font-bold text-lg sm:text-xl transition transform hover:scale-105 shadow-2xl hover:shadow-purple-900/50 flex items-center gap-2 mx-auto">
-                    ▶ Criar Meu Presente
-                </button>
-                <p class="mt-4 text-sm text-purple-200 font-medium">Não é necessário cadastro.</p>
+                
+                <!-- Botão Principal -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <button onclick="openGeneratorModal()" class="w-full sm:w-auto bg-brand-600 hover:bg-brand-500 text-white px-10 py-5 rounded-full font-bold text-xl transition-all transform hover:scale-105 shadow-[0_0_40px_-10px_rgba(212,59,94,0.8)] flex items-center justify-center gap-3">
+                        <span class="text-2xl">▶</span> Criar Meu Presente Agora
+                    </button>
+                </div>
+                
+                <p class="mt-6 text-sm text-stone-400 font-medium flex items-center justify-center gap-2">
+                    <span class="relative flex h-3 w-3">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                    </span>
+                    Nenhum cadastro necessário para testar.
+                </p>
             </div>
         </section>
 
