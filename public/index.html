@@ -499,69 +499,82 @@
                     </div>
                 </div>
 
-               <!-- PASSO 6: FINALIZAR (CHECKOUT RESTAURADO COM FUNIL) -->
-                <div id="step-6" class="step-content hidden-step text-center py-6 relative">
-                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-brand-50 text-brand-600 mb-4 shadow-inner border border-brand-100">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+               <!-- PASSO 6: FINALIZAR (INTEGRAÇÃO REAL COM RAILWAY) -->
+<div id="step-6" class="step-content hidden-step text-center py-6 relative">
+    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-brand-50 text-brand-600 mb-4 shadow-inner border border-brand-100">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+    </div>
+    <h3 class="font-playfair text-3xl font-bold text-stone-800 mb-2 leading-tight">Tudo Pronto!</h3>
+    <p class="text-stone-500 text-sm mb-6 font-light">Suas memórias foram processadas. Escolha como deseja eternizar este momento.</p>
+    
+    <div class="space-y-4 mb-6 text-left">
+        <!-- PLANO VITALÍCIO (R$ 27,90) -->
+        <label class="block cursor-pointer group">
+            <input type="radio" name="plan" value="27.90" class="hidden" onchange="handlePlanSelection(this)">
+            <div class="w-full bg-gradient-to-r from-brand-600 to-brand-700 rounded-2xl p-5 border border-brand-500 shadow-lg relative overflow-hidden group-hover:-translate-y-1 transition-all">
+                <div class="absolute top-0 right-0 bg-white text-brand-700 text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wider shadow-sm">Mais Escolhido</div>
+                <div class="flex justify-between items-center relative z-10 text-white">
+                    <div>
+                        <h3 class="font-playfair font-bold text-xl text-white">Acesso Vitalício</h3>
+                        <p class="text-xs opacity-80 mt-1 font-light text-brand-100">Vídeo HD + Guardado para sempre</p>
                     </div>
-                    <h3 class="font-playfair text-3xl font-bold text-stone-800 mb-2 leading-tight">Tudo Pronto!</h3>
-                    <p class="text-stone-500 text-sm mb-6 font-light">O roteiro foi criado e as fotos processadas. Escolha como deseja entregar e guardar essa memória.</p>
-                    
-                    <div class="space-y-4 mb-6 text-left">
-                        
-                        <!-- OPÇÃO 1: PREMIUM (R$ 27,90) - Vai direto pro pagamento -->
-                        <button onclick="checkout('premium')" class="w-full bg-gradient-to-r from-brand-600 to-brand-700 rounded-2xl p-5 border border-brand-500 shadow-[0_8px_20px_-4px_rgba(227,93,122,0.4)] relative overflow-hidden group hover:-translate-y-1 transition-all text-left">
-                            <div class="absolute top-0 right-0 bg-white text-brand-700 text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wider shadow-sm">Mais Popular</div>
-                            <div class="flex justify-between items-center relative z-10">
-                                <div>
-                                    <h3 class="font-playfair font-bold text-white text-xl">Acesso Vitalício</h3>
-                                    <p class="text-xs text-brand-100 mt-1">Vídeo HD + Guardado para sempre</p>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-xs text-brand-200 line-through">R$ 69,90</div>
-                                    <div class="text-2xl font-black text-white">R$ 27,90</div>
-                                </div>
-                            </div>
-                        </button>
-
-                        <!-- OPÇÃO 2: BÁSICO (R$ 14,90) - Abre o Pop-up de Downsell/Upsell -->
-                        <button onclick="document.getElementById('upsell-modal').classList.remove('hidden')" class="w-full bg-white rounded-2xl p-5 border border-stone-200 shadow-sm relative overflow-hidden hover:border-brand-300 hover:bg-stone-50 transition-colors text-left">
-                            <div class="flex justify-between items-center relative z-10">
-                                <div>
-                                    <h3 class="font-playfair font-bold text-stone-800 text-lg">Acesso Simples</h3>
-                                    <p class="text-xs text-stone-500 mt-1">Vídeo HD + Link válido por 1 ano</p>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-2xl font-black text-stone-800">R$ 14,90</div>
-                                </div>
-                            </div>
-                        </button>
-                    </div>
-                    
-                    <div class="flex gap-3">
-                        <button onclick="prevStep(6)" class="w-full bg-stone-100 text-stone-600 rounded-full py-4 font-medium hover:bg-stone-200 transition">Voltar para edição</button>
-                    </div>
-
-                    <!-- MODAL DE UPSELL / DOWNSELL (R$ 19,90) - ESCONDIDO POR PADRÃO -->
-                    <div id="upsell-modal" class="hidden absolute inset-0 z-50 flex items-center justify-center p-4 bg-white/95 backdrop-blur-md rounded-[2.5rem]">
-                        <div class="bg-white rounded-3xl w-full max-w-sm p-6 text-center shadow-2xl border border-brand-100">
-                            <div class="text-4xl mb-3">🚨</div>
-                            <h3 class="font-playfair text-2xl font-bold text-stone-800 mb-2 leading-tight">Espere! Um presente para você...</h3>
-                            <p class="text-stone-600 text-sm mb-6 font-light">E se ela quiser assistir esse vídeo daqui a 5 anos? Desbloqueie o <strong>Acesso Vitalício</strong> agora com um super desconto e nunca perca essa memória.</p>
-                            
-                            <!-- Botão que aceita o Upsell por 19,90 -->
-                            <button onclick="checkout('upsell')" class="w-full bg-green-600 text-white rounded-full py-4 font-bold text-lg mb-4 shadow-[0_8px_20px_-4px_rgba(22,163,74,0.4)] hover:bg-green-700 transition-all flex items-center justify-center gap-2">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                Quero Vitalício por R$ 19,90
-                            </button>
-                            
-                            <!-- Botão que recusa e mantém os 14,90 -->
-                            <button onclick="checkout('basic')" class="text-stone-400 text-xs font-medium hover:text-stone-600 underline transition-colors">
-                                Não, obrigado. Quero apenas o plano de R$ 14,90.
-                            </button>
-                        </div>
+                    <div class="text-right">
+                        <div class="text-xs opacity-60 line-through text-brand-200">R$ 69,90</div>
+                        <div class="text-2xl font-black text-white">R$ 27,90</div>
                     </div>
                 </div>
+            </div>
+        </label>
+
+        <!-- PLANO SIMPLES (R$ 14,90 - DISPARA O DOWNSELL) -->
+        <label class="block cursor-pointer group">
+            <input type="radio" name="plan" value="14.90" class="hidden" onchange="handlePlanSelection(this)">
+            <div class="w-full bg-white rounded-2xl p-5 border border-stone-200 shadow-sm hover:border-brand-300 hover:bg-stone-50 transition-all text-left">
+                <div class="flex justify-between items-center relative z-10">
+                    <div>
+                        <h3 class="font-playfair font-bold text-stone-800 text-lg">Acesso Simples</h3>
+                        <p class="text-xs text-stone-500 mt-1 font-light">Vídeo HD + Disponível por 1 ano</p>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-2xl font-black text-stone-800">R$ 14,90</div>
+                    </div>
+                </div>
+            </div>
+        </label>
+    </div>
+
+    <div class="flex gap-3">
+        <!-- BOTÃO QUE CHAMA A FUNÇÃO REAL DO SEU SCRIPT -->
+        <button id="btn-unlock" onclick="goToCheckout()" class="w-full bg-brand-600 text-white rounded-full py-4 font-medium text-lg hover:bg-brand-700 transition-all shadow-lg shadow-brand-600/30 flex justify-center items-center gap-2">
+            🚀 Liberar Meu Presente
+        </button>
+    </div>
+
+    <!-- MODAL DE DOWNSELL (R$ 19,90) -->
+    <div id="downsell-modal" class="hidden absolute inset-0 z-[60] flex items-center justify-center p-4 bg-white/95 backdrop-blur-md rounded-[2.5rem]">
+        <div class="bg-white rounded-3xl w-full max-w-sm p-6 text-center shadow-2xl border border-brand-100">
+            <div class="text-4xl mb-3">🎁</div>
+            <h3 class="font-playfair text-2xl font-bold text-stone-800 mb-2 leading-tight">Um presente especial!</h3>
+            <p class="text-stone-500 text-xs mb-6 font-light">Grave essa memória para sempre com o <b>Acesso Vitalício</b> por um valor único.</p>
+            <button onclick="acceptDownsell()" class="w-full bg-green-600 text-white rounded-full py-4 font-bold text-lg mb-4 shadow-lg hover:bg-green-700 transition-all">
+                Quero Vitalício por R$ 19,90
+            </button>
+            <button onclick="declineDownsell()" class="text-stone-400 text-xs font-medium hover:text-stone-600 underline">
+                Não, manter apenas por 1 ano.
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- LOADING SCREEN REESTILIZADA -->
+<div id="loading-screen" class="hidden-step text-center py-12 px-6">
+    <div class="text-6xl text-brand-500 animate-pulse mb-6">❤️</div>
+    <h3 class="font-playfair text-3xl font-bold text-stone-800 mb-2">Preparando a magia...</h3>
+    <p class="text-stone-500 text-sm font-light">Sincronizando trilha sonora e renderizando as memórias de vocês.</p>
+    <div class="w-full bg-stone-100 rounded-full h-2 mt-8 overflow-hidden shadow-inner">
+        <div class="bg-brand-500 h-2 rounded-full w-full animate-[progress_3s_ease-in-out]"></div>
+    </div>
+</div>
 
                 <!-- LOADING SCREEN -->
                 <div id="loading-screen" class="hidden-step text-center py-12">
