@@ -347,209 +347,191 @@
     </div> <!-- Fechamento do Main Landing -->
 
 <!-- ============================================== -->
-<!-- MODAL DE GERAÇÃO (FORMULÁRIO PREMIUM UX/UI)    -->
-<!-- ============================================== -->
-<div id="modal-container" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 bg-stone-900/60 backdrop-blur-md transition-opacity duration-300">
-    <div class="bg-white rounded-[2.5rem] w-full max-w-lg overflow-hidden shadow-2xl relative border border-white/40 ring-1 ring-stone-900/5">
-        
-        <!-- Botão Fechar -->
-        <button onclick="closeModals()" class="absolute top-5 right-5 text-stone-400 hover:text-brand-700 transition-colors z-10 bg-white/80 backdrop-blur hover:bg-brand-50 p-2.5 rounded-full shadow-sm border border-stone-100">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path></svg>
-        </button>
-
-        <!-- Passo 1 -->
-        <div id="step-1" class="p-8 sm:p-10">
-            <div class="text-center mb-8">
-                <span class="text-brand-600/80 font-semibold tracking-[0.2em] text-[10px] uppercase mb-3 block">Capítulo 1 de 5</span>
-                <h2 class="font-playfair text-4xl font-bold text-stone-800 leading-tight">Quem está presenteando?</h2>
-                <p class="text-stone-500 text-sm mt-3 font-light">Precisamos saber quem você é para assinar esta homenagem.</p>
-            </div>
-            <div class="space-y-5">
-                <div>
-                    <label class="block text-xs font-semibold tracking-wide text-stone-600 uppercase mb-1.5">Seu Nome</label>
-                    <input type="text" id="user-name" placeholder="Ex: Lucas" class="w-full border border-stone-200 bg-stone-50/50 rounded-2xl px-5 py-3.5 text-stone-800 placeholder-stone-400 focus:ring-0 focus:border-brand-500 focus:bg-white transition-all shadow-inner outline-none">
+    <!-- MODAL PRINCIPAL DO GERADOR / CHECKOUT          -->
+    <!-- ============================================== -->
+    <div id="modal-container" class="fixed inset-0 bg-stone-900/80 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-md transition-opacity">
+        <div class="bg-white rounded-[2.5rem] w-full max-w-lg max-h-[90vh] overflow-y-auto relative shadow-2xl border border-stone-100">
+            
+            <button onclick="closeModals()" class="absolute top-5 right-5 text-stone-400 hover:text-brand-700 text-2xl font-bold z-10 bg-stone-50 hover:bg-brand-50 w-10 h-10 rounded-full flex items-center justify-center transition-colors">&times;</button>
+            
+            <div class="p-8 sm:p-10">
+                <!-- Barra de Progresso (Passos Form) -->
+                <div id="progress-bar-container" class="w-full bg-stone-100 rounded-full h-2 mb-8 shadow-inner">
+                    <div id="progress-bar" class="bg-brand-500 h-2 rounded-full transition-all duration-300" style="width: 16.6%"></div>
                 </div>
-                <div>
-                    <label class="block text-xs font-semibold tracking-wide text-stone-600 uppercase mb-1.5">Seu Gênero <span class="text-[10px] text-stone-400 font-normal normal-case">(Para a locução perfeita)</span></label>
+
+                <!-- PASSO 1: Dados do Usuário -->
+                <div id="step-1" class="step-content">
+                    <div class="text-center mb-8">
+                        <span class="text-brand-600 font-semibold tracking-[0.2em] text-[10px] uppercase mb-2 block">Capítulo 1 de 5</span>
+                        <h3 class="font-playfair text-3xl font-bold text-stone-800 mb-2 leading-tight">Quem está presenteando?</h3>
+                        <p class="text-sm text-stone-500 mb-6 font-light">Precisamos saber quem você é para o roteiro.</p>
+                    </div>
+                    
+                    <div class="space-y-5">
+                        <div>
+                            <label class="block text-xs font-semibold tracking-wide text-stone-600 uppercase mb-1.5">Seu Nome</label>
+                            <input type="text" id="user-name" class="w-full border border-stone-200 bg-stone-50/50 rounded-2xl px-5 py-3.5 focus:outline-none focus:ring-1 focus:ring-brand-500 focus:bg-white transition-all shadow-inner text-stone-800" placeholder="Ex: Lucas">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold tracking-wide text-stone-600 uppercase mb-1.5">Seu Gênero <span class="text-[10px] text-stone-400 font-normal normal-case">(Importante para o áudio)</span></label>
+                            <div class="grid grid-cols-2 gap-3">
+                                <label class="border border-stone-200 bg-stone-50/50 rounded-2xl p-3 flex items-center gap-2 cursor-pointer hover:border-brand-300 transition-all has-[:checked]:bg-brand-50 has-[:checked]:border-brand-500 has-[:checked]:shadow-[inset_0_0_0_1px_rgba(227,93,122,1)]">
+                                    <input type="radio" name="gender" value="Masculino" class="w-4 h-4 text-brand-600 focus:ring-brand-500">
+                                    <span class="font-medium text-stone-700 text-sm">👨 Masculino</span>
+                                </label>
+                                <label class="border border-stone-200 bg-stone-50/50 rounded-2xl p-3 flex items-center gap-2 cursor-pointer hover:border-brand-300 transition-all has-[:checked]:bg-brand-50 has-[:checked]:border-brand-500 has-[:checked]:shadow-[inset_0_0_0_1px_rgba(227,93,122,1)]">
+                                    <input type="radio" name="gender" value="Feminino" class="w-4 h-4 text-brand-600 focus:ring-brand-500">
+                                    <span class="font-medium text-stone-700 text-sm">👩 Feminino</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold tracking-wide text-stone-600 uppercase mb-1.5">Seu WhatsApp</label>
+                            <input type="tel" id="user-phone" class="w-full border border-stone-200 bg-stone-50/50 rounded-2xl px-5 py-3.5 focus:outline-none focus:ring-1 focus:ring-brand-500 focus:bg-white transition-all shadow-inner text-stone-800" placeholder="(00) 00000-0000">
+                        </div>
+                    </div>
+                    <button onclick="nextStep(1)" class="w-full bg-brand-600 text-white rounded-full py-4 font-medium text-lg mt-8 hover:-translate-y-0.5 hover:bg-brand-700 transition-all shadow-lg shadow-brand-600/30 flex justify-center items-center gap-2">Continuar <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></button>
+                </div>
+
+                <!-- PASSO 2: Dados da Mãe -->
+                <div id="step-2" class="step-content hidden-step">
+                    <div class="text-center mb-8">
+                        <span class="text-brand-600 font-semibold tracking-[0.2em] text-[10px] uppercase mb-2 block">Capítulo 2 de 5</span>
+                        <h3 class="font-playfair text-3xl font-bold text-stone-800 mb-2 leading-tight">Sobre a Estrela</h3>
+                        <p class="text-sm text-stone-500 mb-6 font-light">Como ela se chama?</p>
+                    </div>
+                    <div class="space-y-5">
+                        <div>
+                            <label class="block text-xs font-semibold tracking-wide text-stone-600 uppercase mb-1.5">Nome da sua mãe</label>
+                            <input type="text" id="mom-name" class="w-full border border-stone-200 bg-stone-50/50 rounded-2xl px-5 py-3.5 focus:outline-none focus:ring-1 focus:ring-brand-500 focus:bg-white transition-all shadow-inner text-stone-800" placeholder="Ex: Maria">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold tracking-wide text-stone-600 uppercase mb-1.5">Apelido carinhoso (opcional)</label>
+                            <input type="text" id="mom-nickname" class="w-full border border-stone-200 bg-stone-50/50 rounded-2xl px-5 py-3.5 focus:outline-none focus:ring-1 focus:ring-brand-500 focus:bg-white transition-all shadow-inner text-stone-800" placeholder="Ex: Rainha, Mamis">
+                        </div>
+                    </div>
+                    <div class="flex gap-3 mt-8">
+                        <button onclick="prevStep(2)" class="w-1/3 bg-stone-100 text-stone-600 rounded-full py-4 font-medium hover:bg-stone-200 transition">Voltar</button>
+                        <button onclick="nextStep(2)" class="w-2/3 bg-brand-600 text-white rounded-full py-4 font-medium text-lg hover:-translate-y-0.5 hover:bg-brand-700 transition-all shadow-lg shadow-brand-600/30 flex justify-center items-center gap-2">Continuar <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></button>
+                    </div>
+                </div>
+
+                <!-- PASSO 3: Detalhes -->
+                <div id="step-3" class="step-content hidden-step">
+                    <div class="text-center mb-8">
+                        <span class="text-brand-600 font-semibold tracking-[0.2em] text-[10px] uppercase mb-2 block">Capítulo 3 de 5</span>
+                        <h3 class="font-playfair text-3xl font-bold text-stone-800 mb-2 leading-tight">Pequenos detalhes</h3>
+                        <p class="text-sm text-stone-500 mb-6 font-light">Para deixar bem pessoal.</p>
+                    </div>
+                    <div class="space-y-5">
+                        <div>
+                            <label class="block text-xs font-semibold tracking-wide text-stone-600 uppercase mb-1.5">Comida favorita que ela faz</label>
+                            <input type="text" id="mom-food" class="w-full border border-stone-200 bg-stone-50/50 rounded-2xl px-5 py-3.5 focus:outline-none focus:ring-1 focus:ring-brand-500 focus:bg-white transition-all shadow-inner text-stone-800" placeholder="Ex: Lasanha de domingo">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold tracking-wide text-stone-600 uppercase mb-1.5">Uma mania engraçada dela</label>
+                            <input type="text" id="mom-habit" class="w-full border border-stone-200 bg-stone-50/50 rounded-2xl px-5 py-3.5 focus:outline-none focus:ring-1 focus:ring-brand-500 focus:bg-white transition-all shadow-inner text-stone-800" placeholder="Ex: Guardar pote de sorvete com feijão">
+                        </div>
+                    </div>
+                    <div class="flex gap-3 mt-8">
+                        <button onclick="prevStep(3)" class="w-1/3 bg-stone-100 text-stone-600 rounded-full py-4 font-medium hover:bg-stone-200 transition">Voltar</button>
+                        <button onclick="nextStep(3)" class="w-2/3 bg-brand-600 text-white rounded-full py-4 font-medium text-lg hover:-translate-y-0.5 hover:bg-brand-700 transition-all shadow-lg shadow-brand-600/30 flex justify-center items-center gap-2">Continuar <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></button>
+                    </div>
+                </div>
+
+                <!-- PASSO 4: Memória -->
+                <div id="step-4" class="step-content hidden-step">
+                    <div class="text-center mb-8">
+                        <span class="text-brand-600 font-semibold tracking-[0.2em] text-[10px] uppercase mb-2 block">Capítulo 4 de 5</span>
+                        <h3 class="font-playfair text-3xl font-bold text-stone-800 mb-2 leading-tight">Memória Inesquecível</h3>
+                        <p class="text-sm text-stone-500 mb-6 font-light">Isso fará toda a diferença.</p>
+                    </div>
+                    <div class="space-y-5">
+                        <div>
+                            <label class="block text-xs font-semibold tracking-wide text-stone-600 uppercase mb-1.5">Escreva uma frase de agradecimento</label>
+                            <textarea id="mom-memory" rows="4" class="w-full border border-stone-200 bg-stone-50/50 rounded-2xl px-5 py-4 focus:outline-none focus:ring-1 focus:ring-brand-500 focus:bg-white transition-all shadow-inner text-stone-800 resize-none leading-relaxed" placeholder="Ex: Obrigado por ter me apoiado quando eu mais precisei."></textarea>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 mt-8">
+                        <button onclick="prevStep(4)" class="w-1/3 bg-stone-100 text-stone-600 rounded-full py-4 font-medium hover:bg-stone-200 transition">Voltar</button>
+                        <button onclick="nextStep(4)" class="w-2/3 bg-brand-600 text-white rounded-full py-4 font-medium text-lg hover:-translate-y-0.5 hover:bg-brand-700 transition-all shadow-lg shadow-brand-600/30 flex justify-center items-center gap-2">Continuar <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></button>
+                    </div>
+                </div>
+
+                <!-- PASSO 5: FOTOS -->
+                <div id="step-5" class="step-content hidden-step">
+                    <div class="text-center mb-8">
+                        <span class="text-brand-600 font-semibold tracking-[0.2em] text-[10px] uppercase mb-2 block">Último Capítulo</span>
+                        <h3 class="font-playfair text-3xl font-bold text-stone-800 mb-2 leading-tight">As Melhores Fotos</h3>
+                        <p class="text-sm text-stone-500 mb-6 font-light">Selecione 5 fotos marcantes (vocês juntos, infância, família).</p>
+                    </div>
+                    <div class="grid grid-cols-5 gap-2 mb-8">
+                        <div class="relative w-full aspect-square bg-stone-50 rounded-xl flex items-center justify-center border border-dashed border-stone-300 overflow-hidden hover:border-brand-400 transition-colors group">
+                            <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10" onchange="handleFileUpload(this, 0)">
+                            <span class="text-xl text-stone-400 group-hover:text-brand-500 group-hover:scale-110 transition">+</span>
+                            <img id="preview-img-0" class="absolute inset-0 w-full h-full object-cover hidden">
+                        </div>
+                        <div class="relative w-full aspect-square bg-stone-50 rounded-xl flex items-center justify-center border border-dashed border-stone-300 overflow-hidden hover:border-brand-400 transition-colors group">
+                            <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10" onchange="handleFileUpload(this, 1)">
+                            <span class="text-xl text-stone-400 group-hover:text-brand-500 group-hover:scale-110 transition">+</span>
+                            <img id="preview-img-1" class="absolute inset-0 w-full h-full object-cover hidden">
+                        </div>
+                        <div class="relative w-full aspect-square bg-stone-50 rounded-xl flex items-center justify-center border border-dashed border-stone-300 overflow-hidden hover:border-brand-400 transition-colors group">
+                            <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10" onchange="handleFileUpload(this, 2)">
+                            <span class="text-xl text-stone-400 group-hover:text-brand-500 group-hover:scale-110 transition">+</span>
+                            <img id="preview-img-2" class="absolute inset-0 w-full h-full object-cover hidden">
+                        </div>
+                        <div class="relative w-full aspect-square bg-stone-50 rounded-xl flex items-center justify-center border border-dashed border-stone-300 overflow-hidden hover:border-brand-400 transition-colors group">
+                            <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10" onchange="handleFileUpload(this, 3)">
+                            <span class="text-xl text-stone-400 group-hover:text-brand-500 group-hover:scale-110 transition">+</span>
+                            <img id="preview-img-3" class="absolute inset-0 w-full h-full object-cover hidden">
+                        </div>
+                        <div class="relative w-full aspect-square bg-stone-50 rounded-xl flex items-center justify-center border border-dashed border-stone-300 overflow-hidden hover:border-brand-400 transition-colors group">
+                            <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10" onchange="handleFileUpload(this, 4)">
+                            <span class="text-xl text-stone-400 group-hover:text-brand-500 group-hover:scale-110 transition">+</span>
+                            <img id="preview-img-4" class="absolute inset-0 w-full h-full object-cover hidden">
+                        </div>
+                    </div>
+                    <div class="flex gap-3 mt-8">
+                        <button onclick="prevStep(5)" class="w-1/3 bg-stone-100 text-stone-600 rounded-full py-4 font-medium hover:bg-stone-200 transition">Voltar</button>
+                        <button onclick="nextStep(5)" class="w-2/3 bg-brand-600 text-white rounded-full py-4 font-medium text-lg hover:-translate-y-0.5 hover:bg-brand-700 transition-all shadow-lg shadow-brand-600/30 flex justify-center items-center gap-2">Próximo ➔</button>
+                    </div>
+                </div>
+
+                <!-- PASSO 6: FINALIZAR -->
+                <div id="step-6" class="step-content hidden-step text-center py-6">
+                    <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-brand-50 text-brand-600 mb-6 shadow-inner border border-brand-100">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                    </div>
+                    <h3 class="font-playfair text-3xl font-bold text-stone-800 mb-2 leading-tight">Tudo Pronto!</h3>
+                    <p class="text-stone-500 text-sm mb-8 font-light">O roteiro foi criado, as fotos processadas e a trilha sonora escolhida baseada no seu perfil.</p>
+                    
+                    <div class="w-full bg-gradient-to-b from-stone-50 to-white rounded-3xl p-6 border border-stone-200 shadow-xl relative overflow-hidden mb-8">
+                        <div class="absolute top-0 right-0 bg-brand-600 text-white text-[10px] font-bold px-3 py-1 rounded-bl-2xl uppercase tracking-[0.2em] shadow-sm">Oferta Especial</div>
+                        <div class="flex justify-between items-center mb-6 text-left mt-2">
+                            <div>
+                                <h3 class="font-playfair font-bold text-stone-800 text-xl">Acesso Vitalício</h3>
+                                <p class="text-xs text-stone-500 font-light mt-1">Vídeo HD + Link Seguro</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-xs text-stone-400 line-through decoration-brand-300">R$ 49,90</div>
+                                <div class="text-3xl font-black text-brand-600 mt-1">R$ 14,90</div>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="flex gap-3">
-                        <label class="flex-1 flex items-center justify-center gap-2 border border-stone-200 bg-stone-50/50 p-3.5 rounded-2xl cursor-pointer hover:border-brand-300 transition-all has-[:checked]:border-brand-500 has-[:checked]:bg-brand-50 has-[:checked]:shadow-[inset_0_0_0_1px_rgba(227,93,122,1)]">
-                            <input type="radio" name="gender" value="Masculino" class="sr-only">
-                            <span class="font-medium text-stone-700 text-sm">Masculino</span>
-                        </label>
-                        <label class="flex-1 flex items-center justify-center gap-2 border border-stone-200 bg-stone-50/50 p-3.5 rounded-2xl cursor-pointer hover:border-brand-300 transition-all has-[:checked]:border-brand-500 has-[:checked]:bg-brand-50 has-[:checked]:shadow-[inset_0_0_0_1px_rgba(227,93,122,1)]">
-                            <input type="radio" name="gender" value="Feminino" class="sr-only">
-                            <span class="font-medium text-stone-700 text-sm">Feminino</span>
-                        </label>
+                        <button onclick="prevStep(6)" class="w-1/3 bg-stone-100 text-stone-600 rounded-full py-4 font-medium hover:bg-stone-200 transition">Voltar</button>
+                        <button onclick="generateRetrospective()" class="w-2/3 bg-brand-600 text-white rounded-full py-4 font-medium text-lg shadow-[0_8px_20px_-4px_rgba(227,93,122,0.5)] hover:bg-brand-700 transition-all hover:-translate-y-0.5 flex justify-center items-center gap-2">
+                            🎁 Gerar Vídeo
+                        </button>
                     </div>
                 </div>
-                <div>
-                    <label class="block text-xs font-semibold tracking-wide text-stone-600 uppercase mb-1.5">Seu WhatsApp</label>
-                    <input type="tel" id="whatsapp" placeholder="(00) 00000-0000" class="w-full border border-stone-200 bg-stone-50/50 rounded-2xl px-5 py-3.5 text-stone-800 placeholder-stone-400 focus:ring-0 focus:border-brand-500 focus:bg-white transition-all shadow-inner outline-none">
-                </div>
-                <button onclick="nextStep(1)" class="w-full mt-8 bg-brand-600 hover:bg-brand-700 text-white font-medium text-lg py-4 rounded-full transition-all duration-300 shadow-lg shadow-brand-600/30 flex justify-center items-center gap-2 hover:-translate-y-0.5">
-                    Continuar <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                </button>
+
             </div>
         </div>
-
-        <!-- Passo 2 -->
-        <div id="step-2" class="p-8 sm:p-10 hidden-step">
-            <button onclick="prevStep(2)" class="text-stone-400 hover:text-brand-600 mb-6 flex items-center gap-1.5 text-sm font-medium transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Voltar</button>
-            <div class="text-center mb-8">
-                <span class="text-brand-600/80 font-semibold tracking-[0.2em] text-[10px] uppercase mb-3 block">Capítulo 2 de 5</span>
-                <h2 class="font-playfair text-4xl font-bold text-stone-800 leading-tight">Sobre a Estrela</h2>
-                <p class="text-stone-500 text-sm mt-3 font-light">Como devemos chamar o amor da sua vida no vídeo?</p>
-            </div>
-            <div class="space-y-5">
-                <div>
-                    <label class="block text-xs font-semibold tracking-wide text-stone-600 uppercase mb-1.5">Nome da sua mãe</label>
-                    <input type="text" id="mom-name" placeholder="Ex: Maria" class="w-full border border-stone-200 bg-stone-50/50 rounded-2xl px-5 py-3.5 text-stone-800 placeholder-stone-400 focus:ring-0 focus:border-brand-500 focus:bg-white transition-all shadow-inner outline-none">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold tracking-wide text-stone-600 uppercase mb-1.5">Como você a chama carinhosamente?</label>
-                    <input type="text" id="mom-nickname" placeholder="Ex: Mamãe, Rainha, Dona Maria..." class="w-full border border-stone-200 bg-stone-50/50 rounded-2xl px-5 py-3.5 text-stone-800 placeholder-stone-400 focus:ring-0 focus:border-brand-500 focus:bg-white transition-all shadow-inner outline-none">
-                </div>
-                <button onclick="nextStep(2)" class="w-full mt-8 bg-brand-600 hover:bg-brand-700 text-white font-medium text-lg py-4 rounded-full transition-all duration-300 shadow-lg shadow-brand-600/30 flex justify-center items-center gap-2 hover:-translate-y-0.5">
-                    Continuar <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                </button>
-            </div>
-        </div>
-
-        <!-- Passo 3 -->
-        <div id="step-3" class="p-8 sm:p-10 hidden-step">
-            <button onclick="prevStep(3)" class="text-stone-400 hover:text-brand-600 mb-6 flex items-center gap-1.5 text-sm font-medium transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Voltar</button>
-            <div class="text-center mb-8">
-                <span class="text-brand-600/80 font-semibold tracking-[0.2em] text-[10px] uppercase mb-3 block">Capítulo 3 de 5</span>
-                <h2 class="font-playfair text-4xl font-bold text-stone-800 leading-tight">Detalhes Únicos</h2>
-                <p class="text-stone-500 text-sm mt-3 font-light">Os pequenos detalhes que fazem dela quem ela é.</p>
-            </div>
-            <div class="space-y-5">
-                <div>
-                    <label class="block text-xs font-semibold tracking-wide text-stone-600 uppercase mb-1.5">A comida favorita que ela faz</label>
-                    <input type="text" id="mom-food" placeholder="Ex: O famoso macarrão de domingo" class="w-full border border-stone-200 bg-stone-50/50 rounded-2xl px-5 py-3.5 text-stone-800 placeholder-stone-400 focus:ring-0 focus:border-brand-500 focus:bg-white transition-all shadow-inner outline-none">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold tracking-wide text-stone-600 uppercase mb-1.5">Uma mania engraçada ou clássica dela</label>
-                    <input type="text" id="mom-habit" placeholder="Ex: Guardar o pote de sorvete com feijão" class="w-full border border-stone-200 bg-stone-50/50 rounded-2xl px-5 py-3.5 text-stone-800 placeholder-stone-400 focus:ring-0 focus:border-brand-500 focus:bg-white transition-all shadow-inner outline-none">
-                </div>
-                <button onclick="nextStep(3)" class="w-full mt-8 bg-brand-600 hover:bg-brand-700 text-white font-medium text-lg py-4 rounded-full transition-all duration-300 shadow-lg shadow-brand-600/30 flex justify-center items-center gap-2 hover:-translate-y-0.5">
-                    Continuar <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                </button>
-            </div>
-        </div>
-
-        <!-- Passo 4 -->
-        <div id="step-4" class="p-8 sm:p-10 hidden-step">
-            <button onclick="prevStep(4)" class="text-stone-400 hover:text-brand-600 mb-6 flex items-center gap-1.5 text-sm font-medium transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Voltar</button>
-            <div class="text-center mb-8">
-                <span class="text-brand-600/80 font-semibold tracking-[0.2em] text-[10px] uppercase mb-3 block">Capítulo 4 de 5</span>
-                <h2 class="font-playfair text-4xl font-bold text-stone-800 leading-tight">A Memória</h2>
-                <p class="text-stone-500 text-sm mt-3 font-light">As palavras que ficarão eternizadas no coração dela.</p>
-            </div>
-            <div class="space-y-5">
-                <div>
-                    <label class="block text-xs font-semibold tracking-wide text-stone-600 uppercase mb-1.5">Sua mensagem ou melhor lembrança</label>
-                    <textarea id="mom-memory" rows="4" placeholder="Ex: Daquele dia que você me ensinou a andar de bicicleta até hoje, você é meu maior porto seguro. Te amo infinitamente!" class="w-full border border-stone-200 bg-stone-50/50 rounded-2xl px-5 py-4 text-stone-800 placeholder-stone-400 focus:ring-0 focus:border-brand-500 focus:bg-white transition-all shadow-inner outline-none resize-none leading-relaxed"></textarea>
-                </div>
-                <button onclick="nextStep(4)" class="w-full mt-6 bg-brand-600 hover:bg-brand-700 text-white font-medium text-lg py-4 rounded-full transition-all duration-300 shadow-lg shadow-brand-600/30 flex justify-center items-center gap-2 hover:-translate-y-0.5">
-                    Continuar <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                </button>
-            </div>
-        </div>
-
-        <!-- Passo 5: Imagens -->
-        <div id="step-5" class="p-8 sm:p-10 hidden-step">
-            <button onclick="prevStep(5)" class="text-stone-400 hover:text-brand-600 mb-4 flex items-center gap-1.5 text-sm font-medium transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Voltar</button>
-            <div class="text-center mb-8">
-                <span class="text-brand-600/80 font-semibold tracking-[0.2em] text-[10px] uppercase mb-3 block">Último Capítulo</span>
-                <h2 class="font-playfair text-4xl font-bold text-stone-800 leading-tight">A Exposição</h2>
-                <p class="text-stone-500 text-sm mt-3 font-light">Selecione as 5 fotos que contam a história de vocês.</p>
-            </div>
-            
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-8" id="photo-inputs-container">
-                <!-- Foto 1 -->
-                <div>
-                    <input type="file" id="foto1" accept="image/*" class="hidden" onchange="previewImage(this, 'label-foto1')">
-                    <label for="foto1" id="label-foto1" class="border border-dashed border-brand-200 rounded-[1.25rem] flex flex-col items-center justify-center h-28 cursor-pointer hover:border-brand-500 hover:bg-brand-50/50 transition-all overflow-hidden relative bg-stone-50 bg-center bg-cover shadow-sm group">
-                        <div class="text-brand-400 mb-2 bg-white p-2 rounded-full shadow-sm group-hover:scale-110 transition-transform"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg></div>
-                        <span class="font-playfair text-xs font-semibold text-stone-600 italic bg-white/80 px-3 py-1 rounded-full backdrop-blur-sm">Foto 1</span>
-                    </label>
-                </div>
-                <!-- Foto 2 -->
-                <div>
-                    <input type="file" id="foto2" accept="image/*" class="hidden" onchange="previewImage(this, 'label-foto2')">
-                    <label for="foto2" id="label-foto2" class="border border-dashed border-brand-200 rounded-[1.25rem] flex flex-col items-center justify-center h-28 cursor-pointer hover:border-brand-500 hover:bg-brand-50/50 transition-all overflow-hidden relative bg-stone-50 bg-center bg-cover shadow-sm group">
-                        <div class="text-brand-400 mb-2 bg-white p-2 rounded-full shadow-sm group-hover:scale-110 transition-transform"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg></div>
-                        <span class="font-playfair text-xs font-semibold text-stone-600 italic bg-white/80 px-3 py-1 rounded-full backdrop-blur-sm">Foto 2</span>
-                    </label>
-                </div>
-                <!-- Foto 3 -->
-                <div>
-                    <input type="file" id="foto3" accept="image/*" class="hidden" onchange="previewImage(this, 'label-foto3')">
-                    <label for="foto3" id="label-foto3" class="border border-dashed border-brand-200 rounded-[1.25rem] flex flex-col items-center justify-center h-28 cursor-pointer hover:border-brand-500 hover:bg-brand-50/50 transition-all overflow-hidden relative bg-stone-50 bg-center bg-cover shadow-sm group">
-                        <div class="text-brand-400 mb-2 bg-white p-2 rounded-full shadow-sm group-hover:scale-110 transition-transform"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg></div>
-                        <span class="font-playfair text-xs font-semibold text-stone-600 italic bg-white/80 px-3 py-1 rounded-full backdrop-blur-sm">Foto 3</span>
-                    </label>
-                </div>
-                <!-- Foto 4 -->
-                <div class="col-span-1 sm:col-span-1 sm:col-start-1 sm:ml-auto sm:w-full max-w-[180px]">
-                    <input type="file" id="foto4" accept="image/*" class="hidden" onchange="previewImage(this, 'label-foto4')">
-                    <label for="foto4" id="label-foto4" class="border border-dashed border-brand-200 rounded-[1.25rem] flex flex-col items-center justify-center h-28 cursor-pointer hover:border-brand-500 hover:bg-brand-50/50 transition-all overflow-hidden relative bg-stone-50 bg-center bg-cover shadow-sm group">
-                        <div class="text-brand-400 mb-2 bg-white p-2 rounded-full shadow-sm group-hover:scale-110 transition-transform"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg></div>
-                        <span class="font-playfair text-xs font-semibold text-stone-600 italic bg-white/80 px-3 py-1 rounded-full backdrop-blur-sm">Foto 4</span>
-                    </label>
-                </div>
-                <!-- Foto 5 -->
-                <div class="col-span-1 sm:col-span-2 sm:mr-auto sm:w-full sm:max-w-[180px]">
-                    <input type="file" id="foto5" accept="image/*" class="hidden" onchange="previewImage(this, 'label-foto5')">
-                    <label for="foto5" id="label-foto5" class="border border-dashed border-brand-200 rounded-[1.25rem] flex flex-col items-center justify-center h-28 cursor-pointer hover:border-brand-500 hover:bg-brand-50/50 transition-all overflow-hidden relative bg-stone-50 bg-center bg-cover shadow-sm group">
-                        <div class="text-brand-400 mb-2 bg-white p-2 rounded-full shadow-sm group-hover:scale-110 transition-transform"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg></div>
-                        <span class="font-playfair text-xs font-semibold text-stone-600 italic bg-white/80 px-3 py-1 rounded-full backdrop-blur-sm">Foto 5</span>
-                    </label>
-                </div>
-            </div>
-
-            <button onclick="generatePreview()" id="btn-generate" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-medium text-lg py-4 rounded-full transition-all duration-300 shadow-lg shadow-brand-600/30 flex justify-center items-center gap-2 hover:-translate-y-0.5">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
-                <span>Eternizar Memórias</span>
-            </button>
-        </div>
-
-        <!-- Passo 6: Checkout / Preview -->
-        <div id="step-6" class="p-8 sm:p-10 hidden-step flex flex-col items-center text-center">
-            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-brand-50 text-brand-600 mb-6 shadow-inner border border-brand-100">
-                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-            </div>
-            <h2 class="font-playfair text-4xl font-bold text-stone-800 mb-3 leading-tight">Sua homenagem está pronta!</h2>
-            <p class="text-stone-500 text-sm mb-8 font-light">Desbloqueie o acesso vitalício e surpreenda a mulher da sua vida hoje mesmo.</p>
-            
-            <div class="w-full bg-gradient-to-b from-stone-50 to-white rounded-3xl p-7 border border-stone-200 shadow-xl relative overflow-hidden mb-8">
-                <div class="absolute top-0 right-0 bg-brand-600 text-white text-[10px] font-bold px-4 py-1.5 rounded-bl-2xl uppercase tracking-[0.2em] shadow-sm">Oferta Especial</div>
-                <div class="flex justify-between items-center mb-8 text-left mt-2">
-                    <div>
-                        <h3 class="font-playfair font-bold text-stone-800 text-2xl">Acesso Vitalício</h3>
-                        <p class="text-sm text-stone-500 font-light mt-1">Vídeo em Alta Definição (HD)<br>Link Seguro para WhatsApp</p>
-                    </div>
-                    <div class="text-right">
-                        <div class="text-sm text-stone-400 line-through decoration-brand-300">R$ 49,90</div>
-                        <div class="text-4xl font-black text-brand-600 mt-1">R$ 14,90</div>
-                    </div>
-                </div>
-                
-               <button id="btn-checkout" onclick="generateRetrospective()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-medium text-lg py-4.5 rounded-2xl transition-all duration-300 shadow-[0_8px_20px_-4px_rgba(227,93,122,0.5)] flex justify-center items-center gap-2.5 hover:-translate-y-1">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                    Desbloquear Meu Presente
-                </button>
-                
-                <div class="text-center mt-5 flex items-center justify-center gap-2 text-[11px] text-stone-400 font-medium tracking-wide uppercase">
-                    <svg class="w-4 h-4 text-stone-300" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zm7-10a1 1 0 01.707.293l2 2a1 1 0 010 1.414l-2 2a1 1 0 01-1.414-1.414L14.586 6l-1.293-1.293A1 1 0 0112 2zm0 10a1 1 0 01.707.293l2 2a1 1 0 010 1.414l-2 2a1 1 0 01-1.414-1.414L14.586 16l-1.293-1.293A1 1 0 0112 12z" clip-rule="evenodd"></path></svg>
-                    Transação 100% Segura
-                </div>
-            </div>
-        </div>
-
     </div>
-</div>
 
                 <!-- LOADING SCREEN -->
                 <div id="loading-screen" class="hidden-step text-center py-12">
