@@ -981,7 +981,7 @@ const texts = [
             previewInterval = setInterval(updateFrame, 3500); 
         }
 
-        // ==========================================
+      // ==========================================
         // 4. INTEGRAÇÃO BACKEND (SALVAR DADOS REAIS)
         // ==========================================
         async function goToCheckout() {
@@ -1005,21 +1005,30 @@ const texts = [
                     body: JSON.stringify(userData)
                 });
                 
-                if(!response.ok) throw new Error("Falha na rede");
-                
                 const data = await response.json();
-                retroIdCriado = data.id; // GUARDA O ID PARA O PAGAMENTO
+                
+                // Se a API avisar que deu erro, paramos tudo aqui
+                if (data.erro) throw new Error(data.erro);
+                if (!response.ok) throw new Error("Falha na rede com o servidor");
+                
+                // Pega o ID de forma blindada (cobre todos os padrões de banco de dados)
+                retroIdCriado = data.id || data._id || data.retroId; 
+                
+                // Se vier vazio (null), trava e avisa.
+                if (!retroIdCriado) {
+                    throw new Error("O servidor não devolveu o ID do presente.");
+                }
 
-                // Avança para tela de Checkout
-               // COLOQUE ISTO:
-document.getElementById('plan-selection-container').classList.add('hidden');
-document.getElementById('unlock-btn-container').classList.add('hidden');
-setupPaymentForm(selectedPrice.toString().replace('.', ','));
+                // SUCESSO! Só esconde a oferta e mostra o Checkout SE salvou de verdade
+                document.getElementById('plan-selection-container').classList.add('hidden');
+                document.getElementById('unlock-btn-container').classList.add('hidden');
+                setupPaymentForm(selectedPrice.toString().replace('.', ','));
                 
             } catch (error) {
                 console.error("Erro ao salvar:", error);
-                alert("Erro ao conectar com o servidor. As imagens podem ser muito pesadas. Tente novamente.");
+                alert("Ops! Houve um erro ao preparar suas fotos: " + error.message + ". Tente novamente clicando no botão.");
             } finally {
+                // Devolve o botão ao estado normal
                 btn.innerHTML = originalText;
                 btn.classList.remove('opacity-75', 'cursor-not-allowed');
                 btn.disabled = false;
