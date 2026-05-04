@@ -499,7 +499,7 @@
                     </div>
                 </div>
 
-               <!-- PASSO 6: FINALIZAR (INTEGRAÇÃO REAL COM RAILWAY) -->
+<!-- PASSO 6: FINALIZAR E PAGAMENTO (INTEGRADO) -->
 <div id="step-6" class="step-content hidden-step text-center py-6 relative">
     <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-brand-50 text-brand-600 mb-4 shadow-inner border border-brand-100">
         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
@@ -507,11 +507,12 @@
     <h3 class="font-playfair text-3xl font-bold text-stone-800 mb-2 leading-tight">Tudo Pronto!</h3>
     <p class="text-stone-500 text-sm mb-6 font-light">Suas memórias foram processadas. Escolha como deseja eternizar este momento.</p>
     
-    <div class="space-y-4 mb-6 text-left">
+    <!-- ESCOLHA DO PLANO -->
+    <div class="space-y-4 mb-6 text-left" id="plan-selection-container">
         <!-- PLANO VITALÍCIO (R$ 27,90) -->
         <label class="block cursor-pointer group">
             <input type="radio" name="plan" value="27.90" class="hidden" onchange="handlePlanSelection(this)">
-            <div class="w-full bg-gradient-to-r from-brand-600 to-brand-700 rounded-2xl p-5 border border-brand-500 shadow-lg relative overflow-hidden group-hover:-translate-y-1 transition-all">
+            <div class="w-full bg-gradient-to-r from-brand-600 to-brand-700 rounded-2xl p-5 border border-brand-500 shadow-lg relative overflow-hidden group-hover:-translate-y-1 transition-all has-[:checked]:ring-4 has-[:checked]:ring-brand-300">
                 <div class="absolute top-0 right-0 bg-white text-brand-700 text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wider shadow-sm">Mais Escolhido</div>
                 <div class="flex justify-between items-center relative z-10 text-white">
                     <div>
@@ -526,10 +527,10 @@
             </div>
         </label>
 
-        <!-- PLANO SIMPLES (R$ 14,90 - DISPARA O DOWNSELL) -->
+        <!-- PLANO SIMPLES (R$ 14,90) -->
         <label class="block cursor-pointer group">
             <input type="radio" name="plan" value="14.90" class="hidden" onchange="handlePlanSelection(this)">
-            <div class="w-full bg-white rounded-2xl p-5 border border-stone-200 shadow-sm hover:border-brand-300 hover:bg-stone-50 transition-all text-left">
+            <div class="w-full bg-white rounded-2xl p-5 border border-stone-200 shadow-sm hover:border-brand-300 hover:bg-stone-50 transition-all text-left has-[:checked]:ring-2 has-[:checked]:ring-brand-500">
                 <div class="flex justify-between items-center relative z-10">
                     <div>
                         <h3 class="font-playfair font-bold text-stone-800 text-lg">Acesso Simples</h3>
@@ -543,11 +544,46 @@
         </label>
     </div>
 
-    <div class="flex gap-3">
-        <!-- BOTÃO QUE CHAMA A FUNÇÃO REAL DO SEU SCRIPT -->
+    <!-- BOTÃO INICIAL PARA SALVAR NA RAILWAY E MOSTRAR O PAGAMENTO -->
+    <div class="flex gap-3" id="unlock-btn-container">
         <button id="btn-unlock" onclick="goToCheckout()" class="w-full bg-brand-600 text-white rounded-full py-4 font-medium text-lg hover:bg-brand-700 transition-all shadow-lg shadow-brand-600/30 flex justify-center items-center gap-2">
             🚀 Liberar Meu Presente
         </button>
+    </div>
+
+    <!-- ÁREA DE PAGAMENTO (Fica oculta até clicar em Liberar Meu Presente) -->
+    <div id="payment-form-container" class="hidden mt-6 text-left">
+        <hr class="my-6 border-stone-200">
+        <h4 class="font-playfair font-bold text-stone-800 mb-4 text-lg">Dados de Pagamento</h4>
+        <div class="mb-5">
+            <label class="block text-xs font-semibold tracking-wide text-stone-600 uppercase mb-1.5">Seu E-mail (Para receber o link)</label>
+            <input type="email" id="user-email" class="w-full border border-stone-200 bg-stone-50/50 rounded-2xl px-5 py-3.5 focus:outline-none focus:ring-1 focus:ring-brand-500 focus:bg-white transition-all shadow-inner text-stone-800" placeholder="voce@email.com">
+        </div>
+
+        <div class="flex bg-stone-100 p-1 rounded-2xl mb-6 shadow-inner">
+            <button onclick="switchTab('pix')" id="tab-pix" class="w-1/2 py-2.5 rounded-xl font-bold text-sm bg-white shadow-sm text-stone-800 transition">PIX</button>
+            <button onclick="switchTab('cartao')" id="tab-cartao" class="w-1/2 py-2.5 rounded-xl font-bold text-sm text-stone-500 transition hover:text-stone-800">CARTÃO</button>
+        </div>
+
+        <!-- ABA PIX -->
+        <div id="content-pix" class="bg-green-50 border border-green-200 rounded-2xl p-6 text-center shadow-sm">
+            <h4 class="font-bold text-green-900 mb-2">Pague via PIX</h4>
+            <p class="text-xs text-green-800 mb-4 font-light">Aprovação imediata. Clique para gerar seu código.</p>
+            <div class="font-black text-3xl text-green-900 mb-4 price-display">R$ --,--</div>
+            <button onclick="gerarPixReal()" id="btn-generate-pix" class="w-full bg-green-600 hover:bg-green-700 text-white rounded-full py-4 font-bold flex items-center justify-center gap-2 transition shadow-lg shadow-green-600/30">
+                Gerar PIX
+            </button>
+            <img id="qr-code-img" src="" class="w-32 h-32 mx-auto rounded-xl mb-4 shadow-md border border-green-200 hidden" alt="QR Code PIX">
+            <button onclick="copyPix()" id="btn-copy-pix" class="w-full bg-green-600 hover:bg-green-700 text-white rounded-full py-4 font-bold items-center justify-center gap-2 transition hidden">
+                📋 Copiar Código PIX
+            </button>
+        </div>
+
+        <!-- ABA CARTÃO -->
+        <div id="content-cartao" class="hidden">
+            <p id="brick-loading-text" class="text-sm text-stone-500 text-center mb-4 font-light">Carregando ambiente seguro de pagamento...</p>
+            <div id="payment-brick-container"></div>
+        </div>
     </div>
 
     <!-- MODAL DE DOWNSELL (R$ 19,90) -->
@@ -575,99 +611,6 @@
         <div class="bg-brand-500 h-2 rounded-full w-full animate-[progress_3s_ease-in-out]"></div>
     </div>
 </div>
-
-                <!-- LOADING SCREEN -->
-                <div id="loading-screen" class="hidden-step text-center py-12">
-                    <div class="text-6xl text-red-500 animate-pulse mb-6">❤️</div>
-                    <h3 class="text-2xl font-bold text-purple-900 mb-2">Preparando algo especial...</h3>
-                    <p class="text-gray-500 text-sm">Sincronizando áudio, ajustando fotos e gerando a magia.</p>
-                    <div class="w-full bg-gray-200 rounded-full h-2 mt-6 overflow-hidden">
-                        <div class="bg-purple-600 h-2 rounded-full w-full animate-[progress_3s_ease-in-out]"></div>
-                    </div>
-                    <style>@keyframes progress { 0% { width: 0%; } 100% { width: 100%; } }</style>
-                </div>
-
-                <!-- PRÉVIA DINÂMICA -->
-                <div id="preview-screen" class="hidden-step">
-                    <h3 class="text-xl font-bold text-center text-gray-800 mb-4">Sua Prévia (Demonstração)</h3>
-                    <div class="phone-mockup shadow-2xl">
-                        <div id="dynamic-preview-screen" class="phone-screen bg-gray-900" style="background-image: url('https://images.unsplash.com/photo-1511895426328-dc8714191300?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80')">
-                            <div class="phone-text-overlay" id="dynamic-preview-text">Carregando memórias...</div>
-                        </div>
-                    </div>
-                    <div class="mt-6 text-center">
-                        <p class="text-xs text-gray-500 mb-4">A versão final será em alta resolução, sem marca d'água e baixável.</p>
-                        <!-- ID btn-unlock adicionado para lógica de Loading ao Salvar -->
-                        <button id="btn-unlock" onclick="goToCheckout()" class="w-full bg-green-500 hover:bg-green-600 text-white rounded-xl py-4 font-bold text-lg shadow-lg shadow-green-500/30 transition transform hover:scale-105 flex items-center justify-center gap-2">
-                            🔓 Desbloquear Retrospectiva Completa
-                        </button>
-                    </div>
-                </div>
-
-                <!-- CHECKOUT OTIMIZADO -->
-                <div id="checkout-screen" class="hidden-step">
-                    <h3 class="text-2xl font-bold text-center text-gray-800 mb-1">Finalizar Pedido</h3>
-                    <p class="text-sm text-center text-gray-500 mb-6">Escolha o seu plano de acesso.</p>
-
-                    <div class="space-y-3 mb-6">
-                        <label class="block border-2 border-gray-200 rounded-xl p-4 cursor-pointer hover:border-purple-500 has-[:checked]:border-purple-600 has-[:checked]:bg-purple-50 transition relative">
-                            <input type="radio" name="plan" value="14.90" class="absolute opacity-0" onchange="handlePlanSelection(this)">
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <h4 class="font-bold text-gray-800">Plano Completo</h4>
-                                    <p class="text-xs text-gray-500">Acesso por 30 dias. Alta resolução.</p>
-                                </div>
-                                <div class="font-black text-lg text-purple-700">R$ 14,90</div>
-                            </div>
-                        </label>
-                        <label class="block border-2 border-gray-200 rounded-xl p-4 cursor-pointer hover:border-purple-500 has-[:checked]:border-purple-600 has-[:checked]:bg-purple-50 transition relative overflow-hidden">
-                            <div class="absolute top-0 right-0 bg-yellow-400 text-yellow-900 text-[10px] font-bold px-2 py-0.5 rounded-bl-lg">MAIS VENDIDO</div>
-                            <input type="radio" name="plan" value="27.90" class="absolute opacity-0" onchange="handlePlanSelection(this)">
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <h4 class="font-bold text-gray-800">Plano Vitalício</h4>
-                                    <p class="text-xs text-gray-500">Acesso para sempre. Download imediato.</p>
-                                </div>
-                                <div class="font-black text-lg text-purple-700">R$ 27,90</div>
-                            </div>
-                        </label>
-                    </div>
-
-                    <div id="payment-form-container" class="hidden">
-                        <hr class="my-6 border-gray-200">
-                        <h4 class="font-bold text-gray-800 mb-4">Dados de Pagamento</h4>
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Seu E-mail (Para receber o link)</label>
-                            <input type="email" id="user-email" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="voce@email.com">
-                        </div>
-
-                        <div class="flex bg-gray-100 p-1 rounded-xl mb-6">
-                            <button onclick="switchTab('pix')" id="tab-pix" class="w-1/2 py-2 rounded-lg font-bold text-sm bg-white shadow-sm text-gray-800 transition">PIX</button>
-                            <button onclick="switchTab('cartao')" id="tab-cartao" class="w-1/2 py-2 rounded-lg font-bold text-sm text-gray-500 transition hover:text-gray-800">CARTÃO</button>
-                        </div>
-
-                        <!-- ABA PIX -->
-                        <div id="content-pix" class="bg-green-50 border border-green-200 rounded-xl p-6 text-center">
-                            <h4 class="font-bold text-green-900 mb-2">Pague via PIX</h4>
-                            <p class="text-xs text-green-800 mb-4">Aprovação imediata. Clique para gerar seu código.</p>
-                            <div class="font-black text-2xl text-green-900 mb-4 price-display">R$ --,--</div>
-                            <button onclick="gerarPixReal()" id="btn-generate-pix" class="w-full bg-green-600 hover:bg-green-700 text-white rounded-xl py-3.5 font-bold flex items-center justify-center gap-2 transition shadow-lg">
-                                Gerar PIX
-                            </button>
-                            <img id="qr-code-img" src="" class="w-32 h-32 mx-auto rounded-lg mb-4 shadow-sm border border-green-200 hidden" alt="QR Code PIX">
-                            <button onclick="copyPix()" id="btn-copy-pix" class="w-full bg-green-600 hover:bg-green-700 text-white rounded-xl py-3.5 font-bold items-center justify-center gap-2 transition hidden">
-                                📋 Copiar Código PIX
-                            </button>
-                        </div>
-
-                        <!-- ABA CARTÃO -->
-                        <div id="content-cartao" class="hidden">
-                            <p id="brick-loading-text" class="text-sm text-gray-500 text-center mb-4">Carregando ambiente seguro de pagamento...</p>
-                            <div id="payment-brick-container"></div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- TELA DE SUCESSO (APÓS PAGAMENTO) -->
                 <div id="success-screen" class="hidden-step text-center py-10">
                     <div class="text-6xl mb-4 animate-bounce">🎉</div>
@@ -998,8 +941,10 @@ const texts = [
                 retroIdCriado = data.id; // GUARDA O ID PARA O PAGAMENTO
 
                 // Avança para tela de Checkout
-                document.getElementById('preview-screen').classList.add('hidden-step');
-                document.getElementById('checkout-screen').classList.remove('hidden-step');
+               // COLOQUE ISTO:
+document.getElementById('plan-selection-container').classList.add('hidden');
+document.getElementById('unlock-btn-container').classList.add('hidden');
+setupPaymentForm(selectedPrice.toString().replace('.', ','));
                 
             } catch (error) {
                 console.error("Erro ao salvar:", error);
