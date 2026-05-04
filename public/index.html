@@ -137,49 +137,116 @@
             </div>
         </header>
 
-        <!-- Hero Section Premium -->
-        <section class="relative pt-32 pb-20 lg:pt-40 lg:pb-32 overflow-hidden bg-stone-900">
-            <!-- Background Imagem de Fundo com Efeito Vidro -->
-            <div class="absolute inset-0 z-0 opacity-40">
-                <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=2000&auto=format&fit=crop" alt="Mãe e filho" class="w-full h-full object-cover" />
-                <div class="absolute inset-0 bg-gradient-to-b from-stone-900 via-stone-900/80 to-stone-50"></div>
-            </div>
+       <!-- Hero Section UAU (Alta Conversão) -->
+        <section class="relative pt-32 pb-20 lg:pt-32 lg:pb-24 overflow-hidden bg-stone-950">
+            <!-- Efeitos de Luz de Fundo (Glow) -->
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-600/20 rounded-full blur-[120px] mix-blend-screen pointer-events-none"></div>
+            <div class="absolute bottom-0 right-1/4 w-[30rem] h-[30rem] bg-purple-600/10 rounded-full blur-[120px] mix-blend-screen pointer-events-none"></div>
 
-            <div class="relative z-10 max-w-5xl mx-auto px-4 text-center mt-4">
-                <!-- Etiqueta de Confiança -->
-                <div class="inline-block px-5 py-2 rounded-full bg-white/10 border border-white/10 backdrop-blur-md mb-8 shadow-lg">
-                    <span class="text-brand-100 font-semibold text-sm tracking-wider uppercase flex items-center gap-2">
-                        <span class="text-lg">✨</span> O Presente Mais Emocionante
-                    </span>
+            <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center mt-4">
+                    
+                    <!-- COLUNA DA ESQUERDA: Copy e CTA -->
+                    <div class="text-center lg:text-left">
+                        <!-- Etiqueta de Confiança Premium -->
+                        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-6 shadow-2xl">
+                            <span class="flex h-2 w-2 relative">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
+                            </span>
+                            <span class="text-stone-300 font-medium text-xs tracking-wider uppercase">
+                                +12.450 Mães emocionadas
+                            </span>
+                        </div>
+                        
+                        <!-- Título de Alto Impacto -->
+                        <h1 class="font-playfair text-5xl sm:text-6xl md:text-[5rem] font-bold mb-6 text-white leading-[1.1] drop-shadow-2xl">
+                            Faça sua mãe <br class="hidden lg:block">
+                            chorar...<br>
+                            <span class="italic text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-fuchsia-400 font-light relative inline-block mt-2">
+                                De alegria.
+                                <!-- Sublinhado desenhado -->
+                                <svg class="absolute w-full h-3 -bottom-1 left-0 text-brand-500/50" viewBox="0 0 200 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 6.5C48.5 2.5 152.5 -1.5 198 6.5" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+                            </span>
+                        </h1>
+                        
+                        <p class="text-lg sm:text-xl mb-10 text-stone-400 max-w-2xl mx-auto lg:mx-0 font-light leading-relaxed">
+                            Transforme 5 fotos da galeria do seu celular em uma <strong>superprodução cinematográfica</strong> com áudio de estúdio e roteiro personalizado. Pronto em menos de 3 minutos.
+                        </p>
+                        
+                        <!-- Botão Principal com Efeito Glow -->
+                        <div class="flex flex-col sm:flex-row items-center lg:items-start justify-center lg:justify-start gap-4">
+                            <button onclick="openGeneratorModal()" class="w-full sm:w-auto relative group">
+                                <div class="absolute -inset-1 bg-gradient-to-r from-brand-600 to-fuchsia-600 rounded-full blur opacity-70 group-hover:opacity-100 transition duration-200"></div>
+                                <div class="relative bg-brand-600 text-white px-10 py-5 rounded-full font-bold text-lg transition-all flex items-center justify-center gap-3">
+                                    <span class="text-2xl animate-pulse">🎁</span> Criar Meu Presente Agora
+                                </div>
+                            </button>
+                        </div>
+                        
+                        <!-- Gatilhos de Objeção Abaixo do Botão -->
+                        <div class="mt-8 flex items-center justify-center lg:justify-start gap-6 text-xs text-stone-500 font-medium">
+                            <div class="flex items-center gap-1.5">
+                                <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                Sem aplicativos
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                Teste 100% grátis
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- COLUNA DA DIREITA: TANGIBILIZAÇÃO (Mockup Flutuante) -->
+                    <div class="relative hidden lg:block lg:ml-auto">
+                        <!-- Bolhas de UI flutuantes (Dá a sensação de Inteligência/Processamento) -->
+                        <div class="absolute top-10 -left-12 bg-white/10 backdrop-blur-md border border-white/20 p-3 rounded-2xl shadow-2xl flex items-center gap-3 z-20 animate-[bounce_4s_ease-in-out_infinite]">
+                            <div class="w-8 h-8 rounded-full bg-brand-500 flex items-center justify-center text-white">✨</div>
+                            <div>
+                                <div class="text-[10px] text-brand-200 uppercase font-bold tracking-wider">Mágica IA</div>
+                                <div class="text-sm font-medium text-white">Gerando Roteiro...</div>
+                            </div>
+                        </div>
+
+                        <div class="absolute bottom-24 -right-8 bg-white/10 backdrop-blur-md border border-white/20 p-3 rounded-2xl shadow-2xl flex items-center gap-3 z-20 animate-[bounce_5s_ease-in-out_infinite_reverse]">
+                            <div class="w-8 h-8 rounded-full bg-fuchsia-500 flex items-center justify-center text-white">🎵</div>
+                            <div>
+                                <div class="text-[10px] text-fuchsia-200 uppercase font-bold tracking-wider">Estúdio</div>
+                                <div class="text-sm font-medium text-white">Áudio sincronizado</div>
+                            </div>
+                        </div>
+
+                        <!-- O Mockup do Celular -->
+                        <div class="relative w-[300px] h-[600px] border-[14px] border-stone-900 bg-stone-900 rounded-[3rem] shadow-[0_0_50px_rgba(0,0,0,0.5)] transform rotate-[-2deg] transition-transform hover:rotate-0 duration-500">
+                            <!-- Notch -->
+                            <div class="absolute top-0 inset-x-0 h-6 bg-stone-900 rounded-b-3xl w-40 mx-auto z-20"></div>
+                            
+                            <!-- Tela com vídeo rolando (GIF ou Imagem) -->
+                            <div class="w-full h-full rounded-[2rem] overflow-hidden relative bg-stone-800">
+                                <img src="https://images.unsplash.com/photo-1542037104857-ffbb0b9155fb?q=80&w=400&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover opacity-80" alt="Exemplo de vídeo">
+                                
+                                <!-- Gradiente escuro embaixo -->
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                                
+                                <!-- Elementos do Player dentro da tela -->
+                                <div class="absolute bottom-6 left-0 w-full px-5">
+                                    <h4 class="text-white font-playfair font-bold text-xl mb-1 drop-shadow-md">Para: Mamãe ❤️</h4>
+                                    <p class="text-stone-300 text-xs mb-4 drop-shadow-md">"Você é o meu porto seguro..."</p>
+                                    
+                                    <!-- Barrinha de Player de música simulada -->
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center backdrop-blur text-[10px]">⏸</div>
+                                        <div class="flex-1 h-1 bg-white/20 rounded-full overflow-hidden">
+                                            <div class="w-1/3 h-full bg-brand-500"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                
-                <!-- Título de Alto Impacto -->
-                <h1 class="font-playfair text-5xl sm:text-6xl md:text-7xl font-bold mb-6 text-white leading-tight drop-shadow-2xl">
-                    Faça sua mãe chorar...<br>
-                    <span class="italic text-brand-400 font-light">De alegria.</span>
-                </h1>
-                
-                <p class="text-lg sm:text-xl md:text-2xl mb-12 text-stone-300 max-w-3xl mx-auto font-light drop-shadow-lg">
-                    Transforme 5 fotos da galeria do seu celular em uma superprodução cinematográfica com roteiro personalizado. <strong>Pronto em 3 minutos.</strong>
-                </p>
-                
-                <!-- Botão Principal -->
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <button onclick="openGeneratorModal()" class="w-full sm:w-auto bg-brand-600 hover:bg-brand-500 text-white px-10 py-5 rounded-full font-bold text-xl transition-all transform hover:scale-105 shadow-[0_0_40px_-10px_rgba(212,59,94,0.8)] flex items-center justify-center gap-3">
-                        <span class="text-2xl">▶</span> Criar Meu Presente Agora
-                    </button>
-                </div>
-                
-                <p class="mt-6 text-sm text-stone-400 font-medium flex items-center justify-center gap-2">
-                    <span class="relative flex h-3 w-3">
-                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                      <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                    </span>
-                    Nenhum cadastro necessário para testar.
-                </p>
             </div>
         </section>
-
         <!-- Seção: Por que é inesquecível? (Design Editorial) -->
         <section id="recursos" class="py-24 px-4 bg-stone-50">
             <div class="max-w-6xl mx-auto">
