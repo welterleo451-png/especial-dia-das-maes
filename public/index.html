@@ -1072,15 +1072,27 @@ setupPaymentForm(selectedPrice.toString().replace('.', ','));
             }
         }
 
-        // ==========================================
+      // ==========================================
         // 6. PROCESSAMENTO CARTÃO E PIX (COM SUCESSO)
         // ==========================================
         
         function showSuccessScreen() {
-            document.getElementById('checkout-screen').classList.add('hidden-step');
-            document.getElementById('success-screen').classList.remove('hidden-step');
+            // Esconde a tela de pagamento nova (Passo 6)
+            const step6 = document.getElementById('step-6');
+            if (step6) step6.classList.add('hidden-step');
+            
+            // Garantia: se sobrou algum checkout antigo escondido, ele mata também
+            const oldCheckout = document.getElementById('checkout-screen');
+            if (oldCheckout) oldCheckout.classList.add('hidden-step');
+
+            // Exibe a tela de sucesso bonitona
+            const successScreen = document.getElementById('success-screen');
+            if (successScreen) successScreen.classList.remove('hidden-step');
+
+            // Gera e cola o link para o cliente copiar
             const finalLink = `https://especial-dia-das-maes-production.up.railway.app/retro/${retroIdCriado}`;
-            document.getElementById('final-link-input').value = finalLink;
+            const linkInput = document.getElementById('final-link-input');
+            if (linkInput) linkInput.value = finalLink;
         }
 
         function copyFinalLink() {
@@ -1091,7 +1103,6 @@ setupPaymentForm(selectedPrice.toString().replace('.', ','));
                 alert("Link copiado com sucesso! Agora é só colar no WhatsApp dela.");
             });
         }
-
         // CARTÃO DE CRÉDITO
         async function renderCardBrick(price) {
             const bricksBuilder = mp.bricks();
